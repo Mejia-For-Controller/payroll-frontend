@@ -1,17 +1,20 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import kennethavatar from './kennethheadshot.png';
 import './App.css';
-import React from 'react'
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react'
+import React from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
+import TableauReport from 'tableau-react';
 
 import {
   BrowserRouter as Router,
+  HashRouter,
   Switch,
   Route,
-  Link
+  Link,
+  NavLink
 } from "react-router-dom";
 
 //const navigation = ['Dashboard', 'Payroll', 'Checkbook', 'Budget', "Revenue", "All Data"]
@@ -49,6 +52,7 @@ function classNames(...classes) {
 
 export default function App() {
   return (
+    <Router>
 <div>
     <Disclosure as="nav" className="bg-gray-800">
         {({ open }) => (
@@ -67,22 +71,16 @@ export default function App() {
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item, itemIdx) =>
-                        item.url === window.location.pathname ? (
-                          <Fragment key={item}>
-                            {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                            <a href={item.url} className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
-                              {item.name}
-                            </a>
-                          </Fragment>
-                        ) : (
-                          <a
-                            key={item}
-                            href={item.url}
-                            className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                          >
-                            {item.name}
-                          </a>
-                        )
+                         <NavLink
+                         key={item}
+                         exact={true}
+                         to={item.url}
+                         activeClassName='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                         className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                       >
+                         {item.name}
+                        
+                       </NavLink>
                       )}
                     </div>
                   </div>
@@ -214,17 +212,27 @@ export default function App() {
         )}
       </Disclosure>
       </div>
+
+         {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/">
+          </Route>
+          <Route path="/checkbook">
+  <TableauReport
+    url="http://reports.my-site.com/my-workbook/my-report"
+    token="<TRUSTED TICKET HERE>"
+  />
+          </Route>
+          <Route path="/payroll">
+            <Empty />
+          </Route>
+          </Switch>
+      </Router>
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
 
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
+function Empty() {
+  return <h2>Empty</h2>
 }
