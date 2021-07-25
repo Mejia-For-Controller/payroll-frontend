@@ -14,7 +14,33 @@ import {
   Link
 } from "react-router-dom";
 
-const navigation = ['Dashboard', 'Payroll', 'Checkbook', 'Budget', "Revenue", "All Data"]
+//const navigation = ['Dashboard', 'Payroll', 'Checkbook', 'Budget', "Revenue", "All Data"]
+const navigation = [
+  {
+    'name': "Dashboard",
+    'url': "/"
+  },
+  {
+    'name': "Payroll",
+    'url': "/payroll"
+  },
+  {
+    'name': "Checkbook",
+    'url': '/checkbook'
+  },
+  {
+    'name': "Budget",
+    'url': '/budget'
+  },
+  {
+    'name': "Revenue",
+    'url': "/revenue"
+  },
+  {
+    'name': "All Data",
+    'url': "alldata"
+  }
+]
 const profile = ['Your Profile', 'Settings', 'Sign out']
 
 function classNames(...classes) {
@@ -41,20 +67,20 @@ export default function App() {
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item, itemIdx) =>
-                        itemIdx === 0 ? (
+                        item.url === window.location.pathname ? (
                           <Fragment key={item}>
                             {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                            <a href="#" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
-                              {item}
+                            <a href={item.url} className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
+                              {item.name}
                             </a>
                           </Fragment>
                         ) : (
                           <a
                             key={item}
-                            href="#"
+                            href={item.url}
                             className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                           >
-                            {item}
+                            {item.name}
                           </a>
                         )
                       )}
