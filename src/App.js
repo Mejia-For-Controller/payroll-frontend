@@ -6,7 +6,7 @@ import { Fragment } from 'react'
 import React from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import TableauReport from 'tableau-react';
+import TableauEmbed from './tableau'
 
 import {
   BrowserRouter as Router,
@@ -16,6 +16,9 @@ import {
   Link,
   NavLink
 } from "react-router-dom";
+
+const {tableau} = window;
+
 
 //const navigation = ['Dashboard', 'Payroll', 'Checkbook', 'Budget', "Revenue", "All Data"]
 const navigation = [
@@ -216,16 +219,30 @@ export default function App() {
          {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/">
+         
+          <Route path="/checkbook" onEnter={() => {
+       
+          }}>
+         <TableauEmbed
+         key='Checkbook'
+         url='https://public.tableau.com/views/LosAngelesFY2021PoliceCheckbookv1/VendorAmountList?:language=en-US&:embed=y&:origin=viz_share_link&:embed_code_version=3&:loadOrderID=0&:display_count=y&publish=yes'
+         
+                  />
           </Route>
-          <Route path="/checkbook">
-  <TableauReport
-    url="http://reports.my-site.com/my-workbook/my-report"
-    token="<TRUSTED TICKET HERE>"
-  />
-          </Route>
+          <Route path="/lapdvendors" onEnter={() => {
+       
+      }}>
+     <TableauEmbed
+     key='LAPDVendors'
+     url='https://public.tableau.com/views/LosAngelesFY2021PoliceCheckbookv1/VendorAmountList?:language=en-US&:embed=y&:origin=viz_share_link&:embed_code_version=3&:loadOrderID=0&:display_count=y&publish=yes'
+     
+              />
+      </Route>
           <Route path="/payroll">
-            <Empty />
+          <Empty/>
+          </Route>
+          <Route path="/">
+            <Empty/>
           </Route>
           </Switch>
       </Router>
