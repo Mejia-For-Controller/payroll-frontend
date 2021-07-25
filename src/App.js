@@ -56,8 +56,8 @@ function classNames(...classes) {
 export default function App() {
   return (
     <Router>
-<div>
-    <Disclosure as="nav" className="bg-gray-800">
+<div class='box'>
+    <Disclosure class='row header' as="nav" className="bg-gray-800">
         {({ open }) => (
           <div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -216,6 +216,8 @@ export default function App() {
       </Disclosure>
       </div>
 
+      <div class='row content'>
+
          {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
@@ -245,6 +247,7 @@ export default function App() {
             <Empty/>
           </Route>
           </Switch>
+          </div>
       </Router>
   );
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import tableau from 'tableau-api';
- 
+import './index.css';
  
 class TableauEmbed extends Component {
   componentDidMount() {
@@ -23,6 +23,7 @@ class TableauEmbed extends Component {
         hideTabs: true,
         onFirstInteractive: function () {
             console.log("Run this code when the viz has finished loading.");
+            document.querySelector('.tableauembed > iframe').style.height = 'calc(100vh - 64px)'
         },
         device: deviceType
     };
@@ -35,7 +36,7 @@ class TableauEmbed extends Component {
  
   render() {
     return (
-      <div ref={(div) => { this.vizContainer = div }}>
+      <div class='tableauembed' ref={(div) => { this.vizContainer = div }}>
       </div>
     )
   }

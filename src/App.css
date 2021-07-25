@@ -36,3 +36,32 @@
     transform: rotate(360deg);
   }
 }
+/*
+@font-face {
+  font-family: "mejiafont";
+  src: url('https://db.onlinewebfonts.com/t/02408ccd8efcf169db4e41d6e0551118.woff2');
+}*/
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+   /* font-family: "mejiafont";*/
+  }
+  .box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+  }
+  .box .row {
+    border: 1px dotted #0313fc;
+  }
+  .box .row.header {
+    flex: 0 1 auto;
+  }
+  .box .row.content {
+    flex: 1 1 auto;
+  }
+  .box .row.footer {
+    flex: 0 1 40px;
+  }
