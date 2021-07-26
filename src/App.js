@@ -161,23 +161,21 @@ export default function App() {
 
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                
+                
                 {navigation.map((item, itemIdx) =>
-                  itemIdx === 0 ? (
-                    <Fragment key={item}>
-                      {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                      <a href="#" className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium">
-                        {item}
-                      </a>
-                    </Fragment>
-                  ) : (
-                    <a
-                      key={item}
-                      href="#"
-                      className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
-                    >
-                      {item}
-                    </a>
-                  )
+                 
+                    <NavLink
+                    key={item}
+                    exact={true}
+                    to={item.url}
+                    activeClassName='bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white'
+                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  >
+                    {item.name}
+                   
+                  </NavLink>
+
                 )}
               </div>
               <div className="pt-4 pb-3 border-t border-gray-700">
