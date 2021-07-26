@@ -57,7 +57,7 @@ export default function App() {
   return (
     <Router>
 <div class='box'>
-    <Disclosure class='row header' as="nav" className="bg-gray-800">
+    <Disclosure class='row header' as="nav" className="bg-gray-800 shadow-lg z-50">
         {({ open }) => (
           <div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,9 +65,9 @@ export default function App() {
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <img
-                      className="h-8 w-8"
-               src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                // src='https://mejiaforcontroller.com/wp-content/themes/KennethMejia-logo-568x251.png'
+                      className="h-9 w-9"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                // src='/favicon.png'
                       alt="Workflow"
                     />
                   </div>
@@ -254,5 +254,5 @@ export default function App() {
 
 
 function Empty() {
-  return <h2>Empty</h2>
+  return <h2 className='p-10'> kyler hasn't coded anything here yet! If you think it's actually broken, email kyler at kyler@mejiaforcontroller.com</h2>
 }
