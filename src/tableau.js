@@ -23,7 +23,7 @@ class TableauEmbed extends Component {
         hideTabs: true,
         onFirstInteractive: function () {
             console.log("Run this code when the viz has finished loading.");
-            document.querySelector('.tableauembed > iframe').style.height = 'calc(100vh - 64px)'
+            document.querySelector('.tableauembed > iframe').style.height = '100%'
         },
         device: deviceType
     };
@@ -36,7 +36,7 @@ class TableauEmbed extends Component {
  
   render() {
     return (
-      <div class='tableauembed' ref={(div) => { this.vizContainer = div }}>
+      <div class='tableauembed height100' ref={(div) => { this.vizContainer = div }}>
       </div>
     )
   }

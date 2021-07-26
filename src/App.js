@@ -55,8 +55,9 @@ function classNames(...classes) {
 
 export default function App() {
   return (
-    <Router>
-<div class='box'>
+   
+<div class='box height100'>
+<Router>
     <Disclosure class='row header' as="nav" className="bg-gray-800 shadow-lg z-50">
         {({ open }) => (
           <div>
@@ -212,7 +213,7 @@ export default function App() {
           </div>
         )}
       </Disclosure>
-      </div>
+      
 
       <div class='row content'>
 
@@ -225,7 +226,7 @@ export default function App() {
           }}>
          <TableauEmbed
          key='Checkbook'
-         url='https://public.tableau.com/views/LosAngelesFY2021PoliceCheckbookv1/VendorAmountList?:language=en-US&:embed=y&:origin=viz_share_link&:embed_code_version=3&:loadOrderID=0&:display_count=y&publish=yes'
+         url='https://public.tableau.com/views/LosAngelesFY2021Checkbookv1/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
          
                   />
           </Route>
@@ -241,12 +242,19 @@ export default function App() {
           <Route path="/payroll">
           <Empty/>
           </Route>
+          <Route path="/budget">
+          <Empty/>
+          </Route>
+          <Route path="/alldata">
+          <Empty/>
+          </Route>
           <Route path="/">
             <Empty/>
           </Route>
           </Switch>
           </div>
       </Router>
+      </div>
   );
 }
 
