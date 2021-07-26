@@ -53,9 +53,7 @@
     flex-flow: column;
     height: 100%;
   }
-  .box .row {
-    border: 1px dotted #0313fc;
-  }
+  
   .box .row.header {
     flex: 0 1 auto;
   }
