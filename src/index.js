@@ -1,10 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
 import TagManager from 'react-gtm-module'
+
+Sentry.init({
+  dsn: "https://274fc6e6e9b54ecc96a67ef921dd64c5@o931607.ingest.sentry.io/5880538",
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+
 
 const tagManagerArgs = {
     gtmId: 'GTM-MQG62S5'
