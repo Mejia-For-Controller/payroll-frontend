@@ -243,7 +243,6 @@ export default function App() {
             key='payroll1'
             url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
             />
-          <Empty/>
           </Route>
           <Route path="/budget">
             
