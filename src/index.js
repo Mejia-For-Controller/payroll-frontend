@@ -2,6 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as Sentry from "@sentry/react";
+// If taking advantage of automatic instrumentation (highly recommended)
+import { Integrations as TracingIntegrations } from "@sentry/tracing";
+// Or, if only manually tracing
+// import * as _ from "@sentry/tracing"
+// Note: You MUST import the package in some way for tracing to work
 import { Integrations } from "@sentry/tracing";
 import App from './App';
 import reportWebVitals from './reportWebVitals';

@@ -36,10 +36,6 @@ const navigation = [
     'url': '/checkbook'
   },
   {
-    'name': "Budget",
-    'url': '/budget'
-  },
-  {
     'name': "Revenue",
     'url': "/revenue"
   },
@@ -76,16 +72,18 @@ export default function App() {
                   <div className="hidden md:block">
                     <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item, itemIdx) =>
-                         <NavLink
-                         key={item}
-                         exact={true}
-                         to={item.url}
-                         activeClassName='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                         className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                       >
-                         {item.name}
+                     
+                          <NavLink
+                          key={item}
+                          exact={true}
+                          to={item.url}
+                          activeClassName='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
+                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                        >
+                          {item.name}
+                         
+                        </NavLink>
                         
-                       </NavLink>
                       )}
                     </div>
                   </div>
@@ -241,6 +239,10 @@ export default function App() {
               />
       </Route>
           <Route path="/payroll">
+            <TableauEmbed
+            key='payroll1'
+            url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
+            />
           <Empty/>
           </Route>
           <Route path="/budget">
