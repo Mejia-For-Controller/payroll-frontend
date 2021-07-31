@@ -1,28 +1,14 @@
-//import logo from './logo.svg';
+import ActiveLink from './ActiveLink'
 import kennethavatar from './kennethheadshot.png';
-import '../styles/globals.css'
-import './App.css';
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from 'react'
-import React, { useState } from 'react'
+
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
-import TableauEmbed from './tableau'
-//import {Budget} from './budget'
 
-import {
-  BrowserRouter as Router,
-  HashRouter,
-  Switch,
-  Route,
-  Link,
-  NavLink
-} from "react-router-dom";
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
 
-const {tableau} = window;
-
-
-//const navigation = ['Dashboard', 'Payroll', 'Checkbook', 'Budget', "Revenue", "All Data"]
 const navigation = [
   {
     'name': "Dashboard",
@@ -42,21 +28,15 @@ const navigation = [
   },
   {
     'name': "All Data",
-    'url': "alldata"
+    'url': "/alldata"
   }
 ]
 const profile = ['Your Profile', 'Settings', 'Sign out']
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
-export default function App() {
-  return (
-   
-<div class='box height100'>
-<Router>
-    <Disclosure class='row header' as="nav" className="bg-gray-800 shadow-lg z-50">
+const Navbar = () => (
+  <nav>
+     <Disclosure className='row header bg-gray-800 shadow-lg z-50' as="nav">
         {({ open }) => (
           <div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -74,16 +54,15 @@ export default function App() {
                     <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item, itemIdx) =>
                      
-                          <NavLink
-                          key={item}
-                          exact={true}
-                          to={item.url}
-                          activeClassName='bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium'
-                          className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                       
+
+                        <ActiveLink activeClassName="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" href={item.url}
+                        key={itemIdx}
                         >
-                          {item.name}
-                         
-                        </NavLink>
+                        <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                                    {item.name}
+                        </a>
+                        </ActiveLink>
                         
                       )}
                     </div>
@@ -103,11 +82,11 @@ export default function App() {
                           <div>
                             <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                               <span className="sr-only">Open user menu</span>
-                              <img
+                            {/* <img
                                 className="h-8 w-8 rounded-full"
                                 src={kennethavatar}
                                 alt=""
-                              />
+                              /> */} 
                             </Menu.Button>
                           </div>
                           <Transition
@@ -166,16 +145,14 @@ export default function App() {
                 
                 {navigation.map((item, itemIdx) =>
                  
-                    <NavLink
-                    key={item}
-                    exact={true}
-                    to={item.url}
-                    activeClassName='bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white'
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                  
+                  <ActiveLink activeClassName="bg-gray-900 text-white text-gray-300 hover:bg-gray-700 hover:text-white" href={item.url}
+                  key={itemIdx}
                   >
-                    {item.name}
-                   
-                  </NavLink>
+<a className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" >
+                            {item.name}
+</a>
+</ActiveLink>
 
                 )}
               </div>
@@ -214,60 +191,8 @@ export default function App() {
         )}
       </Disclosure>
       
+    
+  </nav>
+)
 
-      <div class='row content'>
-
-         {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-         
-          <Route path="/checkbook" onEnter={() => {
-       
-          }}>
-         <TableauEmbed
-         key='Checkbook'
-         url='https://public.tableau.com/views/LosAngelesFY2021Checkbookv1/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
-         
-                  />
-          </Route>
-          <Route path="/lapdvendors" onEnter={() => {
-       
-      }}>
-     <TableauEmbed
-     key='LAPDVendors'
-     url='https://public.tableau.com/views/LosAngelesFY2021PoliceCheckbookv1/VendorAmountList?:language=en-US&:embed=y&:origin=viz_share_link&:embed_code_version=3&:loadOrderID=0&:display_count=y&publish=yes'
-     
-              />
-      </Route>
-          <Route path="/payroll">
-            <TableauEmbed
-            key='payroll1'
-            url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
-            />
-          </Route>
-          <Route path="/budget">
-            
-          <TableauEmbed 
-          key = 'Budget'
-          url = 'https://public.tableau.com/views/Budget_16273393123040/Sheet1?:language=en-US&:display_count=n&:origin=viz_share_link'
-          />
-            
-          </Route>
-          <Route path="/alldata">
-          
-          <Empty/>
-          </Route>
-          <Route path="/">
-            <Empty/>
-          </Route>
-          </Switch>
-          </div>
-      </Router>
-      </div>
-  );
-}
-
-
-function Empty() {
-  return <h2 className='p-10'> kyler hasn't coded anything here yet! If you think it's actually broken, email kyler at kyler@mejiaforcontroller.com</h2>
-}
+export default Navbar

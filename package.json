@@ -11,29 +11,39 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.4.7",
+    "@types/react": "^17.0.15",
+    "@types/react-dom": "^17.0.9",
+    "audit": "^0.0.6",
     "chokidar": "^3.5.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "fix": "^0.0.6",
     "jquery-csv": "^1.0.21",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "next": "latest",
+    "postcss": "^8.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "react": "latest",
+    "react-dom": "latest",
     "react-google-charts": "^3.0.15",
     "react-gtm-module": "^2.0.11",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^1.1.5",
+    "react-scripts": "^4.0.3",
     "tableau-api": "^2.2.3",
     "tableau-react": "^2.0.0-beta.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.6",
+    "typescript": "^4.3.5",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "build": "craco build",
+    "start": "craco start"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:react-hooks/recommended"
     ]
   },
   "browserslist": {
@@ -48,8 +58,9 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.35",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.6"
+    "autoprefixer": "^10.3.1",
+    "eslint-config-next": "^11.0.1",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.7"
   }
 }
