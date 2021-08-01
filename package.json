@@ -32,7 +32,7 @@
   },
   "scripts": {
     "test": "next test",
-    "build": "next build",
+    "build": "mkdir -p build && next build",
     "start": "next start",
     "dev": "next dev -p 8003"
   },
