@@ -1,7 +1,7 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import dynamic from 'next/dynamic';
 
-import tableau from 'tableau-api';
+//import tableau from 'tableau-api';
 //var tableau = require('tableau-api');
 
 type MyProps = { 
@@ -28,8 +28,6 @@ class TableauEmbed extends React.Component<MyProps, MyState> {
   }
 
   initViz() {
-    
-
     if (typeof window !== 'undefined') {
       if (process.browser) {
         // client-side-only code
@@ -55,8 +53,9 @@ class TableauEmbed extends React.Component<MyProps, MyState> {
           const vizContainer = this.vizContainer;
           
           console.log('vizContainer',this.vizContainer)
-        // @ts-ignore: Unreachable code error
-         let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
+          // @ts-ignore: Unreachable code error
+          let viz = new tableau.Viz(vizContainer, vizUrl, options)
+        
       }
 
     // const {tableau} = window;
@@ -70,7 +69,8 @@ class TableauEmbed extends React.Component<MyProps, MyState> {
   render() {
     return (
       <div className='height100'>
-  
+        <script type="text/javascript"
+	    src="https://public.tableau.com/javascripts/api/tableau-2.8.1.min.js"></script>
         <div className='tableauembed height100' ref={(div) => {
         this.vizContainer = div;
       }}>
