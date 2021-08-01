@@ -15,7 +15,6 @@
     "@types/react-dom": "^17.0.9",
     "audit": "^0.0.6",
     "chokidar": "^3.5.2",
-    "fix": "^0.0.3",
     "jquery-csv": "^1.0.21",
     "next": "latest",
     "postcss": "^8.0.0",
