@@ -33,7 +33,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className='height100'>
       <Navbar/>
-     
       <Component {...pageProps} class='height100'/>
     </div>
   );  
