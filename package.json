@@ -15,6 +15,7 @@
     "@types/react-dom": "^17.0.9",
     "audit": "^0.0.6",
     "chokidar": "^3.5.2",
+    "eslint-config-react-app": "^6.0.0",
     "jquery-csv": "^1.0.21",
     "next": "latest",
     "postcss": "^8.0.0",
@@ -39,8 +40,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ],
     "plugins": [
       "react-hooks"
@@ -66,7 +66,10 @@
     "@types/react": "^17.0.15",
     "autoprefixer": "^10.3.1",
     "eslint-config-next": "^11.0.1",
+    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^4.10.1",
     "postcss": "^8.3.6",
     "tailwindcss": "^2.2.7",
     "typescript": "^4.3.5"
