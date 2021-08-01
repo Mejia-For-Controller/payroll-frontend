@@ -4,6 +4,8 @@ Paid for by Mejia for City Controller 2022, FPPC ID#: 1435234 1001 Wilshire Blvd
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+### works with cloudflare! aug 1 
+
 ## Available Scripts
 
 In the project directory, you can run:
