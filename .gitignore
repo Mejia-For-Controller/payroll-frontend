@@ -39,4 +39,3 @@ yarn-debug.log*
 yarn-error.log*
 
 out/
-package-lock.json
