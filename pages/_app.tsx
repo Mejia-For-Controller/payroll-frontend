@@ -33,6 +33,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className='height100'>
       <Head>
+      <meta name="twitter:site" content="@kennethmejiala" />
+        <meta name="twitter:creator" content="@kennethmejiala" />
+<meta name="twitter:card" content="summary_large_image"/>
         <script src='https://public.tableau.com/javascripts/api/tableau-2.min.js'></script>
       </Head>
       <Navbar/>
