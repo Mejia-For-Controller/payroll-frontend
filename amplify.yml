@@ -4,12 +4,11 @@ frontend:
     preBuild:
       commands:
         - yarn install
-        - mkdir -p build
     build:
       commands:
-        - yarn run build
+        - next export
   artifacts:
-    baseDirectory: build
+    baseDirectory: out
     files:
       - '**/*'
   cache:
