@@ -15,6 +15,7 @@
     "@types/react-dom": "^17.0.9",
     "audit": "^0.0.6",
     "chokidar": "^3.5.2",
+    "eslint": "^7.32.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-testing-library": "^3.10.2",
     "jquery-csv": "^1.0.21",
