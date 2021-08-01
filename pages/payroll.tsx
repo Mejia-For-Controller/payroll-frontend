@@ -6,7 +6,7 @@ import Head from 'next/head'
 
 function Payroll() {
   return <div className='height100'>
-          <script key='tableauscript' src='https://public.tableau.com/javascripts/api/tableau-2.min.js'></script>
+          
     <div suppressHydrationWarning={true} className='height100'>
       {
         process.browser &&
