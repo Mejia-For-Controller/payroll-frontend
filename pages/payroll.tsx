@@ -12,9 +12,7 @@ function Payroll() {
     />
   }
     <Head>
-    <meta name="twitter:title" content="Los Angeles Employee Payroll 2020 -Employee Names and Salaries"></meta>
-<meta name="twitter:description" content="Search Names and Job Titles and see their Salaries and Benefits."></meta>
-<meta name="twitter:image" content="https://data.mejiaforcontroller.com/cityworkercard.png"></meta>
+  
     </Head>
     </div>
 }
