@@ -7,9 +7,9 @@ import Head from 'next/head'
 function Payroll() {
   return <div className='height100'>
     <Head>
-    <meta name="twitter:title" content="Los Angeles Employee Payroll 2020 -Employee Names and Salaries"></meta>
-<meta name="twitter:description" content="Search Names and Job Titles and see their Salaries and Benefits."></meta>
-<meta name="twitter:image" content="https://data.mejiaforcontroller.com/cityworkercard.png"></meta>
+    <meta name="twitter:title" key='twittertitle' content="Los Angeles Employee Payroll 2020 -Employee Names and Salaries"></meta>
+<meta name="twitter:description"  key='twitterdesc' content="Search Names and Job Titles and see their Salaries and Benefits."></meta>
+<meta name="twitter:image"  key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercard.png"></meta>
     </Head>
      <TableauEmbedFunc
       key='payroll1'
