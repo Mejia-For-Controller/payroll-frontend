@@ -30,8 +30,13 @@ function classNames(...classes) {
 function MyApp({ Component, pageProps }: AppProps) {
   //import logo from './logo.svg';
 
+
+
   return (
     <div className='height100'>
+      <Head>
+        <meta property='twitter:site' content='@kennethmejiala' />
+      </Head>
       <Navbar/>
       <Component {...pageProps} class='height100'/>
     </div>
