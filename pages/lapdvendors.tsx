@@ -2,14 +2,14 @@ import TableauEmbed from '../components/tableau'
 import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
 
-function Payroll() {
+function lapdvendors() {
   return <div suppressHydrationWarning={true} className='height100'>{
     process.browser && <TableauEmbedFunc
-      key='payroll1'
-      url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
+      key='checkbook1'
+      url='https://public.tableau.com/views/LosAngelesFY2021PoliceCheckbookv1/VendorAmountList?:language=en-US&:embed=y&:origin=viz_share_link&:embed_code_version=3&:loadOrderID=0&:display_count=y&publish=yes'
     />
   }
     </div>
 }
 
-export default Payroll
+export default lapdvendors

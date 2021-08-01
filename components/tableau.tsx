@@ -44,9 +44,11 @@ class TableauEmbed extends React.Component<MyProps, MyState> {
         var options = {
             hideTabs: true,
             onFirstInteractive: function () {
-                console.log("Run this code when the viz has finished loading.");
-        //      document.querySelector('.tableauembed > iframe').style.height = '100%'
-            },
+              console.log("Run this code when the viz has finished loading.");
+              // @ts-ignore: Unreachable code error
+              document.querySelector('.tableauembed > iframe').style.height = '100%'
+              console.log('did it work?')
+          },
             device: deviceType
         };
           
