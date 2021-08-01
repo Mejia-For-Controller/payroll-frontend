@@ -20,7 +20,6 @@ function lapdvendors() {
 <meta property="og:site_name" content="Kenneth Mejia for Los Angeles City Controller"/>
 <meta property="og:url" content="https://lapdvendors.mejiaforcontroller.com"/>
 <meta property="og:description" content="View and Search Vendors, Transactions, and Spending Purpose of LAPD's 2021 Checkbook"/>
-<meta property="og:type" content="website"/>
 <meta property="og:image" content="https://lapdvendors.mejiaforcontroller.com/twittercard3-min.png"/>
     </Head>
     </div>
