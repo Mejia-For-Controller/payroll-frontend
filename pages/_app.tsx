@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className='height100'>
       <Head>
-
+        <meta property='twitter:site' content='@kennethmejiala' />
       </Head>
       <Navbar/>
       <Component {...pageProps} class='height100'/>
