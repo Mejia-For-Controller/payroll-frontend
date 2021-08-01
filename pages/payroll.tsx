@@ -11,7 +11,6 @@ function Payroll() {
       <meta name="twitter:site" content="@kennethmejiala" />
         <meta name="twitter:creator" content="@kennethmejiala" />
 <meta name="twitter:card" content="summary_large_image"/>
-       
     <meta name="twitter:title" key='twittertitle' content="Los Angeles Employee Payroll 2020 -Employee Names and Salaries"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="Search Names and Job Titles and see their Salaries and Benefits."></meta>
 <meta name="twitter:image"  key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercard.png"></meta>
