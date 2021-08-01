@@ -32,6 +32,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <div className='height100'>
+      <Head>
+      <script src='https://public.tableau.com/javascripts/api/tableau-2.min.js'></script>
+      </Head>
       <Navbar/>
      
       <Component {...pageProps} class='height100'/>

@@ -35,7 +35,8 @@
     "build": "next build",
     "start": "next start",
     "dev": "next dev -p 8003",
-    "export": "next export"
+    "export": "next export",
+    "bruh": "next build && next export"
   },
   "eslintConfig": {
     "extends": [

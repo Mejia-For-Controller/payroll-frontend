@@ -6,8 +6,7 @@ frontend:
         - yarn install
     build:
       commands:
-        - yarn run build
-        - yarn run export
+        - yarn run bruh
   artifacts:
     baseDirectory: out
     files:
