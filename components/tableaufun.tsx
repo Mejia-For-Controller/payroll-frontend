@@ -44,6 +44,8 @@ const TableauEmbedFunc = (props) => {
           onFirstInteractive: function () {
             console.log("Run this code when the viz has finished loading.");
             //      document.querySelector('.tableauembed > iframe').style.height = '100%'
+            // @ts-ignore: Unreachable code error
+            document.querySelector('.loadinginfo').style.display = "none"
           },
           device: deviceType
         };
@@ -71,7 +73,9 @@ const TableauEmbedFunc = (props) => {
 
       <div className='tableauembed height100' ref={(div) => {
       vizContainer = div;
-    }}>
+      }}>
+        <p className="text-center p-8 loadinginfo">Our team of well-fed corgis are downloading and visualizing your data.
+         This may take a few seconds, please wait.</p>
     </div>
     </div>
    
