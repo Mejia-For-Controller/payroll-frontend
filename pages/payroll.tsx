@@ -6,7 +6,9 @@ import Head from 'next/head'
 
 function Payroll() {
   return <div className='height100'>
-          
+    <Head>
+      <title>LA Payroll 2020 Employee Names and Salaries - Kentrol Panel</title>
+    </Head>
     <div suppressHydrationWarning={true} className='height100'>
       {
         process.browser &&
