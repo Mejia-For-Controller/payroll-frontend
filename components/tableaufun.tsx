@@ -42,7 +42,8 @@ const TableauEmbedFunc = (props) => {
         var options = {
           hideTabs: true,
           onFirstInteractive: function () {
-            //      document.querySelector('.tableauembed > iframe').style.height = '100%'
+             // @ts-ignore: Unreachable code error
+          document.querySelector('.tableauembed > iframe').style.height = '100%'
             // @ts-ignore: Unreachable code error
             var elementtohide = document.querySelector('.loadinginfo')
             elementtohide.remove()
