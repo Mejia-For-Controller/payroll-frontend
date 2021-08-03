@@ -44,6 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <div className='height100'>
       <Head>
         <meta property='twitter:site' content='@kennethmejiala' />
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
         <script key='tableauscript' src='https://public.tableau.com/javascripts/api/tableau-2.8.1.min.js'></script>
       </Head>
       <Navbar/>

@@ -4,6 +4,7 @@
 
 import Head from 'next/head'
 import Disclaimer from '../components/disclaimer'
+import DataCard from '../components/datacard'
 
 function AllData() {
   return <div>
@@ -17,7 +18,14 @@ function AllData() {
 <meta name="twitter:description"  key='twitterdesc' content="A searchable Database of City Spending and Budgets."></meta>
 <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
     </Head>
-    <Disclaimer/>
+    <div className="md:container md:mx-auto">
+      <DataCard
+        tableau='https://public.tableau.com/app/profile/kenneth.mejia.for.la.city.controller/viz/LAPayrollFY2020withNames/Dashboard1'
+        excel='http://datasets.mejiaforcontroller.com/cityofLA2020payrollemployeesv2.xlsx'
+      />
+<Disclaimer />
+</div>
+    
   </div>
 }
 
