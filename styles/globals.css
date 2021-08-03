@@ -21,4 +21,11 @@ body {
 
 #__next {
     height: 100%;
+
+}
+
+.corgiloading {
+    position: absolute;
+    background-color: #f7f7f700;
+    width: 100%;
 }

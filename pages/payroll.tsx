@@ -1,6 +1,7 @@
 //import TableauEmbed from '../components/tableau'
 import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
+import Disclaimer from '../components/disclaimer'
 
 import Head from 'next/head'
 
@@ -24,6 +25,9 @@ function Payroll() {
           url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
           acceptUrlParams='true'
         />}
+      <div className='p-2'>
+      <Disclaimer/>
+      </div>
     </div></div>
 }
 
