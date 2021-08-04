@@ -22,7 +22,7 @@ function Payroll() {
         process.browser &&
         <TableauEmbedFunc
           key='payroll1'
-          url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
+          url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
           acceptUrlParams='true'
         />}
       <div className='p-2'>
