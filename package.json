@@ -21,7 +21,7 @@
     "eslint-plugin-flowtype": "^5.8.2",
     "eslint-plugin-testing-library": "^3.10.2",
     "jquery-csv": "^1.0.21",
-    "next": "latest",
+    "next": "^11.0.1",
     "postcss": "^8.0.0",
     "postcss-preset-env": "^6.7.0",
     "react": "latest",
@@ -39,7 +39,8 @@
     "start": "next start",
     "dev": "next dev -p 8003",
     "export": "next export",
-    "bruh": "next build && next export"
+    "bruh": "next build && next export",
+    "duo": "next build && next start"
   },
   "eslintConfig": {
     "extends": [

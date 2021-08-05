@@ -18,13 +18,14 @@ function AllData() {
 <meta name="twitter:description"  key='twitterdesc' content="A searchable Database of City Spending and Budgets."></meta>
 <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
     </Head>
-    <div className="md:container md:mx-auto">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="">
       <DataCard
         tableau='https://public.tableau.com/app/profile/kenneth.mejia.for.la.city.controller/viz/LAPayrollFY2020withNames/Dashboard1'
         excel='http://datasets.mejiaforcontroller.com/cityofLA2020payrollemployeesv2.xlsx'
       />
 <Disclaimer />
-</div>
+</div></div>
     
   </div>
 }

@@ -1,11 +1,12 @@
-//import TableauEmbed from '../components/tableau'
-import TableauEmbedFunc from '../components/tableaufun'
-//import BasicEmbed from '../components/basicembed'
-import Disclaimer from '../components/disclaimer'
-
 import Head from 'next/head'
+//import TableauEmbed from '../components/tableau'
+import TableauEmbedFunc from '../../components/tableaufun'
+//import BasicEmbed from '../components/basicembed'
+import Disclaimer from '../../components/disclaimer'
 
-function Payroll() {
+import PayrollNav from '../../components/payrollnav'
+
+function Summary() {
   return <div className='height100'>
     <Head>
       <title>LA Payroll 2020 Employee Names and Salaries - Kentrol Panel</title>
@@ -18,17 +19,17 @@ function Payroll() {
 <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
-      {
-        process.browser &&
+    <PayrollNav/>
         <TableauEmbedFunc
           key='payroll1'
-          url='https://public.tableau.com/views/LAPayrollFY2020withNames/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
+          url='https://public.tableau.com/views/LAPayrollFY2020withNames/SummaryPage'
           acceptUrlParams='true'
-        />}
+        />
+  
       <div className='p-2'>
       <Disclaimer/>
       </div>
-    </div></div>
+      </div></div>
 }
 
-export default Payroll
+export default Summary
