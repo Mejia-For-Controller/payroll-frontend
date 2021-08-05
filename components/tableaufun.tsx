@@ -22,7 +22,9 @@ type MyState = {
 type TableauType = React.Component<MyProps, MyState> & {vizContainer: any}
 
 const TableauEmbedFunc = (props) => {
+
   var vizContainer;
+ // var viz;
 
   useEffect(() => {
 
@@ -32,6 +34,8 @@ const TableauEmbedFunc = (props) => {
         const vizUrl = props.url;
         var thingwidth = document.documentElement.clientWidth
     
+        const filterAttachToUrl = props.filterAttachToUrl;
+
         var deviceType = "desktop";
     
         if (thingwidth < 767) {
@@ -53,13 +57,16 @@ const TableauEmbedFunc = (props) => {
         };
           
        // const vizContainer = vizContainer;
+        
+       const queryString = window.location.search;
+       console.log(queryString);
           
         console.log('vizContainer', vizContainer)
         console.log('window.tableau', window.tableau)
         // @ts-ignore: Unreachable code error
         if (typeof window.tableau !== 'undefined') {
           // @ts-ignore: Unreachable code error
-          let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
+         let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
         }
       }
 

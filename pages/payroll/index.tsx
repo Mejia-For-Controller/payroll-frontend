@@ -9,6 +9,14 @@ import { Tab } from '@headlessui/react'
 
 import Head from 'next/head'
 
+var filtersForIndex = [
+  {
+    "url": "Department",
+    "filter": "Department",
+    "type": "single"
+  }  
+]
+
 function Payroll() {
   return <div className='height100'>
     <Head>
@@ -24,9 +32,11 @@ function Payroll() {
     <div suppressHydrationWarning={true} className='height100'>
     <PayrollNav/>
         <TableauEmbedFunc
-          key='payroll1'
-          url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
-          acceptUrlParams='true'
+        key='payroll1'
+        url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
+        acceptUrlParams='true'
+        
+        filterAttachToUrl={filtersForIndex}
         />
   
       <div className='p-2'>

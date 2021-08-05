@@ -16,7 +16,8 @@ const navigation = [
   },
   {
     'name': "Payroll",
-    'url': "/payroll"
+    'url': "/payroll",
+    'validRegexString': 'payroll\/.*'
   },
   {
     'name': "Checkbook",
@@ -62,7 +63,8 @@ const Navbar = () => (
                        
 
                         <ActiveLink activeClassName="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" href={item.url}
-                        key={itemIdx}
+                          key={itemIdx}
+                          validRegexString={item.validRegexString}
                         >
                         <a className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                                     {item.name}

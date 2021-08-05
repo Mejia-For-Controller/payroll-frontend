@@ -8,11 +8,18 @@ const ActiveLink = ({ children, activeClassName, ...props }) => {
   const child = Children.only(children)
   const childClassName = child.props.className || ''
 
+  var propMatch =
+    props.validRegexString
+      ? props.validRegexString
+      : "a^"
+
   // pages/index.js will be matched via props.href
   // pages/about.js will be matched via props.href
   // pages/[slug].js will be matched via props.as
+  var regex = new RegExp(propMatch, 'i');
+  
   const className =
-    asPath === props.href || asPath === props.as
+    asPath === props.href || asPath === props.as || regex.test(asPath)
       ? `${childClassName} ${activeClassName}`.trim()
       : childClassName
 
