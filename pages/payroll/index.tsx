@@ -24,7 +24,12 @@ var filtersForIndex = [
     "url": "Department",
     "filter": "Department",
     "type": "single"
-  }  
+  },
+  {
+    "url": "FirstName",
+    "filter": "First Name",
+    "type": "single"
+  }
 ]
 
 function Payroll() {

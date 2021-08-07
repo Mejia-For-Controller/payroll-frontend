@@ -61,6 +61,7 @@ const TableauEmbedFunc = (props) => {
             elementtohide.remove()
             console.log("Run this code when the viz has finished loading.");
           },
+          
           device: deviceType
         };
 
