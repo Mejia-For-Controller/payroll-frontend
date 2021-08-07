@@ -43,6 +43,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className='height100'>
       <Head>
+      <link rel="icon" href="https://mejiaforcontroller.com/wp-content/uploads/2020/12/favicon.png" type="image/x-icon" />
         <meta property='twitter:site' content='@kennethmejiala' />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
         <script key='tableauscript' src='https://public.tableau.com/javascripts/api/tableau-2.8.1.min.js'></script>
