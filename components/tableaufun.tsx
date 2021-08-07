@@ -64,7 +64,7 @@ const TableauEmbedFunc = (props) => {
           device: deviceType
         };
 
-        if (filtersAttachToUrl === true) {
+        if (filtersAttachToUrl) {
           filtersAttachToUrl.forEach(element => {
             console.log(element)
             if (element.type === 'single') {
