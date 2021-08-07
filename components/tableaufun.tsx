@@ -72,7 +72,7 @@ const TableauEmbedFunc = (props) => {
               if (urlParams.has(element.url)) {
   
                 //add the option like this obj["key3"] = "value3";
-                options[`${element.filter}`] = urlParams.get(element.url)
+                options[`${element.filter}`] = decodeURI(urlParams.get(element.url))
               }
             }
           })
