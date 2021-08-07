@@ -27,6 +27,7 @@ const TableauEmbedFunc = (props) => {
  // var viz;
   
 
+
   useEffect(() => {
 
     if (typeof window !== 'undefined') {
@@ -36,8 +37,12 @@ const TableauEmbedFunc = (props) => {
 
         // client-side-only code
         const vizUrl = props.url;
-        var filtersAttachToUrl = props.filtersAttachToUrl;
         var thingwidth = document.documentElement.clientWidth;
+
+        var filtersAttachToUrl = props.filtersAttachToUrl;
+        const queryString = window.location.search;
+        console.log(queryString);
+        const urlParams = new URLSearchParams(queryString);
 
         var deviceType = "desktop";
     
@@ -56,14 +61,26 @@ const TableauEmbedFunc = (props) => {
             elementtohide.remove()
             console.log("Run this code when the viz has finished loading.");
           },
-          device: deviceType,
-          "Department": "POLICE"
+          device: deviceType
         };
+
+        if (filtersAttachToUrl === true) {
+          filtersAttachToUrl.forEach(element => {
+            console.log(element)
+            if (element.type === 'single') {
+              if (urlParams.has(element.url)) {
+  
+                //add the option like this obj["key3"] = "value3";
+                options[`${element.filter}`] = urlParams.get(element.url)
+              }
+            }
+          })
+        }
+        
           
        // const vizContainer = vizContainer;
         
-        const queryString = window.location.search;
-        console.log(queryString);
+     
         
     //   const queryString = window.location.search;
       // console.log(queryString);
@@ -78,7 +95,7 @@ const TableauEmbedFunc = (props) => {
 
         console.log("viz")
 
-        const urlParams = new URLSearchParams(queryString);
+       
         //initial import filters from url
        /* filtersAttachToUrl.forEach(element => {
           console.log(element)
