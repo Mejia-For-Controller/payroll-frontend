@@ -9,6 +9,15 @@ import { Tab } from '@headlessui/react'
 
 import Head from 'next/head'
 
+import dynamic from 'next/dynamic'
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import('../../components/tableaufun'),
+  { ssr: false }
+)
+
+import React from 'react'
+
 var filtersForIndex = [
   {
     "url": "Department",
@@ -30,15 +39,15 @@ function Payroll() {
 <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
-    <PayrollNav/>
-        <TableauEmbedFunc
+      <PayrollNav />
+      <React.StrictMode>
+      <DynamicComponentWithNoSSR
         key='payroll1'
         url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
-        acceptUrlParams='true'
-        
-        filterAttachToUrl={filtersForIndex}
+      
         />
-  
+       
+  </React.StrictMode>
       <div className='p-2'>
       <Disclaimer/>
       </div>

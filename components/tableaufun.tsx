@@ -30,6 +30,9 @@ const TableauEmbedFunc = (props) => {
 
     if (typeof window !== 'undefined') {
       if (process.browser) {
+
+        console.log("current time", Date.now())
+
         // client-side-only code
         const vizUrl = props.url;
         var thingwidth = document.documentElement.clientWidth
@@ -58,8 +61,8 @@ const TableauEmbedFunc = (props) => {
           
        // const vizContainer = vizContainer;
         
-       const queryString = window.location.search;
-       console.log(queryString);
+    //   const queryString = window.location.search;
+      // console.log(queryString);
           
         console.log('vizContainer', vizContainer)
         console.log('window.tableau', window.tableau)
@@ -75,7 +78,7 @@ const TableauEmbedFunc = (props) => {
     
     }
 
-  })
+  }, [])
 
   return (
     <div className='height100'>

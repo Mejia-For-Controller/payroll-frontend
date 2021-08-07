@@ -23,7 +23,7 @@ function AllData() {
       <DataCard
         tableau='https://public.tableau.com/app/profile/kenneth.mejia.for.la.city.controller/viz/LAPayrollFY2020withNames/Dashboard1'
         excel='http://datasets.mejiaforcontroller.com/cityofLA2020payrollemployeesv2.xlsx'
-      />
+        />
 <Disclaimer />
 </div></div>
     
