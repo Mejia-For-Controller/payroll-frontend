@@ -61,6 +61,9 @@ const TableauEmbedFunc = (props) => {
           
        // const vizContainer = vizContainer;
         
+        const queryString = window.location.search;
+        console.log(queryString);
+        
     //   const queryString = window.location.search;
       // console.log(queryString);
           
@@ -74,7 +77,7 @@ const TableauEmbedFunc = (props) => {
       }
 
       // const {tableau} = window;
-
+      
     
     }
 
