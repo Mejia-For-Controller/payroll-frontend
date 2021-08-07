@@ -9,6 +9,7 @@ import { Tab } from '@headlessui/react'
 
 import Head from 'next/head'
 
+import React from 'react'
 import dynamic from 'next/dynamic'
 
 const DynamicComponentWithNoSSR = dynamic(
@@ -16,7 +17,7 @@ const DynamicComponentWithNoSSR = dynamic(
   { ssr: false }
 )
 
-import React from 'react'
+
 
 var filtersForIndex = [
   {
