@@ -22,16 +22,23 @@ type MyState = {
 type TableauType = React.Component<MyProps, MyState> & {vizContainer: any}
 
 const TableauEmbedFunc = (props) => {
+
   var vizContainer;
+ // var viz;
 
   useEffect(() => {
 
     if (typeof window !== 'undefined') {
       if (process.browser) {
+
+        console.log("current time", Date.now())
+
         // client-side-only code
         const vizUrl = props.url;
         var thingwidth = document.documentElement.clientWidth
     
+        const filterAttachToUrl = props.filterAttachToUrl;
+
         var deviceType = "desktop";
     
         if (thingwidth < 767) {
@@ -53,13 +60,16 @@ const TableauEmbedFunc = (props) => {
         };
           
        // const vizContainer = vizContainer;
+        
+    //   const queryString = window.location.search;
+      // console.log(queryString);
           
         console.log('vizContainer', vizContainer)
         console.log('window.tableau', window.tableau)
         // @ts-ignore: Unreachable code error
         if (typeof window.tableau !== 'undefined') {
           // @ts-ignore: Unreachable code error
-          let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
+         let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
         }
       }
 
@@ -68,7 +78,7 @@ const TableauEmbedFunc = (props) => {
     
     }
 
-  })
+  }, [])
 
   return (
     <div className='height100'>
@@ -76,7 +86,7 @@ const TableauEmbedFunc = (props) => {
       <div className='tableauembed height100' ref={(div) => {
       vizContainer = div;
       }}>
-        <p className="text-center loadinginfo corgiloading sm:p-4 md:p-8">Our team of well-fed corgis are downloading and visualizing your data.
+        <p className="text-center loadinginfo corgiloading sm:p-4 md:p-8 sm:text-sm md:text-base max-w-full">Our team of well-fed corgis are downloading and visualizing your data.
          This may take a few seconds, please wait.</p>
     </div>
     </div>
