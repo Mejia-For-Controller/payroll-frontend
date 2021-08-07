@@ -25,6 +25,7 @@ const TableauEmbedFunc = (props) => {
 
   var vizContainer;
  // var viz;
+  
 
   useEffect(() => {
 
@@ -35,9 +36,8 @@ const TableauEmbedFunc = (props) => {
 
         // client-side-only code
         const vizUrl = props.url;
-        var thingwidth = document.documentElement.clientWidth
-    
-        const filterAttachToUrl = props.filterAttachToUrl;
+        var filtersAttachToUrl = props.filtersAttachToUrl;
+        var thingwidth = document.documentElement.clientWidth;
 
         var deviceType = "desktop";
     
@@ -56,7 +56,8 @@ const TableauEmbedFunc = (props) => {
             elementtohide.remove()
             console.log("Run this code when the viz has finished loading.");
           },
-          device: deviceType
+          device: deviceType,
+          "Department": "POLICE"
         };
           
        // const vizContainer = vizContainer;
@@ -72,12 +73,27 @@ const TableauEmbedFunc = (props) => {
         // @ts-ignore: Unreachable code error
         if (typeof window.tableau !== 'undefined') {
           // @ts-ignore: Unreachable code error
-         let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
+          let viz = new window.tableau.Viz(vizContainer, vizUrl, options)
         }
+
+        console.log("viz")
+
+        const urlParams = new URLSearchParams(queryString);
+        //initial import filters from url
+       /* filtersAttachToUrl.forEach(element => {
+          console.log(element)
+          if (element.type === 'single') {
+            if (urlParams.has(element.url)) {
+              urlParams.get(element.url)
+            }
+          }
+          
+         
+        })*/
       }
 
       // const {tableau} = window;
-      
+
     
     }
 

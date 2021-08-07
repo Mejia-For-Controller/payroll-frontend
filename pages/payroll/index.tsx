@@ -42,10 +42,10 @@ function Payroll() {
     <div suppressHydrationWarning={true} className='height100'>
       <PayrollNav />
       <React.StrictMode>
-      <DynamicComponentWithNoSSR
-        key='payroll1'
-        url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
-      
+        <DynamicComponentWithNoSSR
+          key='payroll1'
+          url='https://public.tableau.com/views/LAPayrollFY2020withNames/EmployeeList'
+          filtersAttachToUrl={filtersForIndex}
         />
        
   </React.StrictMode>
