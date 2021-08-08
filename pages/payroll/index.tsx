@@ -29,6 +29,16 @@ var filtersForIndex = [
     "url": "FirstName",
     "filter": "First Name",
     "type": "single"
+  },
+  {
+    "url": "LastName",
+    "filter": "Last Name",
+    "type": "single"
+  },
+  {
+    "url": "JobClassTitle",
+    "filter": "",
+    "type": "single"
   }
 ]
 
