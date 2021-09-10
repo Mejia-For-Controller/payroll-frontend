@@ -13,6 +13,6 @@ export default function EmailSubscribe() {
   }
 
   return (
-      
+      <p>hi</p>
   )
 }
