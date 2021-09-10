@@ -1,4 +1,4 @@
-import {EmailSubscribe} from '../components/emailsubscribe'
+import EmailSubscribe from './emailsubscribe'
 import ActiveLink from './ActiveLink'
 import kennethavatar from './kennethheadshot.png';
 import { Fragment } from 'react'
