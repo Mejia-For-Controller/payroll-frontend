@@ -27,13 +27,13 @@ function Payroll() {
 <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" key='twittertitle' content="2021 Affordable Housing"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="Map of Affordable housing in Los Angeles"></meta>
-<meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
+<meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
         <DynamicComponentWithNoSSR
           key='payroll1'
-          url='https://public.tableau.com/views/affordablehousing_16313098092910/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
+          url='https://public.tableau.com/views/AffordableHousingLA/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
         />
        
   </React.StrictMode>
