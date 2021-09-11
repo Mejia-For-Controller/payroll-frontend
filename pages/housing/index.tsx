@@ -33,7 +33,7 @@ function Payroll() {
       <React.StrictMode>
         <DynamicComponentWithNoSSR
           key='payroll1'
-          url='https://public.tableau.com/app/profile/kenneth.mejia.for.la.city.controller/viz/AffordableHousingLA/Dashboard1#1'
+          url='https://public.tableau.com/views/AffordableHousingLA/Dashboard1?:language=en-US&:display_count=n&:origin=viz_share_link'
         />
        
   </React.StrictMode>
