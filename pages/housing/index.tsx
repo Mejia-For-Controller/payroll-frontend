@@ -27,7 +27,7 @@ function Payroll() {
 <meta name="twitter:card" content="summary_large_image"/>
     <meta name="twitter:title" key='twittertitle' content="2021 Affordable Housing"></meta>
 <meta name="twitter:description"  key='twitterdesc' content="Map of Affordable housing in Los Angeles"></meta>
-<meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
+<meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/affordablehousingpic.png"></meta>
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
