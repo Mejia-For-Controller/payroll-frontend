@@ -7,6 +7,8 @@ import NavTabs from '../../components/tabs'
 
 import { Tab } from '@headlessui/react'
 
+import HousingNav from '../../components/housingnav'
+
 import Head from 'next/head'
 
 import React from 'react'
@@ -31,18 +33,7 @@ function Payroll() {
     </Head>
     <div suppressHydrationWarning={true} className='height100'>
       <React.StrictMode>
-        <NavTabs
-        tabs={[
-          {
-            'name': "Map",
-            'url': "/housing/"
-          },
-          {
-            'name': "List",
-            'url': "/housing/list"
-          }
-        ]}  
-        ></NavTabs>
+        <HousingNav/>
         <DynamicComponentWithNoSSR
           key='payroll1'
           url='https://public.tableau.com/views/AffordableHousingLA/sheet?:language=en-US&:display_count=n&:origin=viz_share_link'
