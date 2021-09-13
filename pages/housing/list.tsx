@@ -45,7 +45,7 @@ function Payroll() {
         ></NavTabs>
         <DynamicComponentWithNoSSR
           key='payroll1'
-          url='https://public.tableau.com/views/AffordableHousingLA/map?:language=en-US&:display_count=n&:origin=viz_share_link'
+          url='https://public.tableau.com/views/AffordableHousingLA/sheet?:language=en-US&:display_count=n&:origin=viz_share_link'
         />
        
   </React.StrictMode>
