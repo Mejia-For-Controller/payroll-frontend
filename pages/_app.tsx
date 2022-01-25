@@ -48,7 +48,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
         <script key='tableauscript' src='https://public.tableau.com/javascripts/api/tableau-2.8.1.min.js'></script>
       </Head>
-      <Navbar/>
       <Component {...pageProps} class='height100'/>
     </div>
   );  

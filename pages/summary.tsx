@@ -1,10 +1,10 @@
 import Head from 'next/head'
 //import TableauEmbed from '../components/tableau'
-import TableauEmbedFunc from '../../components/tableaufun'
+import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
-import Disclaimer from '../../components/disclaimer'
+import Disclaimer from '../components/disclaimer'
 
-import PayrollNav from '../../components/payrollnav'
+import PayrollNav from '../components/payrollnav'
 
 function Summary() {
   return <div className='height100'>

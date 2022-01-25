@@ -2,11 +2,15 @@ import ActiveLink from './ActiveLink'
 const navigationPayroll = [
   {
     'name': "Summary",
-    'url': "/payroll/summary"
+    'url': "summary"
   },
   {
     'name': "Employee List",
-    'url': "/payroll"
+    'url': "/"
+  },
+  {
+    'name': "Mejia for Controller",
+    'url': "https://mejiaforcontroller.com/"
   }
 ]
 
@@ -16,10 +20,10 @@ function PayrollNav() {
       {navigationPayroll.map((item, itemIdx) =>
                      
               
-                     <ActiveLink activeClassName="text-gray-600 py-3 px-6 block hover:text-blue-500 focus:outline-none text-blue-500 border-b-2 font-medium border-blue-500" href={item.url}
+                     <ActiveLink activeClassName="text-gray-600 py-3 px-6 block hover:text-green-500 focus:outline-none text-green-500 border-b-2 font-medium border-green-500" href={item.url}
                      key={itemIdx}
                      >
-                     <a className="text-gray-600 py-3 px-6 block hover:text-blue-500 focus:outline-none">
+                     <a className="text-gray-600 py-3 px-6 block hover:text-green-500 focus:outline-none underline">
                                                  {item.name}
                      </a>
                      </ActiveLink>
