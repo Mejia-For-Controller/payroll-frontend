@@ -5,25 +5,28 @@ const navigationPayroll = [
     'url': "summary"
   },
   {
-    'name': "Employee List",
-    'url': "/"
+    'name': "Employees",
+    'url': "/",
   },
   {
-    'name': "Mejia for Controller",
-    'url': "https://mejiaforcontroller.com/"
+    'name': "Our Campaign",
+    'url': "https://mejiaforcontroller.com/",
+    'newtab': true
   }
 ]
 
 function PayrollNav() {
-  return <div className="bg-white">
-    <nav className="flex flex-col sm:flex-row">
+  return  <div className="bg-black flex flex-col">
+  <nav className="flex flex-row">
       {navigationPayroll.map((item, itemIdx) =>
                      
               
-                     <ActiveLink activeClassName="text-gray-600 py-3 px-6 block hover:text-green-500 focus:outline-none text-green-500 border-b-2 font-medium border-green-500" href={item.url}
+                     <ActiveLink activeClassName="text-gray-100 py-3 px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300" href={item.url}
                      key={itemIdx}
                      >
-                     <a className="text-gray-600 py-3 px-6 block hover:text-green-500 focus:outline-none underline">
+                     <a className="text-gray-100 py-3 px-6 block hover:text-green-300 focus:outline-none underline"
+                          target={`${item.newtab === true ? "_blank" : ""}`}
+                     >
                                                  {item.name}
                      </a>
                      </ActiveLink>
