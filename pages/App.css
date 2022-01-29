@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;700&display=swap');
 .App {
   text-align: center;
 }
@@ -51,6 +51,7 @@
     height: 100%;
     margin: 0;
    /* font-family: "mejiafont";*/
+   font-family: 'Lexend Deca', sans-serif;
   }
   .box {
     display: flex;
