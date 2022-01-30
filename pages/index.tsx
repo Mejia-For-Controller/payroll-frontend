@@ -14,6 +14,70 @@ import dynamic from 'next/dynamic'
 
 import { io } from "socket.io-client";
 
+const departments = [
+  {
+    grouped: false,
+    array: [
+      "Aging",
+"Airports",
+"Animal Services",
+"Building and Safety",
+"Cannabis Regulation",
+"City Administrative Officer",
+"City Attorney",
+"City Clerk",
+"City Employees Retirement System",
+"City Ethics Commission",
+"City Planning",
+"Controller",
+"Convention and Tourism Development",
+"Cultural Affairs",
+"Disability",
+"Economic and Workforce Development",
+"El Pueblo De Los Angeles",
+"Emergency Management",
+"Employee Relations Board",
+"Finance",
+"Fire",
+"General Services",
+"Harbor",
+"Housing and Community Investment",
+"IT",
+"Library",
+"Mayor",
+"Neighborhood Empowerment",
+"Pension",
+"Personnel",
+"Police",
+"Public Accountability",
+      ],
+  },
+  
+    {
+      grouped: true,
+      nameOfGroup: "Public Works",
+      array: [
+        "Board of Public Works",
+        "Contract Administration",
+        "Engineering",
+        "Sanitation",
+        "Street Lighting",
+        "Street Services",
+      ]
+    },
+    {
+      grouped: false,
+      array: [
+  "Recreation and Parks",
+  "Transportation",
+  "Water and Power",
+  "Zoo"
+        ],
+    },
+    
+  
+  ];
+
 export class  Payroll extends React.Component<any, any> {
   socketmain: any;
   maintainSocketTimer: any;
@@ -100,11 +164,26 @@ export class  Payroll extends React.Component<any, any> {
           </div>
 
           
-          <div id='filterpanel' className='w-full absolute bottom-0 md:w-1/2 md:block bg-truegray-800 px-3 py-1'>
-<p className='text-lg'>Filter</p>
-<div className='flex flex-col'>
-  <p>First Name</p>
-      <input className='bg-truegray-600'></input>
+          <div id='filterpanel' className='w-full absolute bottom-0 md:w-1/3 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
+<p className='text-lg'>Filter Employees</p>
+<div className='flex flex-row md:flex-col space-x-1 md:space-x-0 md:space-y-2'>
+<div className='flex flex-col md:flex-row md:w-full'>
+  <p className='grow'>First Name</p>
+      <input className='bg-truegray-600 md:grow lg:w-9/12 md:ml-2'></input>
+</div>
+<div className='flex flex-col md:flex-row md:w-full'>
+  <p className=''>Last Name</p>
+      <input className='bg-truegray-600 md:grow lg:w-9/12 md:ml-2'></input>
+</div>
+</div>
+
+<div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
+  <p className='align-middle my-auto'>Departments</p>
+      <button className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>Police
+      <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
+    <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
+</svg>
+      </button>
 </div>
           </div>
         </div>
