@@ -17,6 +17,16 @@
   }
 }
 
+ /* when the system is enabled, show the check mark, hide it on hover */
+.parentcheckmark > .checkmarkenable {
+ display: block;
+}
+
+.parentcheckmark:hover > .checkmarkenable {
+  display: hidden;
+ }
+ 
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

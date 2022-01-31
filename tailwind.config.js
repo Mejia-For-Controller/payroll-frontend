@@ -11,7 +11,8 @@ module.exports = {
         truegray: colors.trueGray,
         mejito: '#41ffca',
         lightmejito: '#c3f2ef',
-        green: colors.green
+        green: colors.green,
+        mejitodark: "#00C853"
       }
     },
   },
