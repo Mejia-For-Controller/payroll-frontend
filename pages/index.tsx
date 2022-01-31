@@ -170,7 +170,7 @@ export class  Payroll extends React.Component<any, any> {
     });
 
     this.setState({
-      filterpanel: window.innerWidth >= 768 ? true : false
+      filterpanel: window.innerWidth >= 768 ? true : true
     })
 
     
@@ -241,6 +241,12 @@ var singledept  = Object.entries(this.state.enabledDept).filter((eachDept) => ea
     }
   }
 
+  toggleDeptPanel = () => {
+    this.setState({
+      deptpanelopen: !this.state.deptpanelopen
+    })
+  }
+
   render () {
     return (
       <div className='height100 bg-truegray-900'>
@@ -298,7 +304,9 @@ this.state.filterpanel === true &&
 
 <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
   <p className='align-middle my-auto'>Departments</p>
-      <button className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
+      <button 
+      onClick={(event) => {this.toggleDeptPanel()} }
+      className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
         {this.departmentsSelectedRender()}
       <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
     <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
@@ -309,9 +317,25 @@ this.state.filterpanel === true &&
 {
   this.state.deptpanelopen === true && (
     
-<div className='bg-truegray-800 max-h-screen h-screen flex flex-col md:h-full'>
+<div className='bg-truegray-800 max-h-screen h-screen flex flex-col md:h-full z-40'
+
+style={
+  {
+    zIndex: 50
+  }
+}
+>
   <div className=' px-2 pt-4 pb-4 md:pt-2 md:pb-0 sticky top-0 bg-truegray-800 flex flex-col md:flex-row'> 
+<div className='flex flex-row'>
 <p className='text-lg'>Select Departments</p>
+<button className='ml-auto mr-2'
+ onClick={(event) => {this.toggleDeptPanel()} }
+>
+<svg className='h-10 w-10' viewBox="0 0 24 24">
+    <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+</svg>
+</button>
+</div>
 <div
 className='flex flex-row  space-x-4 my-auto md:ml-8'
 >
@@ -390,7 +414,11 @@ className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 fle
   )
 }
 
-<div className='flex flex-col md:flex-row md:w-full'>
+
+
+<div className={`flex flex-col md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
+
+>
   <p className='grow'>Job Title</p>
   <input className='bg-truegray-600 md:grow lg:w-9/12 md:ml-2'
   onChange={e => {
