@@ -88,6 +88,22 @@ export class AutocompleteBox extends React.Component<any, any> {
         }
     }
 
+    nextFocus = () => {
+        this.setState((state, props) => {
+            return {
+                currentFocus: state.currentFocus + 1
+            }
+        })
+    }
+
+    prevFocus = () => {
+        this.setState((state, props) => {
+            return {
+                currentFocus: state.currentFocus - 1
+            }
+        })
+    }
+
     componentDidMount = () => {
 
         /*execute a function when someone clicks in the document:*/
@@ -102,14 +118,20 @@ document.addEventListener("click",(e) => {
         inputBoi.addEventListener("keydown", (e) => {
             var x: any = document.getElementById(indexName + "autocomplete-list");
             if (x) x = x.getElementsByTagName("div");
+
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    this.prevFocus()
+                } else {
+                    this.nextFocus()
+                }
+                e.preventDefault();
+            }
+
             if (e.keyCode == 40) {
                 /*If the arrow DOWN key is pressed,
                 increase the currentFocus variable:*/
-                this.setState((state, props) => {
-                    return {
-                        currentFocus: state.currentFocus + 1
-                    }
-                })
+                this.nextFocus()
                 /*and and make the current item more visible:*/
                 //addActive(x);
             } else if (e.keyCode == 38) { //up
@@ -117,11 +139,7 @@ document.addEventListener("click",(e) => {
                 decrease the currentFocus variable:*/
                 // currentFocus--;
 
-                this.setState((state, props) => {
-                    return {
-                        currentFocus: state.currentFocus - 1
-                    }
-                })
+              this.prevFocus()
 
                 /*and and make the current item more visible:*/
                 //addActive(x);
@@ -189,6 +207,7 @@ document.addEventListener("click",(e) => {
                             this.setState({
                                 openUpBox: true
                             })
+                            
                         }
 
                        
