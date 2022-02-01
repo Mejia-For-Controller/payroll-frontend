@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='twitter:site' content='@kennethmejiala' />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
       </Head>
-      <Component {...pageProps} class='height100'/>
+      <Component {...pageProps} class='h-full'/>
     </div>
   );  
            

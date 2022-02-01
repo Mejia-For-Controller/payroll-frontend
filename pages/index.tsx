@@ -317,7 +317,7 @@ this.state.filterpanel === true &&
 {
   this.state.deptpanelopen === true && (
     
-<div className='bg-truegray-800 max-h-screen h-screen flex flex-col md:h-full z-40'
+<div className='bg-truegray-800 h-full flex flex-col fixed bottom-0 md:h-full overflow-scroll'
 
 style={
   {
@@ -325,7 +325,7 @@ style={
   }
 }
 >
-  <div className=' px-2 pt-4 pb-4 md:pt-2 md:pb-0 sticky top-0 bg-truegray-800 flex flex-col md:flex-row'> 
+  <div className=' px-2 pt-4 pb-4 md:pt-2 md:pb-0 sticky top-0 h-content bg-truegray-800  md:flex-row flex flex-col'> 
 <div className='flex flex-row'>
 <p className='text-lg'>Select Departments</p>
 <button className='ml-auto mr-2'
@@ -337,7 +337,7 @@ style={
 </button>
 </div>
 <div
-className='flex flex-row  space-x-4 my-auto md:ml-8'
+className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
 >
 
 <div 
@@ -361,10 +361,11 @@ onClick={() => {
 
 </div>
 </div>
+<div className=' overflow-y-scroll grow h-full'>
 {
   departments.map((eachDepartmentGroup) => (
     <div className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700': "bg-truegray-800"}  px-1 `}>
-         <div className='flex flex-col overflow-y-auto '>
+         <div className='flex flex-col h-full '>
          {
             eachDepartmentGroup.nameOfGroup && (
               
@@ -410,6 +411,7 @@ className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 fle
       </div>
   ))
             }
+  </div>
 </div>
   )
 }
