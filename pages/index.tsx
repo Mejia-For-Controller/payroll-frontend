@@ -291,7 +291,7 @@ this.state.filterpanel === true &&
 (
           <div id='filterpanel' className='w-full absolute bottom-0 md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
 <p className='text-lg'>Filter Employees</p>
-<div className='flex flex-row md:flex-col space-x-1 md:space-x-0 md:space-y-2'>
+<div className='flex flex-col space-x-1 md:space-x-0 md:space-y-2'>
 <div className='flex flex-col md:flex-row md:w-full'>
   <p className='grow'>First Name</p>
       <input className='bg-truegray-600 md:grow lg:w-9/12 md:ml-2'></input>
