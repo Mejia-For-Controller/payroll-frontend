@@ -249,7 +249,7 @@ var singledept  = Object.entries(this.state.enabledDept).filter((eachDept) => ea
 
   render () {
     return (
-      <div className='height100 bg-truegray-900'>
+      <div className='height100 w-screen h-screen bg-truegray-900'>
     <Head>
     <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
       <meta property="og:type" content="website"/>

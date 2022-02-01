@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [])
 
   return (
-    <div className='height100'>
+    <div className='h-screen'>
       <Head>
      
       <link rel="icon" href="https://mejiaforcontroller.com/wp-content/uploads/2020/12/favicon.png" type="image/x-icon" />
