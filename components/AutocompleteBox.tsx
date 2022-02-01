@@ -165,13 +165,34 @@ document.addEventListener("click",(e) => {
                     onChange={e => {
                         this.searchEmployeeJobTitle()
                         this.sendBackToParent()
-
                     }}
 
-                    onKeyPress={e => {
+                    onClick={(e) => {
                         this.setState({
                             openUpBox: true
                         })
+                    }}
+
+                    onPaste={(e) => {
+                        this.searchEmployeeJobTitle();
+                        this.setState({
+                            openUpBox: true
+                        })
+                    }}
+
+                    onKeyPress={e => {
+                        if (e.key === "Enter") {
+                            this.setState({
+                                openUpBox: false
+                            })
+                        } else {
+                            this.setState({
+                                openUpBox: true
+                            })
+                        }
+
+                       
+                        console.log(e)
                     }}
                     id={`inputboi-${this.props.index}`}></input>
 
