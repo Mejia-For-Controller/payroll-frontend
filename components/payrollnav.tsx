@@ -21,10 +21,10 @@ function PayrollNav() {
       {navigationPayroll.map((item, itemIdx) =>
                      
               
-                     <ActiveLink activeClassName="text-gray-100 py-3 px-3 md:px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300 shrink" href={item.url}
+                     <ActiveLink activeClassName="text-gray-100 py-3 px-2 md:px-3 md:px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300 shrink" href={item.url}
                      key={itemIdx}
                      >
-                     <a className="text-gray-100 py-3 px-5 md:px-6 block hover:text-green-300 focus:outline-none underline shrink"
+                     <a className="text-gray-100 py-3 px-3 md:px-6 block hover:text-green-300 focus:outline-none underline shrink"
                           target={`${item.newtab === true ? "_blank" : ""}`}
                      >
                                                  {item.name}
