@@ -110,8 +110,12 @@ export class Payroll extends React.Component<any, any> {
       deptpanelopen: false,
       filterFirstName: '',
       filterLastName: '',
+      filterJobTitle: '',
       currentlyLoadedRowFilters: {
-
+        filterFirstName: '',
+        filterLastName: '',
+        filterJobTitle: '',
+        enabledDept: arrayOfEnabledDepts
       },
       loadedEmployeeRows: [],
       arrayOfResultsMetadata: [
@@ -159,6 +163,8 @@ export class Payroll extends React.Component<any, any> {
     this.maintainSocketTimer = setInterval(() => {
       this.attemptConnectSocket();
     }, 900)
+
+    this.getNewData()
   }
 
   //system to handle button presses for departments
@@ -189,6 +195,19 @@ export class Payroll extends React.Component<any, any> {
       }
       )
     }
+  }
+
+  getNewData = () => {
+    this.socketmain.emit("", {
+      loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
+      requestedFilters: {
+        firstName: this.state.filterFirstName,
+        lastName: this.state.filterLastName,
+        jobTitle: this.state.filterJobTitle,
+        enabledDept: this.state.enabledDept
+      },
+      currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
+    })
   }
 
   departmentsSelectedRender = () => {
@@ -271,7 +290,8 @@ export class Payroll extends React.Component<any, any> {
                     onChange={(value) => {
                       this.setState({
                         filterFirstName: value
-                      })
+                      });
+                      this.getNewData();
                     }}
                     ></AutocompleteBox>
                       </div>
@@ -287,6 +307,7 @@ export class Payroll extends React.Component<any, any> {
                       this.setState({
                         filterLastName: value
                       })
+                      this.getNewData()
                     }}
                     ></AutocompleteBox>
                       </div>
@@ -421,6 +442,12 @@ export class Payroll extends React.Component<any, any> {
                     parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
                     placeholder='Search Job Title'
                     col='Job Title'
+                    onChange={(value) => {
+                      this.setState({
+                        filterJobTitle: value
+                      });
+                      this.getNewData();
+                    }}
                     ></AutocompleteBox>
 
                       
