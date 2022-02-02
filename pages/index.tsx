@@ -107,7 +107,15 @@ export class Payroll extends React.Component<any, any> {
       socketconnected: false,
       enabledDept: arrayOfEnabledDepts,
       showDepartmentScreen: false,
-      deptpanelopen: false
+      deptpanelopen: false,
+      filterFirstName: '',
+      filterLastName: '',
+      currentlyLoadedRowFilters: {
+
+      },
+      loadedEmployeeRows: [],
+      arrayOfResultsMetadata: [
+      ]
     };
   }
 
@@ -208,7 +216,7 @@ export class Payroll extends React.Component<any, any> {
 
   render() {
     return (
-      <div className=' w-screen h-full overflow-y-clip bg-truegray-900'>
+      <div className=' w-screen h-full overflow-y-auto overflow-x-clip bg-truegray-900'>
         <Head>
           <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
           <meta property="og:type" content="website" />
@@ -225,7 +233,7 @@ export class Payroll extends React.Component<any, any> {
         <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-full overflow-y-clip'>
           <PayrollNav />
           <React.StrictMode>
-            <div className='flex flex-col'>
+            <div className='flex flex-col overflow-y-au'>
               <div className='font-semibold flex flex-row pl-1 mt-2 text-lg space-x-2 flex flex-row align-middle space-x-1'>
 
                 <button
@@ -260,6 +268,11 @@ export class Payroll extends React.Component<any, any> {
                     inputClasses='bg-truegray-700 '
                     placeholder='Search First Name'
                     col='First Name'
+                    onChange={(value) => {
+                      this.setState({
+                        filterFirstName: value
+                      })
+                    }}
                     ></AutocompleteBox>
                       </div>
                       <div className='flex flex-col md:flex-row sm:w-full'>
@@ -270,6 +283,11 @@ export class Payroll extends React.Component<any, any> {
                     inputClasses='bg-truegray-700 '
                     placeholder='Search Last Name'
                     col='Last Name'
+                    onChange={(value) => {
+                      this.setState({
+                        filterLastName: value
+                      })
+                    }}
                     ></AutocompleteBox>
                       </div>
                     </div>

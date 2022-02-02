@@ -41,6 +41,27 @@ export class AutocompleteBox extends React.Component<any, any> {
         };
     }
 
+    setInputValue = (valueToSet) => {
+        var inputjobtitle: any = document.getElementById(`inputboi-${this.props.index}`)
+
+
+        if (inputjobtitle) {
+        
+            inputjobtitle.value = valueToSet;
+
+            this.setState({
+                outputvalue: valueToSet
+            })
+        
+            if (valueToSet === '') {
+                this.setState({
+                    openUpBox: false
+                })
+            }
+
+        }
+    }
+
     searchEmployeeJobTitle = () => {
         var inputjobtitle: any = document.getElementById(`inputboi-${this.props.index}`)
 
@@ -125,7 +146,9 @@ document.addEventListener("click",(e) => {
                 } else {
                     this.nextFocus()
                 }
-                e.preventDefault();
+                if (this.state.openUpBox === true) {
+                    e.preventDefault();
+                }
             }
 
             if (e.keyCode == 40) {
@@ -176,19 +199,21 @@ document.addEventListener("click",(e) => {
         return (
 
             <div className={`${this.props.parentClasses} autocomplete w-full`}>
-                <input className={`bg-truegray-700  lg:w-9/12 md:ml-2  ${this.props.inputClasses}`}
+                <input className={`bg-truegray-700 ${this.props.inputClasses}`}
 
                     placeholder={this.props.placeholder}
 
                     onChange={e => {
-                        this.searchEmployeeJobTitle()
                         this.sendBackToParent()
+                        this.searchEmployeeJobTitle()
+                        
                     }}
 
                     onClick={(e) => {
                         this.setState({
                             openUpBox: true
                         })
+                        this.sendBackToParent()
                     }}
 
                     onPaste={(e) => {
@@ -196,6 +221,7 @@ document.addEventListener("click",(e) => {
                         this.setState({
                             openUpBox: true
                         })
+                        this.sendBackToParent()
                     }}
 
                     onKeyPress={e => {
@@ -210,7 +236,7 @@ document.addEventListener("click",(e) => {
                             
                         }
 
-                       
+                        this.sendBackToParent()
                         console.log(e)
                     }}
                     id={`inputboi-${this.props.index}`}></input>
