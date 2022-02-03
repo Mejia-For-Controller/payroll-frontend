@@ -98,6 +98,7 @@ departments.forEach((eachItem) => {
 export class Payroll extends React.Component<any, any> {
   socketmain: any;
   maintainSocketTimer: any;
+  lastRef: any
   constructor(props: any) {
 
     super(props);
@@ -276,9 +277,8 @@ export class Payroll extends React.Component<any, any> {
 
    setLastObjRef = (ref,EmployeeIndex) => {
        if (this.state.loadedEmployeeRows.length -1 === EmployeeIndex) {
-         this.setState({
-            lastRef: ref
-         })
+         this.lastRef = ref
+         
        }
    }
 
