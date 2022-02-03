@@ -209,6 +209,14 @@ document.addEventListener("click",(e) => {
                         
                     }}
 
+                   onKeyDown={e => {
+                    //this.sendBackToParent()
+                   }}
+
+                   onKeyUp={e => {
+                    this.sendBackToParent()
+                   }}
+
                     onClick={(e) => {
                         this.setState({
                             openUpBox: true

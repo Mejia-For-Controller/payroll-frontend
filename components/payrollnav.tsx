@@ -9,7 +9,7 @@ const navigationPayroll = [
     'url': "/",
   },
   {
-    'name': "Our Campaign",
+    'name': "Mejia for Controller",
     'url': "https://mejiaforcontroller.com/",
     'newtab': true
   }
@@ -24,7 +24,7 @@ function PayrollNav() {
                      <ActiveLink activeClassName="text-gray-100 py-3 px-2 md:px-3 md:px-6 block hover:text-green-300 focus:outline-none text-green-300 border-b-2 font-medium border-green-300 shrink" href={item.url}
                      key={itemIdx}
                      >
-                     <a className="text-gray-100 py-3 px-3 md:px-6 block hover:text-green-300 focus:outline-none underline shrink"
+                     <a className="text-sm sm:text-base md:text-lg  text-gray-100 py-3 px-3 md:px-6 block hover:text-green-300 focus:outline-none underline shrink"
                           target={`${item.newtab === true ? "_blank" : ""}`}
                      >
                                                  {item.name}

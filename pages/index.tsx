@@ -111,6 +111,7 @@ export class Payroll extends React.Component<any, any> {
       filterFirstName: '',
       filterLastName: '',
       filterJobTitle: '',
+      lastRef: null,
       currentlyLoadedRowFilters: {
         filterFirstName: '',
         filterLastName: '',
@@ -132,13 +133,21 @@ export class Payroll extends React.Component<any, any> {
   }
 
   componentDidMount = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+
     this.socketmain =
-      io("https://api.payroll.mejiaforcontroller.com", {
+      io(urlParams.get('devport') ? "http://localhost:4927" : "https://api.payroll.mejiaforcontroller.com", {
         'reconnection': true,
         'reconnectionDelay': 500,
         'reconnectionAttempts': 999999,
         autoConnect: false
       });
+      
+    this.socketmain.on("result", async (message) => {
+      this.setState({
+        loadedEmployeeRows: message.employeePortion
+      })
+    })
 
     this.setState({
       filterpanel: window.innerWidth >= 768 ? true : true
@@ -162,6 +171,10 @@ export class Payroll extends React.Component<any, any> {
     this.attemptConnectSocket();
     this.maintainSocketTimer = setInterval(() => {
       this.attemptConnectSocket();
+
+      if (this.state.loadedEmployeeRows.length === 0) {
+          this.getNewData()
+      }
     }, 900)
 
     this.getNewData()
@@ -198,14 +211,41 @@ export class Payroll extends React.Component<any, any> {
   }
 
   getNewData = () => {
-    this.socketmain.emit("", {
+    console.log('get new data')
+    var numberSelected = Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length;
+
+    var valueToSubmit;
+
+    if (numberSelected == Object.values(this.state.enabledDept).length) {
+      valueToSubmit = 'all'
+      console.log('all')
+    } else {
+      if (numberSelected === 0) {
+        valueToSubmit = 'none'
+      } else {
+        valueToSubmit = this.state.enabledDept;
+      }
+    }
+
+    var newSeq:boolean = true;
+
+    if (this.state.firstName === this.state.currentlyLoadedRowFilters['filterFirstName']
+    && this.state.lastName === this.state.currentlyLoadedRowFilters['filterLastName']
+   && this.state.jobTitle === this.state.currentlyLoadedRowFilters['filterJobTitle']
+   && this.state.enabledDept === this.state.currentlyLoadedRowFilters['enabledDept']
+    ) {
+      newSeq = false;
+    }
+
+    this.socketmain.emit("employeereq", {
       loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
       requestedFilters: {
         firstName: this.state.filterFirstName,
         lastName: this.state.filterLastName,
-        jobTitle: this.state.filterJobTitle,
-        enabledDept: this.state.enabledDept
+        j: this.state.filterJobTitle,
+        enabledDept: valueToSubmit
       },
+      newSeq: newSeq,
       currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
     })
   }
@@ -232,6 +272,15 @@ export class Payroll extends React.Component<any, any> {
       deptpanelopen: !this.state.deptpanelopen
     })
   }
+
+
+   setLastObjRef = (ref,EmployeeIndex) => {
+       if (this.state.loadedEmployeeRows.length -1 === EmployeeIndex) {
+         this.setState({
+            lastRef: ref
+         })
+       }
+   }
 
   render() {
     return (
@@ -456,6 +505,54 @@ export class Payroll extends React.Component<any, any> {
  </div>
                 )
               }
+
+              <div className='block md:hidden'>
+                {this.state.loadedEmployeeRows.map((eachEmployee) => (
+                  <div><span
+                  className='bold font-bold'
+                  >{eachEmployee.f}</span> {eachEmployee.l}</div>
+                ))}
+              </div>
+
+              <table className="table-auto" className='hidden md:block'>
+  <thead className='sticky'>
+    <tr className='bg-truegray-900 border-b-1 border-white'>
+      <th>First</th>
+      <th>Last</th>
+      <th>Job</th>
+      <th>Dept</th>
+      <th>Base Pay</th>
+       <th>Overtime</th>
+        <th>Other</th>
+        <th>Healthcare</th>
+        <th>Retirement</th>
+        <th>Total Pay</th>
+    </tr>
+  </thead>
+  <tbody>
+    {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
+                    <tr
+                    ref= {ref => 
+
+                      this.setLastObjRef(ref,employeeIndex)
+                    
+                    
+                   }
+                    >
+      <td>{eachEmployee.f}</td>
+      <td>{eachEmployee.l}</td>
+      <td>{eachEmployee.j}</td>
+      <td>{eachEmployee.d.replace(/Department/gi,"")}</td>
+      <td className='text-right mono'>{Math.round(eachEmployee.b).toLocaleString()}</td>
+      <td className='text-right mono'>{Math.round(eachEmployee.ov).toLocaleString()}</td>
+       <td className='text-right mono'>{Math.round(eachEmployee.ot).toLocaleString()}</td>
+              <td className='text-right mono'>{Math.round(eachEmployee.h).toLocaleString()}</td>
+              <td className='text-right mono'>{Math.round(eachEmployee.r).toLocaleString()}</td>
+              <td className='text-right mono'>{Math.round(( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)).toLocaleString()}</td>
+    </tr>
+                ))}
+  </tbody>
+</table>
             </div>
           </React.StrictMode>
 
