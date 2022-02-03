@@ -514,7 +514,7 @@ export class Payroll extends React.Component<any, any> {
                 ))}
               </div>
 
-              <table className="table-auto" className='hidden md:block'>
+              <table className="table-auto hidden md:block">
   <thead className='sticky'>
     <tr className='bg-truegray-900 border-b-1 border-white'>
       <th>First</th>
