@@ -17,6 +17,20 @@ import { io } from "socket.io-client";
 import {AutocompleteBox} from '../components/AutocompleteBox'
 import { Autocomplete } from '../components/Autocomplete'
 
+export function isInViewport(element:any, buffer: any) {
+  const rect = element.getBoundingClientRect();
+  return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= (window.innerHeight + buffer || document.documentElement.clientHeight + buffer) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
+function excelnum(number) {
+  return Math.round(number).toLocaleString();
+}
+
 const departments: Array<any> = [
   {
     grouped: false,
@@ -98,10 +112,31 @@ departments.forEach((eachItem) => {
 export class Payroll extends React.Component<any, any> {
   socketmain: any;
   maintainSocketTimer: any;
-  lastRef: any
-  constructor(props: any) {
+  lastRef: any;
+  lastRefBuffer70: any;
+  lastRefSecondLast: any;
+  lastRefMobile: any;
+  lastRefMobileBuffer15: any;
 
+  //currently loaded
+  currentlyLoadedF: string;
+  currentlyLoadedL: string;
+  currentlyLoadedJ: string;
+  currentlyLoadedD: any;
+
+  lastReqF: string;
+  lastReqL: string;
+  lastReqJ: string;
+  lastReqRowCount: any;
+  
+
+  constructor(props: any) {
     super(props);
+    this.currentlyLoadedF = "";
+    this.currentlyLoadedL = "";
+    this.currentlyLoadedJ = "";
+    this.currentlyLoadedD = arrayOfEnabledDepts;
+
     this.state = {
       filterpanel: false,
       sortpanel: true,
@@ -113,12 +148,6 @@ export class Payroll extends React.Component<any, any> {
       filterLastName: '',
       filterJobTitle: '',
       lastRef: null,
-      currentlyLoadedRowFilters: {
-        filterFirstName: '',
-        filterLastName: '',
-        filterJobTitle: '',
-        enabledDept: arrayOfEnabledDepts
-      },
       loadedEmployeeRows: [],
       arrayOfResultsMetadata: [
       ]
@@ -133,6 +162,64 @@ export class Payroll extends React.Component<any, any> {
     }
   }
 
+  checkIfLoadMore = () => {
+    var loadMore = false;
+
+    if (window.innerWidth >= 768) {
+      if (this.lastRef) {
+
+        if (isInViewport(this.lastRef, 100)) {
+          console.log('can load more now');
+  
+          loadMore = true
+        } 
+      }
+  
+      if (this.lastRefBuffer70) {
+  
+        if (isInViewport(this.lastRefBuffer70, 100)) {
+          console.log('can load more now');
+  
+          loadMore = true
+        }
+      }
+    } else {
+      if (this.lastRefMobile) {
+        if (isInViewport(this.lastRefMobile, 100)) {
+          loadMore = true
+        }
+      }
+
+      if (this.lastRefMobileBuffer15) {
+        if (isInViewport(this.lastRefMobileBuffer15, 100)) {
+          loadMore = true
+        }
+      }
+    }
+
+    
+
+    if (loadMore) {
+      this.getNewData();
+    }
+
+  }
+
+  checkIfLoadMoreScrollRapid = () => {
+    //have idempotency
+
+    if (this.lastReqF === this.state.filterFirstName &&
+      this.lastReqRowCount === this.state.loadedEmployeeRows.length &&
+      this.lastReqL === this.state.filterLastName && 
+      this.lastReqJ === this.state.filterLastName
+      ) {
+        
+      } else {
+        this.checkIfLoadMore()
+      }
+
+  }
+
   componentDidMount = () => {
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -143,11 +230,73 @@ export class Payroll extends React.Component<any, any> {
         'reconnectionAttempts': 999999,
         autoConnect: false
       });
+
+
       
-    this.socketmain.on("result", async (message) => {
-      this.setState({
-        loadedEmployeeRows: message.employeePortion
+let lastKnownScrollPosition = 0;
+let ticking = false;
+
+
+
+
+document.addEventListener('scroll', e => {
+
+  //  console.log('scroll happened')
+
+  lastKnownScrollPosition = window.scrollY;
+
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+     // doSomething(lastKnownScrollPosition);
+
+     console.log('valid scroll')
+
+     this.checkIfLoadMoreScrollRapid()
+
+      ticking = false;
+    });
+
+    ticking = true;
+  }
+}, true);
+      
+    this.socketmain.on("result", (message) => {
+
+     // console.log(message)
+      this.setState((state,props) => {
+
+      
+
+      var toloadrows = state.loadedEmployeeRows
+
+      //if loaded states matches incoming state
+      if ((
+       this.currentlyLoadedF === message.meta.f
+        && 
+        this.currentlyLoadedL === message.meta.l
+        && 
+        this.currentlyLoadedJ === message.meta.j
+      )) {  
+        console.log('append')
+        toloadrows =  [...toloadrows, ...message.employeePortion]
+      } else {
+        console.log('new')
+        toloadrows = message.employeePortion
+      }
+
+      
+      console.log('change employee state to', toloadrows)
+
+       this.currentlyLoadedF = message.meta.f
+       this.currentlyLoadedF = message.meta.l
+       this.currentlyLoadedJ = message.meta.j
+
+        return {
+          loadedEmployeeRows: toloadrows
+        }
       })
+
+      
     })
 
     this.setState({
@@ -173,9 +322,17 @@ export class Payroll extends React.Component<any, any> {
     this.maintainSocketTimer = setInterval(() => {
       this.attemptConnectSocket();
 
-      if (this.state.loadedEmployeeRows.length === 0) {
-          this.getNewData()
+     
+
+      this.setState((state,props) => {
+        if (state.loadedEmployeeRows.length === 0) {
+          console.log('trigger repeat')
+         // this.getNewData()
       }
+      });
+
+     // this.checkIfLoadMore();
+     this.checkIfLoadMoreScrollRapid()
     }, 900)
 
     this.getNewData()
@@ -219,7 +376,7 @@ export class Payroll extends React.Component<any, any> {
 
     if (numberSelected == Object.values(this.state.enabledDept).length) {
       valueToSubmit = 'all'
-      console.log('all')
+     // console.log('all')
     } else {
       if (numberSelected === 0) {
         valueToSubmit = 'none'
@@ -230,13 +387,29 @@ export class Payroll extends React.Component<any, any> {
 
     var newSeq:boolean = true;
 
-    if (this.state.firstName === this.state.currentlyLoadedRowFilters['filterFirstName']
-    && this.state.lastName === this.state.currentlyLoadedRowFilters['filterLastName']
-   && this.state.jobTitle === this.state.currentlyLoadedRowFilters['filterJobTitle']
-   && this.state.enabledDept === this.state.currentlyLoadedRowFilters['enabledDept']
+    if (this.state.filterFirstName === this.currentlyLoadedF
+    && this.state.filterLastName === this.currentlyLoadedL
+   &&this.state.filterJobTitle === this.currentlyLoadedJ
     ) {
       newSeq = false;
     }
+
+    console.log({
+        firstName: this.state.filterFirstName,
+        lastName: this.state.filterLastName,
+        j: this.state.filterJobTitle,
+        enabledDept: valueToSubmit,
+
+        currentF: this.currentlyLoadedF,
+        currentL: this.currentlyLoadedL,
+        currentJ: this.currentlyLoadedJ,
+        newSeq
+    })
+
+    this.lastReqF = this.state.filterFirstName;
+    this.lastReqJ = this.state.filterLastName;
+    this.lastReqJ = this.state.filterJobTitle;
+    this.lastReqRowCount = this.state.loadedEmployeeRows;
 
     this.socketmain.emit("employeereq", {
       loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
@@ -274,12 +447,35 @@ export class Payroll extends React.Component<any, any> {
     })
   }
 
+  setLastObjRefMobile = (ref,EmployeeIndex,length) => {
+    if (length -1 === EmployeeIndex) {
+      this.lastRefMobile = ref
+    }
 
-   setLastObjRef = (ref,EmployeeIndex) => {
-       if (this.state.loadedEmployeeRows.length -1 === EmployeeIndex) {
-         this.lastRef = ref
-         
-       }
+    if (length - 15 === EmployeeIndex) {
+      this.lastRefMobileBuffer15 = ref
+    }
+    
+  }
+
+   setLastObjRef = (ref,EmployeeIndex,length) => {
+      if (length > 70) {
+        if (this.state.loadedEmployeeRows.length -1 -70 === EmployeeIndex) {
+          this.lastRefBuffer70 = ref
+        }
+      }
+
+      if (this.state.loadedEmployeeRows.length -1 === EmployeeIndex) {
+        this.lastRef = ref
+        
+      }
+
+      if (this.state.loadedEmployeeRows.length -2 === EmployeeIndex) {
+        this.lastRefSecondLast = ref
+        
+      }
+
+       
    }
 
   render() {
@@ -301,7 +497,11 @@ export class Payroll extends React.Component<any, any> {
         <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-full overflow-y-clip'>
           <PayrollNav />
           <React.StrictMode>
-            <div className='flex flex-col overflow-y-au'>
+            <div className='flex flex-col overflow-y-auto'
+            onScroll={e => {
+              console.log('scroll')
+            }}
+            >
               <div className='font-semibold flex flex-row pl-1 mt-2 text-lg space-x-2 flex flex-row align-middle space-x-1'>
 
                 <button
@@ -339,8 +539,9 @@ export class Payroll extends React.Component<any, any> {
                     onChange={(value) => {
                       this.setState({
                         filterFirstName: value
+                      },() => {
+                        this.getNewData();
                       });
-                      this.getNewData();
                     }}
                     ></AutocompleteBox>
                       </div>
@@ -355,8 +556,9 @@ export class Payroll extends React.Component<any, any> {
                     onChange={(value) => {
                       this.setState({
                         filterLastName: value
+                      }, () => {
+                        this.getNewData();
                       })
-                      this.getNewData()
                     }}
                     ></AutocompleteBox>
                       </div>
@@ -494,8 +696,10 @@ export class Payroll extends React.Component<any, any> {
                     onChange={(value) => {
                       this.setState({
                         filterJobTitle: value
+                      }, () => {
+                        this.getNewData();
                       });
-                      this.getNewData();
+                     
                     }}
                     ></AutocompleteBox>
 
@@ -506,17 +710,83 @@ export class Payroll extends React.Component<any, any> {
                 )
               }
 
-              <div className='block md:hidden'>
-                {this.state.loadedEmployeeRows.map((eachEmployee) => (
-                  <div><span
+              <div className='block md:hidden  mx-2 '>
+                {this.state.loadedEmployeeRows.map((eachEmployee,index) => (
+                  <div 
+                  ref= {
+                    ref => {
+                      this.setLastObjRefMobile(ref,index,this.state.loadedEmployeeRows.length)
+                    }
+                  }
+                  className='bg-truegray-900 border-slate-700  border-b py-2'>
+                    <div className=' flex flex-row'><div className='grow flex-grow'><span
                   className='bold font-bold'
                   >{eachEmployee.f}</span> {eachEmployee.l}</div>
+<div className='grow flex-grow text-right'>
+                   <span className='font-semibold'>{eachEmployee.j}</span>
+                  <span className='ml-2'>{eachEmployee.d}</span></div></div>
+
+                  <div className='pl-3'>
+
+                    {
+                      /*
+                       Base Pay <span className='mono'>{excelnum(eachEmployee.b)}</span>
+                  <br></br>
+                  Overtime <span className='mono'>{excelnum(eachEmployee.ov)}</span>
+                  <br></br>
+                  Other <span className='mono'>{excelnum(eachEmployee.ot)}</span>
+                  <br></br>
+                  Healthcare <span className='mono'>{excelnum(eachEmployee.h)}</span>
+                  <br></br>
+                  Retirement <span className='mono'>{excelnum(eachEmployee.r)}</span>
+                  <br></br>
+                  <span className='font-semibold'> 
+                  Total Pay <span className='mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</span></span>
+                      */
+                    }
+
+<table className="table-auto">
+  <tbody>
+    <tr>
+      <td className='pr-2'>Base Pay</td>
+      <td>{excelnum(eachEmployee.b)}</td>
+    </tr>
+    <tr>
+      <td className='pr-1'>Overtime</td>
+      <td>{excelnum(eachEmployee.ov)}</td>
+    </tr>
+    <tr>
+      <td className='pr-1'>Other</td>
+      <td>{excelnum(eachEmployee.ot)}</td>
+    </tr>
+    <tr>
+      <td className='pr-1'>Healthcare</td>
+      <td>{excelnum(eachEmployee.h)}</td>
+    </tr>
+    <tr>
+      <td className='pr-1'>Retirement</td>
+      <td>{excelnum(eachEmployee.r)}</td>
+    </tr>
+    <tr>
+      <td className='pr-1'>Total Pay</td>
+      <td>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+    </tr>
+  </tbody>
+</table>
+                    
+                 
+                  </div>
+                  </div>
+
+        
+          
+                  
                 ))}
               </div>
 
-              <table className="table-auto" className='hidden md:block'>
+              <table className="table-auto hidden md:block px-2 text-truegray-200">
   <thead className='sticky'>
-    <tr className='bg-truegray-900 border-b-1 border-white'>
+    <tr className='bg-truegray-900 border-b-1 border-white py-2'>
       <th>First</th>
       <th>Last</th>
       <th>Job</th>
@@ -534,21 +804,23 @@ export class Payroll extends React.Component<any, any> {
                     <tr
                     ref= {ref => 
 
-                      this.setLastObjRef(ref,employeeIndex)
+                      this.setLastObjRef(ref,employeeIndex,this.state.loadedEmployeeRows.length)
                     
                     
                    }
+
+                   className='py-2 border-b border-truegray-700'
                     >
       <td>{eachEmployee.f}</td>
       <td>{eachEmployee.l}</td>
       <td>{eachEmployee.j}</td>
       <td>{eachEmployee.d.replace(/Department/gi,"")}</td>
-      <td className='text-right mono'>{Math.round(eachEmployee.b).toLocaleString()}</td>
-      <td className='text-right mono'>{Math.round(eachEmployee.ov).toLocaleString()}</td>
-       <td className='text-right mono'>{Math.round(eachEmployee.ot).toLocaleString()}</td>
-              <td className='text-right mono'>{Math.round(eachEmployee.h).toLocaleString()}</td>
-              <td className='text-right mono'>{Math.round(eachEmployee.r).toLocaleString()}</td>
-              <td className='text-right mono'>{Math.round(( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)).toLocaleString()}</td>
+      <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
+      <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
+       <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
+              <td className='text-right mono'>{excelnum(eachEmployee.h)}</td>
+              <td className='text-right mono'>{excelnum(eachEmployee.r)}</td>
+              <td className='text-right mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
     </tr>
                 ))}
   </tbody>

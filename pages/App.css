@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100;200;300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 .App {
   text-align: center;
 }
@@ -130,4 +132,8 @@
 .autocomplete-active {
   background-color: #334155 !important; 
 /*  color: #ffffff; */ 
+}
+
+.mono {
+  font-family: 'Roboto Mono', monospace;
 }
