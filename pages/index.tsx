@@ -168,11 +168,11 @@ export class Payroll extends React.Component<any, any> {
   checkIfLoadMore = () => {
     var loadMore = false;
 
-    var actOn= []
+    var actOn = []
 
     if (window.innerWidth >= 768) {
-    
-      actOn = [this.lastRef,this.lastRefBuffer70]
+
+      actOn = [this.lastRef, this.lastRefBuffer70]
     } else {
 
       actOn = [this.lastRefMobile, this.lastRefMobileBuffer15]
