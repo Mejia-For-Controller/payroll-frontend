@@ -180,8 +180,10 @@ export class Payroll extends React.Component<any, any> {
     }
 
     actOn.forEach((eachItem) => {
-      if (isInViewport(eachItem, 100)) {
-        loadMore = true
+      if (eachItem) {
+        if (isInViewport(eachItem, 100)) {
+          loadMore = true
+        }
       }
     })
 
@@ -415,6 +417,8 @@ export class Payroll extends React.Component<any, any> {
         preventNextLoadBecauseRowsAreAllDone = true
       }
     }
+
+    console.log('repeat load', preventNextLoadBecauseRowsAreAllDone)
 
     if (preventNextLoadBecauseRowsAreAllDone === false) {
       this.socketmain.emit("employeereq", {
@@ -722,6 +726,8 @@ export class Payroll extends React.Component<any, any> {
               <div className='block md:hidden  mx-2 '>
                 {this.state.loadedEmployeeRows.map((eachEmployee, index) => (
                   <div
+                  key={eachEmployee.id}
+
                     ref={
                       ref => {
                         this.setLastObjRefMobile(ref, index, this.state.loadedEmployeeRows.length)
