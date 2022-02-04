@@ -14,16 +14,16 @@ import dynamic from 'next/dynamic'
 
 import { io } from "socket.io-client";
 
-import {AutocompleteBox} from '../components/AutocompleteBox'
+import { AutocompleteBox } from '../components/AutocompleteBox'
 import { Autocomplete } from '../components/Autocomplete'
 
-export function isInViewport(element:any, buffer: any) {
+export function isInViewport(element: any, buffer: any) {
   const rect = element.getBoundingClientRect();
   return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight + buffer || document.documentElement.clientHeight + buffer) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight + buffer || document.documentElement.clientHeight + buffer) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }
 
@@ -123,12 +123,12 @@ export class Payroll extends React.Component<any, any> {
   currentlyLoadedL: string;
   currentlyLoadedJ: string;
   currentlyLoadedD: any;
-
+  currentlyLoadedMetadata: any;
   lastReqF: string;
   lastReqL: string;
   lastReqJ: string;
   lastReqRowCount: any;
-  
+
 
   constructor(props: any) {
     super(props);
@@ -136,6 +136,9 @@ export class Payroll extends React.Component<any, any> {
     this.currentlyLoadedL = "";
     this.currentlyLoadedJ = "";
     this.currentlyLoadedD = arrayOfEnabledDepts;
+    this.currentlyLoadedMetadata = {
+      active: false
+    }
 
     this.state = {
       filterpanel: false,
@@ -165,39 +168,23 @@ export class Payroll extends React.Component<any, any> {
   checkIfLoadMore = () => {
     var loadMore = false;
 
+    var actOn= []
+
     if (window.innerWidth >= 768) {
-      if (this.lastRef) {
-
-        if (isInViewport(this.lastRef, 100)) {
-          console.log('can load more now');
-  
-          loadMore = true
-        } 
-      }
-  
-      if (this.lastRefBuffer70) {
-  
-        if (isInViewport(this.lastRefBuffer70, 100)) {
-          console.log('can load more now');
-  
-          loadMore = true
-        }
-      }
+    
+      actOn = [this.lastRef,this.lastRefBuffer70]
     } else {
-      if (this.lastRefMobile) {
-        if (isInViewport(this.lastRefMobile, 100)) {
-          loadMore = true
-        }
-      }
 
-      if (this.lastRefMobileBuffer15) {
-        if (isInViewport(this.lastRefMobileBuffer15, 100)) {
-          loadMore = true
-        }
-      }
+      actOn = [this.lastRefMobile, this.lastRefMobileBuffer15]
+
     }
 
-    
+    actOn.forEach((eachItem) => {
+      if (isInViewport(eachItem, 100)) {
+        loadMore = true
+      }
+    })
+
 
     if (loadMore) {
       this.getNewData();
@@ -210,13 +197,13 @@ export class Payroll extends React.Component<any, any> {
 
     if (this.lastReqF === this.state.filterFirstName &&
       this.lastReqRowCount === this.state.loadedEmployeeRows.length &&
-      this.lastReqL === this.state.filterLastName && 
+      this.lastReqL === this.state.filterLastName &&
       this.lastReqJ === this.state.filterLastName
-      ) {
-        
-      } else {
-        this.checkIfLoadMore()
-      }
+    ) {
+
+    } else {
+      this.checkIfLoadMore()
+    }
 
   }
 
@@ -232,71 +219,77 @@ export class Payroll extends React.Component<any, any> {
       });
 
 
-      
-let lastKnownScrollPosition = 0;
-let ticking = false;
+
+    let lastKnownScrollPosition = 0;
+    let ticking = false;
 
 
 
 
-document.addEventListener('scroll', e => {
+    document.addEventListener('scroll', e => {
 
-  //  console.log('scroll happened')
+      //  console.log('scroll happened')
 
-  lastKnownScrollPosition = window.scrollY;
+      lastKnownScrollPosition = window.scrollY;
 
-  if (!ticking) {
-    window.requestAnimationFrame(() => {
-     // doSomething(lastKnownScrollPosition);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // doSomething(lastKnownScrollPosition);
 
-     console.log('valid scroll')
+          console.log('valid scroll')
 
-     this.checkIfLoadMoreScrollRapid()
+          this.checkIfLoadMoreScrollRapid()
 
-      ticking = false;
-    });
+          ticking = false;
+        });
 
-    ticking = true;
-  }
-}, true);
-      
+        ticking = true;
+      }
+    }, true);
+
     this.socketmain.on("result", (message) => {
 
-     // console.log(message)
-      this.setState((state,props) => {
+      // console.log(message)
+      this.setState((state, props) => {
 
-      
 
-      var toloadrows = state.loadedEmployeeRows
 
-      //if loaded states matches incoming state
-      if ((
-       this.currentlyLoadedF === message.meta.f
-        && 
-        this.currentlyLoadedL === message.meta.l
-        && 
-        this.currentlyLoadedJ === message.meta.j
-      )) {  
-        console.log('append')
-        toloadrows =  [...toloadrows, ...message.employeePortion]
-      } else {
-        console.log('new')
-        toloadrows = message.employeePortion
-      }
+        var toloadrows = state.loadedEmployeeRows
 
-      
-      console.log('change employee state to', toloadrows)
+        //if loaded states matches incoming state
+        if ((
+          this.currentlyLoadedF === message.meta.f
+          &&
+          this.currentlyLoadedL === message.meta.l
+          &&
+          this.currentlyLoadedJ === message.meta.j
+        )) {
+          console.log('append')
+          toloadrows = [...toloadrows, ...message.employeePortion]
+        } else {
+          console.log('new')
+          toloadrows = message.employeePortion
+        }
 
-       this.currentlyLoadedF = message.meta.f
-       this.currentlyLoadedF = message.meta.l
-       this.currentlyLoadedJ = message.meta.j
 
+        console.log('change employee state to', toloadrows)
+
+        this.currentlyLoadedF = message.meta.f
+        this.currentlyLoadedF = message.meta.l
+        this.currentlyLoadedJ = message.meta.j,
+          this.currentlyLoadedMetadata = {
+            active: true,
+            totalFiltered: message.meta.totalFiltered,
+            f: message.meta.f,
+            l: message.meta.l,
+            j: message.meta.j
+          }
         return {
           loadedEmployeeRows: toloadrows
         }
       })
 
-      
+
     })
 
     this.setState({
@@ -322,17 +315,17 @@ document.addEventListener('scroll', e => {
     this.maintainSocketTimer = setInterval(() => {
       this.attemptConnectSocket();
 
-     
 
-      this.setState((state,props) => {
+
+      this.setState((state, props) => {
         if (state.loadedEmployeeRows.length === 0) {
           console.log('trigger repeat')
-         // this.getNewData()
-      }
+          // this.getNewData()
+        }
       });
 
-     // this.checkIfLoadMore();
-     this.checkIfLoadMoreScrollRapid()
+      // this.checkIfLoadMore();
+      this.checkIfLoadMoreScrollRapid()
     }, 900)
 
     this.getNewData()
@@ -376,7 +369,7 @@ document.addEventListener('scroll', e => {
 
     if (numberSelected == Object.values(this.state.enabledDept).length) {
       valueToSubmit = 'all'
-     // console.log('all')
+      // console.log('all')
     } else {
       if (numberSelected === 0) {
         valueToSubmit = 'none'
@@ -385,25 +378,25 @@ document.addEventListener('scroll', e => {
       }
     }
 
-    var newSeq:boolean = true;
+    var newSeq: boolean = true;
 
     if (this.state.filterFirstName === this.currentlyLoadedF
-    && this.state.filterLastName === this.currentlyLoadedL
-   &&this.state.filterJobTitle === this.currentlyLoadedJ
+      && this.state.filterLastName === this.currentlyLoadedL
+      && this.state.filterJobTitle === this.currentlyLoadedJ
     ) {
       newSeq = false;
     }
 
     console.log({
-        firstName: this.state.filterFirstName,
-        lastName: this.state.filterLastName,
-        j: this.state.filterJobTitle,
-        enabledDept: valueToSubmit,
+      firstName: this.state.filterFirstName,
+      lastName: this.state.filterLastName,
+      j: this.state.filterJobTitle,
+      enabledDept: valueToSubmit,
 
-        currentF: this.currentlyLoadedF,
-        currentL: this.currentlyLoadedL,
-        currentJ: this.currentlyLoadedJ,
-        newSeq
+      currentF: this.currentlyLoadedF,
+      currentL: this.currentlyLoadedL,
+      currentJ: this.currentlyLoadedJ,
+      newSeq
     })
 
     this.lastReqF = this.state.filterFirstName;
@@ -411,17 +404,33 @@ document.addEventListener('scroll', e => {
     this.lastReqJ = this.state.filterJobTitle;
     this.lastReqRowCount = this.state.loadedEmployeeRows;
 
-    this.socketmain.emit("employeereq", {
-      loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
-      requestedFilters: {
-        firstName: this.state.filterFirstName,
-        lastName: this.state.filterLastName,
-        j: this.state.filterJobTitle,
-        enabledDept: valueToSubmit
-      },
-      newSeq: newSeq,
-      currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
-    })
+    var preventNextLoadBecauseRowsAreAllDone = false;
+
+    if (this.currentlyLoadedMetadata.active === true) {
+      if (this.currentlyLoadedMetadata.totalFiltered <= this.state.loadedEmployeeRows.length &&
+        this.currentlyLoadedMetadata.f === this.state.filterFirstName &&
+        this.currentlyLoadedMetadata.l === this.state.filterLastName &&
+        this.currentlyLoadedMetadata.j === this.state.filterJobTitle
+      ) {
+        preventNextLoadBecauseRowsAreAllDone = true
+      }
+    }
+
+    if (preventNextLoadBecauseRowsAreAllDone === false) {
+      this.socketmain.emit("employeereq", {
+        loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
+        requestedFilters: {
+          firstName: this.state.filterFirstName,
+          lastName: this.state.filterLastName,
+          j: this.state.filterJobTitle,
+          enabledDept: valueToSubmit
+        },
+        newSeq: newSeq,
+        currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
+      })
+    }
+
+
   }
 
   departmentsSelectedRender = () => {
@@ -447,36 +456,36 @@ document.addEventListener('scroll', e => {
     })
   }
 
-  setLastObjRefMobile = (ref,EmployeeIndex,length) => {
-    if (length -1 === EmployeeIndex) {
+  setLastObjRefMobile = (ref, EmployeeIndex, length) => {
+    if (length - 1 === EmployeeIndex) {
       this.lastRefMobile = ref
     }
 
     if (length - 15 === EmployeeIndex) {
       this.lastRefMobileBuffer15 = ref
     }
-    
+
   }
 
-   setLastObjRef = (ref,EmployeeIndex,length) => {
-      if (length > 70) {
-        if (this.state.loadedEmployeeRows.length -1 -70 === EmployeeIndex) {
-          this.lastRefBuffer70 = ref
-        }
+  setLastObjRef = (ref, EmployeeIndex, length) => {
+    if (length > 70) {
+      if (this.state.loadedEmployeeRows.length - 1 - 70 === EmployeeIndex) {
+        this.lastRefBuffer70 = ref
       }
+    }
 
-      if (this.state.loadedEmployeeRows.length -1 === EmployeeIndex) {
-        this.lastRef = ref
-        
-      }
+    if (this.state.loadedEmployeeRows.length - 1 === EmployeeIndex) {
+      this.lastRef = ref
 
-      if (this.state.loadedEmployeeRows.length -2 === EmployeeIndex) {
-        this.lastRefSecondLast = ref
-        
-      }
+    }
 
-       
-   }
+    if (this.state.loadedEmployeeRows.length - 2 === EmployeeIndex) {
+      this.lastRefSecondLast = ref
+
+    }
+
+
+  }
 
   render() {
     return (
@@ -498,9 +507,9 @@ document.addEventListener('scroll', e => {
           <PayrollNav />
           <React.StrictMode>
             <div className='flex flex-col overflow-y-auto'
-            onScroll={e => {
-              console.log('scroll')
-            }}
+              onScroll={e => {
+                console.log('scroll')
+              }}
             >
               <div className='font-semibold flex flex-row pl-1 mt-2 text-lg space-x-2 flex flex-row align-middle space-x-1'>
 
@@ -531,36 +540,36 @@ document.addEventListener('scroll', e => {
                       <div className='flex flex-col md:flex-row sm:w-full'>
                         <p className='grow md:w-28'>First Name</p>
                         <AutocompleteBox
-                    index='PayrollFirstNames'
-                    parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                    inputClasses='bg-truegray-700 '
-                    placeholder='Search First Name'
-                    col='First Name'
-                    onChange={(value) => {
-                      this.setState({
-                        filterFirstName: value
-                      },() => {
-                        this.getNewData();
-                      });
-                    }}
-                    ></AutocompleteBox>
+                          index='PayrollFirstNames'
+                          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                          inputClasses='bg-truegray-700 '
+                          placeholder='Search First Name'
+                          col='First Name'
+                          onChange={(value) => {
+                            this.setState({
+                              filterFirstName: value
+                            }, () => {
+                              this.getNewData();
+                            });
+                          }}
+                        ></AutocompleteBox>
                       </div>
                       <div className='flex flex-col md:flex-row sm:w-full'>
                         <p className='md:w-28'>Last Name</p>
                         <AutocompleteBox
-                    index='PayrollLastName'
-                    parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                    inputClasses='bg-truegray-700 '
-                    placeholder='Search Last Name'
-                    col='Last Name'
-                    onChange={(value) => {
-                      this.setState({
-                        filterLastName: value
-                      }, () => {
-                        this.getNewData();
-                      })
-                    }}
-                    ></AutocompleteBox>
+                          index='PayrollLastName'
+                          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                          inputClasses='bg-truegray-700 '
+                          placeholder='Search Last Name'
+                          col='Last Name'
+                          onChange={(value) => {
+                            this.setState({
+                              filterLastName: value
+                            }, () => {
+                              this.getNewData();
+                            })
+                          }}
+                        ></AutocompleteBox>
                       </div>
                     </div>
 
@@ -607,10 +616,10 @@ document.addEventListener('scroll', e => {
                                   this.setAllDept(true)
                                 }}
                                 className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
-                                    'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                                  'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
                                   } rounded-xl px-2 py-0.5 font-bold`}>Select All</div>
                               <div className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
-                                  'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                                'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
                                 } rounded-xl px-2 py-0.5 font-bold`}
 
                                 onClick={() => {
@@ -688,143 +697,143 @@ document.addEventListener('scroll', e => {
 
                     >
                       <p className=''>Job Title</p>
-                    <AutocompleteBox
-                    index='PayrollEmployeeList'
-                    parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                    placeholder='Search Job Title'
-                    col='Job Title'
-                    onChange={(value) => {
-                      this.setState({
-                        filterJobTitle: value
-                      }, () => {
-                        this.getNewData();
-                      });
-                     
-                    }}
-                    ></AutocompleteBox>
+                      <AutocompleteBox
+                        index='PayrollEmployeeList'
+                        parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                        placeholder='Search Job Title'
+                        col='Job Title'
+                        onChange={(value) => {
+                          this.setState({
+                            filterJobTitle: value
+                          }, () => {
+                            this.getNewData();
+                          });
 
-                      
+                        }}
+                      ></AutocompleteBox>
+
+
+                    </div>
+
                   </div>
-
- </div>
                 )
               }
 
               <div className='block md:hidden  mx-2 '>
-                {this.state.loadedEmployeeRows.map((eachEmployee,index) => (
-                  <div 
-                  ref= {
-                    ref => {
-                      this.setLastObjRefMobile(ref,index,this.state.loadedEmployeeRows.length)
+                {this.state.loadedEmployeeRows.map((eachEmployee, index) => (
+                  <div
+                    ref={
+                      ref => {
+                        this.setLastObjRefMobile(ref, index, this.state.loadedEmployeeRows.length)
+                      }
                     }
-                  }
-                  className='bg-truegray-900 border-slate-700  border-b py-2'>
+                    className='bg-truegray-900 border-slate-700  border-b py-2'>
                     <div className=' flex flex-row'><div className='grow flex-grow'><span
-                  className='bold font-bold'
-                  >{eachEmployee.f}</span> {eachEmployee.l}</div>
-<div className='grow flex-grow text-right'>
-                   <span className='font-semibold'>{eachEmployee.j}</span>
-                  <span className='ml-2'>{eachEmployee.d}</span></div></div>
+                      className='bold font-bold'
+                    >{eachEmployee.f}</span> {eachEmployee.l}</div>
+                      <div className='grow flex-grow text-right'>
+                        <span className='font-semibold'>{eachEmployee.j}</span>
+                        <span className='ml-2'>{eachEmployee.d}</span></div></div>
 
-                  <div className='pl-3'>
+                    <div className='pl-3'>
 
-                    {
-                      /*
-                       Base Pay <span className='mono'>{excelnum(eachEmployee.b)}</span>
-                  <br></br>
-                  Overtime <span className='mono'>{excelnum(eachEmployee.ov)}</span>
-                  <br></br>
-                  Other <span className='mono'>{excelnum(eachEmployee.ot)}</span>
-                  <br></br>
-                  Healthcare <span className='mono'>{excelnum(eachEmployee.h)}</span>
-                  <br></br>
-                  Retirement <span className='mono'>{excelnum(eachEmployee.r)}</span>
-                  <br></br>
-                  <span className='font-semibold'> 
-                  Total Pay <span className='mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</span></span>
-                      */
-                    }
+                      {
+                        /*
+                         Base Pay <span className='mono'>{excelnum(eachEmployee.b)}</span>
+                    <br></br>
+                    Overtime <span className='mono'>{excelnum(eachEmployee.ov)}</span>
+                    <br></br>
+                    Other <span className='mono'>{excelnum(eachEmployee.ot)}</span>
+                    <br></br>
+                    Healthcare <span className='mono'>{excelnum(eachEmployee.h)}</span>
+                    <br></br>
+                    Retirement <span className='mono'>{excelnum(eachEmployee.r)}</span>
+                    <br></br>
+                    <span className='font-semibold'> 
+                    Total Pay <span className='mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</span></span>
+                        */
+                      }
 
-<table className="table-auto">
-  <tbody>
-    <tr>
-      <td className='pr-2'>Base Pay</td>
-      <td>{excelnum(eachEmployee.b)}</td>
-    </tr>
-    <tr>
-      <td className='pr-1'>Overtime</td>
-      <td>{excelnum(eachEmployee.ov)}</td>
-    </tr>
-    <tr>
-      <td className='pr-1'>Other</td>
-      <td>{excelnum(eachEmployee.ot)}</td>
-    </tr>
-    <tr>
-      <td className='pr-1'>Healthcare</td>
-      <td>{excelnum(eachEmployee.h)}</td>
-    </tr>
-    <tr>
-      <td className='pr-1'>Retirement</td>
-      <td>{excelnum(eachEmployee.r)}</td>
-    </tr>
-    <tr>
-      <td className='pr-1'>Total Pay</td>
-      <td>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
-    </tr>
-  </tbody>
-</table>
-                    
-                 
+                      <table className="table-auto">
+                        <tbody>
+                          <tr>
+                            <td className='pr-2'>Base Pay</td>
+                            <td>{excelnum(eachEmployee.b)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pr-1'>Overtime</td>
+                            <td>{excelnum(eachEmployee.ov)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pr-1'>Other</td>
+                            <td>{excelnum(eachEmployee.ot)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pr-1'>Healthcare</td>
+                            <td>{excelnum(eachEmployee.h)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pr-1'>Retirement</td>
+                            <td>{excelnum(eachEmployee.r)}</td>
+                          </tr>
+                          <tr>
+                            <td className='pr-1'>Total Pay</td>
+                            <td>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+
+                    </div>
                   </div>
-                  </div>
 
-        
-          
-                  
+
+
+
                 ))}
               </div>
 
               <table className="table-auto hidden md:block px-2 text-truegray-200">
-  <thead className='sticky'>
-    <tr className='bg-truegray-900 border-b-1 border-white py-2'>
-      <th>First</th>
-      <th>Last</th>
-      <th>Job</th>
-      <th>Dept</th>
-      <th>Base Pay</th>
-       <th>Overtime</th>
-        <th>Other</th>
-        <th>Healthcare</th>
-        <th>Retirement</th>
-        <th>Total Pay</th>
-    </tr>
-  </thead>
-  <tbody>
-    {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
+                <thead className='sticky'>
+                  <tr className='bg-truegray-900 border-b-1 border-white py-2'>
+                    <th>First</th>
+                    <th>Last</th>
+                    <th>Job</th>
+                    <th>Dept</th>
+                    <th>Base Pay</th>
+                    <th>Overtime</th>
+                    <th>Other</th>
+                    <th>Healthcare</th>
+                    <th>Retirement</th>
+                    <th>Total Pay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
                     <tr
-                    ref= {ref => 
+                      ref={ref =>
 
-                      this.setLastObjRef(ref,employeeIndex,this.state.loadedEmployeeRows.length)
-                    
-                    
-                   }
+                        this.setLastObjRef(ref, employeeIndex, this.state.loadedEmployeeRows.length)
 
-                   className='py-2 border-b border-truegray-700'
+
+                      }
+
+                      className='py-2 border-b border-truegray-700'
                     >
-      <td>{eachEmployee.f}</td>
-      <td>{eachEmployee.l}</td>
-      <td>{eachEmployee.j}</td>
-      <td>{eachEmployee.d.replace(/Department/gi,"")}</td>
-      <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
-      <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
-       <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
-              <td className='text-right mono'>{excelnum(eachEmployee.h)}</td>
-              <td className='text-right mono'>{excelnum(eachEmployee.r)}</td>
-              <td className='text-right mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
-    </tr>
-                ))}
-  </tbody>
-</table>
+                      <td>{eachEmployee.f}</td>
+                      <td>{eachEmployee.l}</td>
+                      <td>{eachEmployee.j}</td>
+                      <td>{eachEmployee.d.replace(/Department/gi, "")}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.h)}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.r)}</td>
+                      <td className='text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </React.StrictMode>
 
@@ -832,7 +841,5 @@ document.addEventListener('scroll', e => {
     )
   }
 }
-
-
 
 export default Payroll
