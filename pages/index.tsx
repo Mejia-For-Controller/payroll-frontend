@@ -16,6 +16,7 @@ import { io } from "socket.io-client";
 
 import { AutocompleteBox } from '../components/AutocompleteBox'
 import { Autocomplete } from '../components/Autocomplete'
+import _ from 'lodash';
 
 export function isInViewport(element: any, buffer: any) {
   const rect = element.getBoundingClientRect();
@@ -117,6 +118,9 @@ export class Payroll extends React.Component<any, any> {
   lastRefSecondLast: any;
   lastRefMobile: any;
   lastRefMobileBuffer15: any;
+  filterFirstName: string;
+  filterLastName: any;
+  filterDeptName: any;
 
   //currently loaded
   currentlyLoadedF: string;
@@ -197,10 +201,10 @@ export class Payroll extends React.Component<any, any> {
   checkIfLoadMoreScrollRapid = () => {
     //have idempotency
 
-    if (this.lastReqF === this.state.filterFirstName &&
+    if (this.lastReqF === this.filterFirstName &&
       this.lastReqRowCount === this.state.loadedEmployeeRows.length &&
-      this.lastReqL === this.state.filterLastName &&
-      this.lastReqJ === this.state.filterLastName
+      this.lastReqL === this.filterLastName &&
+      this.lastReqJ === this.filterLastName
     ) {
 
     } else {
@@ -251,43 +255,53 @@ export class Payroll extends React.Component<any, any> {
 
     this.socketmain.on("result", (message:any) => {
 
-      // console.log(message)
+      
       this.setState((state, props) => {
 
+        
+      var toloadrows = state.loadedEmployeeRows
+
+      //if loaded states matches incoming state
+      if ((
+        this.state.currentlyLoadedF === message.meta.f
+        &&
+        this.state.currentlyLoadedL === message.meta.l
+        &&
+        this.state.currentlyLoadedJ === message.meta.j
+      )) {
+        //console.log('append')
+        toloadrows = [...toloadrows, ...message.employeePortion]
+      } else {
+      //  console.log('new')
+        toloadrows = message.employeePortion
+      }
+
+    //  console.log('change employee state to', toloadrows)
+
+   
+      this.currentlyLoadedF = message.meta.f;
+
+    //  console.log('setting to ', message.meta.f);
+
+    //  console.log('result ', this.currentlyLoadedF)
+
+      this.currentlyLoadedF = message.meta.l;
+      this.currentlyLoadedJ = message.meta.j;
+      // console.log(message)
+      this.currentlyLoadedMetadata = {
+        active: true,
+        totalFiltered: message.meta.totalFiltered,
+        f: message.meta.f,
+        l: message.meta.l,
+        j: message.meta.j
+      }
 
 
-        var toloadrows = state.loadedEmployeeRows
-
-        //if loaded states matches incoming state
-        if ((
-          this.currentlyLoadedF === message.meta.f
-          &&
-          this.currentlyLoadedL === message.meta.l
-          &&
-          this.currentlyLoadedJ === message.meta.j
-        )) {
-          console.log('append')
-          toloadrows = [...toloadrows, ...message.employeePortion]
-        } else {
-          console.log('new')
-          toloadrows = message.employeePortion
-        }
-
-
-        console.log('change employee state to', toloadrows)
-
-        this.currentlyLoadedF = message.meta.f;
-        this.currentlyLoadedF = message.meta.l;
-        this.currentlyLoadedJ = message.meta.j;
-          this.currentlyLoadedMetadata = {
-            active: true,
-            totalFiltered: message.meta.totalFiltered,
-            f: message.meta.f,
-            l: message.meta.l,
-            j: message.meta.j
-          }
         return {
-          loadedEmployeeRows: toloadrows
+          loadedEmployeeRows: toloadrows,
+          currentlyLoadedF: message.meta.f,
+          currentlyLoadedL: message.meta.l,
+          currentlyLoadedJ: message.meta.j
         }
       })
 
@@ -364,7 +378,7 @@ export class Payroll extends React.Component<any, any> {
   }
 
   getNewData = () => {
-    console.log('get new data')
+  //  console.log('get new data')
     var numberSelected = Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length;
 
     var valueToSubmit;
@@ -382,9 +396,13 @@ export class Payroll extends React.Component<any, any> {
 
     var newSeq: boolean = true;
 
-    if (this.state.filterFirstName === this.currentlyLoadedF
-      && this.state.filterLastName === this.currentlyLoadedL
-      && this.state.filterJobTitle === this.currentlyLoadedJ
+  
+
+    //console.log('getnewfunc says f is', this.state.currentlyLoadedF)
+
+    if (this.state.filterFirstName == this.state.currentlyLoadedF
+      && this.state.filterLastName == this.state.currentlyLoadedL
+      && this.state.filterJobTitle == this.state.currentlyLoadedJ
     ) {
       newSeq = false;
     }
@@ -395,7 +413,7 @@ export class Payroll extends React.Component<any, any> {
       j: this.state.filterJobTitle,
       enabledDept: valueToSubmit,
 
-      currentF: this.currentlyLoadedF,
+      currentF: this.state.currentlyLoadedF,
       currentL: this.currentlyLoadedL,
       currentJ: this.currentlyLoadedJ,
       newSeq
@@ -418,7 +436,7 @@ export class Payroll extends React.Component<any, any> {
       }
     }
 
-    console.log('repeat load', preventNextLoadBecauseRowsAreAllDone)
+    //console.log('repeat load', preventNextLoadBecauseRowsAreAllDone)
 
     if (preventNextLoadBecauseRowsAreAllDone === false) {
       this.socketmain.emit("employeereq", {
@@ -550,6 +568,7 @@ export class Payroll extends React.Component<any, any> {
                           placeholder='Search First Name'
                           col='First Name'
                           onChange={(value) => {
+                            this.filterFirstName = value
                             this.setState({
                               filterFirstName: value
                             }, () => {
@@ -567,6 +586,7 @@ export class Payroll extends React.Component<any, any> {
                           placeholder='Search Last Name'
                           col='Last Name'
                           onChange={(value) => {
+                            this.filterLastName = value
                             this.setState({
                               filterLastName: value
                             }, () => {
@@ -707,6 +727,8 @@ export class Payroll extends React.Component<any, any> {
                         placeholder='Search Job Title'
                         col='Job Title'
                         onChange={(value) => {
+                          
+                          this.filterJobTitle = value
                           this.setState({
                             filterJobTitle: value
                           }, () => {
@@ -724,9 +746,9 @@ export class Payroll extends React.Component<any, any> {
               }
 
               <div className='block md:hidden  mx-2 '>
-                {this.state.loadedEmployeeRows.map((eachEmployee, index) => (
+                {_.uniq(this.state.loadedEmployeeRows).map((eachEmployee, index) => (
                   <div
-                  key={eachEmployee.id}
+                  key={index}
 
                     ref={
                       ref => {
