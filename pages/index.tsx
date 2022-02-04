@@ -247,7 +247,7 @@ export class Payroll extends React.Component<any, any> {
       }
     }, true);
 
-    this.socketmain.on("result", (message) => {
+    this.socketmain.on("result", (message:any) => {
 
       // console.log(message)
       this.setState((state, props) => {
@@ -274,9 +274,9 @@ export class Payroll extends React.Component<any, any> {
 
         console.log('change employee state to', toloadrows)
 
-        this.currentlyLoadedF = message.meta.f
-        this.currentlyLoadedF = message.meta.l
-        this.currentlyLoadedJ = message.meta.j,
+        this.currentlyLoadedF = message.meta.f;
+        this.currentlyLoadedF = message.meta.l;
+        this.currentlyLoadedJ = message.meta.j;
           this.currentlyLoadedMetadata = {
             active: true,
             totalFiltered: message.meta.totalFiltered,
