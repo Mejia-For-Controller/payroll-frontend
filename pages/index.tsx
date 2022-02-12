@@ -118,9 +118,10 @@ export class Payroll extends React.Component<any, any> {
   lastRefSecondLast: any;
   lastRefMobile: any;
   lastRefMobileBuffer15: any;
+  filterDeptName: any;
   filterFirstName: string;
   filterLastName: any;
-  filterDeptName: any;
+  filterJobTitle: any;
 
   //currently loaded
   currentlyLoadedF: string;
@@ -745,7 +746,7 @@ export class Payroll extends React.Component<any, any> {
                 )
               }
 
-              <div className='block md:hidden  mx-2 '>
+              <div className='block md:hidden  mx-2 bg-gray-50'>
                 {_.uniq(this.state.loadedEmployeeRows).map((eachEmployee, index) => (
                   <div
                   key={index}
@@ -823,7 +824,7 @@ export class Payroll extends React.Component<any, any> {
 
               <table className="table-auto hidden md:block px-2 text-truegray-200">
                 <thead className='sticky'>
-                  <tr className='bg-truegray-900 border-b-1 border-white py-2'>
+                  <tr className='bg-truegray-800 border-b-1 border-white py-2'>
                     <th>First</th>
                     <th>Last</th>
                     <th>Job</th>
