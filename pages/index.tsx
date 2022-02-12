@@ -557,7 +557,7 @@ export class Payroll extends React.Component<any, any> {
                 this.state.filterpanel === true &&
                 (//absolute bottom-0 
 
-                  <div id='filterpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-slate-50 px-3 py-1'>
+                  <div id='filterpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
                     <p className='text-lg'>Filter Employees</p>
                     <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
                       <div className='flex flex-col md:flex-row sm:w-full'>
@@ -824,7 +824,7 @@ export class Payroll extends React.Component<any, any> {
 
               <table className="table-auto hidden md:block px-2 text-truegray-200">
                 <thead className='sticky'>
-                  <tr className='bg-truegray-900 border-b-1 border-white py-2'>
+                  <tr className='bg-truegray-800 border-b-1 border-white py-2'>
                     <th>First</th>
                     <th>Last</th>
                     <th>Job</th>
