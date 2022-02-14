@@ -741,8 +741,10 @@ export class Payroll extends React.Component<any, any> {
 
 
                     </div>
-                    <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
+                  <a href='https://algolia.com' target="_blank">
+                  <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
                  
+                  </a>
                   </div>
                 )
               }
