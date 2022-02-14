@@ -224,13 +224,8 @@ export class Payroll extends React.Component<any, any> {
         autoConnect: false
       });
 
-
-
     let lastKnownScrollPosition = 0;
     let ticking = false;
-
-
-
 
     document.addEventListener('scroll', e => {
 
@@ -533,7 +528,7 @@ export class Payroll extends React.Component<any, any> {
                 console.log('scroll')
               }}
             >
-              <div className='font-semibold flex flex-row pl-1 mt-2 text-lg space-x-2 flex flex-row align-middle space-x-1'>
+              <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
 
                 <button
                   onClick={() => this.toggleFilterButton()}
@@ -557,10 +552,15 @@ export class Payroll extends React.Component<any, any> {
                 (//absolute bottom-0 
 
                   <div id='filterpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
-                    <p className='text-lg'>Filter Employees</p>
+                  <div className='flex flex-row'>
+
+                  <p className='text-base md:text-lg'>Filter Employees</p>
+                  
+
+                  </div>
                     <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
                       <div className='flex flex-col md:flex-row sm:w-full'>
-                        <p className='grow md:w-28'>First Name</p>
+                        <p className='text-sm md:text-base grow md:w-28'>First Name</p>
                         <AutocompleteBox
                           index='PayrollFirstNames'
                           parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
@@ -578,7 +578,7 @@ export class Payroll extends React.Component<any, any> {
                         ></AutocompleteBox>
                       </div>
                       <div className='flex flex-col md:flex-row sm:w-full'>
-                        <p className='md:w-28'>Last Name</p>
+                        <p className='text-sm md:text-base md:w-28'>Last Name</p>
                         <AutocompleteBox
                           index='PayrollLastName'
                           parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
@@ -598,7 +598,7 @@ export class Payroll extends React.Component<any, any> {
                     </div>
 
                     <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
-                      <p className='align-middle my-auto'>Departments</p>
+                      <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
                       <button
                         onClick={(event) => { this.toggleDeptPanel() }}
                         className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
@@ -622,7 +622,7 @@ export class Payroll extends React.Component<any, any> {
                         >
                           <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky top-0 h-content bg-truegray-800  md:flex-row flex flex-col'>
                             <div className='flex flex-row'>
-                              <p className='text-lg'>Select Departments</p>
+                              <p className='text-sm md:text-lg'>Select Departments</p>
                               <button className='ml-auto mr-2 md:hidden'
                                 onClick={(event) => { this.toggleDeptPanel() }}
                               >
@@ -720,7 +720,7 @@ export class Payroll extends React.Component<any, any> {
                     <div className={`flex flex-row md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
 
                     >
-                      <p className=''>Job Title</p>
+                      <p className='text-sm md:text-base'>Job Title</p>
                       <AutocompleteBox
                         index='PayrollEmployeeList'
                         parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
@@ -740,7 +740,8 @@ export class Payroll extends React.Component<any, any> {
 
 
                     </div>
-
+                    <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
+                 
                   </div>
                 )
               }
@@ -782,7 +783,7 @@ export class Payroll extends React.Component<any, any> {
                         */
                       }
 
-                      <table className="table-auto">
+                      <table className="table-auto text-sm">
                         <tbody>
                           <tr>
                             <td className='pr-2'>Base Pay</td>
