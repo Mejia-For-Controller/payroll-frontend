@@ -944,9 +944,7 @@ export class Payroll extends React.Component<any, any> {
                       <td>{eachEmployee.f}</td>
                       <td>{eachEmployee.l}</td>
                       <td>{eachEmployee.j}</td>
-                      {eachEmployee.d && (
                       <td>{eachEmployee.d.replace(/Department/gi, "")}</td>
-                      )}
                       <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
                       <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
                       <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
