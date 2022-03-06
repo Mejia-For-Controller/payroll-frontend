@@ -609,6 +609,15 @@ export class Payroll extends React.Component<any, any> {
                   </svg>
                   <span className='align-middle'>Sort</span>
                 </div>
+                <div className='hidden md:block my-auto ml-auto pl-2'>
+                {
+                  this.state.loadedfirsttime === true && (
+                    <>
+                    <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> <span className='font-normal'>({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) Filtered of </span> <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
+                    </>
+                  )
+                }
+                </div>
               </div>
 
               {
@@ -818,9 +827,9 @@ export class Payroll extends React.Component<any, any> {
                         <div className='flex flex-row'>
                         <div className="text-base bg-opacity-30">
                           {this.state.loadedfirsttime === true && (
-                            <>
-                            <span className='font-semibold'>{this.state.numberoftotalrows}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount}</span>
-                            </>
+                            <span className='md:hidden'>
+                            <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
+                            </span>
                           )}
                             </div>
                             
@@ -978,7 +987,7 @@ export class Payroll extends React.Component<any, any> {
                     (this.getParsedDeptFilter() === 'none' && this.state.loadedEmployeeRows.length == this.state.numberoftotalrows) && (
                       <>
                       <div className="text-base font-semibold bg-opacity-30">You've reached the end of the table.</div>
-                      <div className="text-base bg-opacity-30">{this.state.numberoftotalrows}  ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) filtered employees of {this.state.entiresetcount} total</div>
+                      <div className="text-base bg-opacity-30">{this.state.numberoftotalrows.toLocaleString("en-US")}  ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) filtered employees of {this.state.entiresetcount.toLocaleString("en-US")} total</div>
                       </>
                     )
                   }
