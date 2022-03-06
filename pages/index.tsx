@@ -433,7 +433,6 @@ export class Payroll extends React.Component<any, any> {
   }
 
   getNewData = () => {
-  
 
     var newSeq: boolean = true;
 
@@ -498,7 +497,7 @@ export class Payroll extends React.Component<any, any> {
 
     console.log('this.getParsedDeptFilter()', this.getParsedDeptFilter())
 
-    if (preventNextLoadBecauseRowsAreAllDone === false && this.getParsedDeptFilter() !== 'none') {
+    if (preventNextLoadBecauseRowsAreAllDone === false) {
 
       this.socketmain.emit("employeereq", {
         loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
