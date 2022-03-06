@@ -583,7 +583,7 @@ export class Payroll extends React.Component<any, any> {
           <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous" />
 
-
+          <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
         </Head>
         <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-full overflow-y-clip'>
           <PayrollNav />
