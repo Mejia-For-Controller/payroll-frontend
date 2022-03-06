@@ -48,6 +48,7 @@ const departments: Array<any> = [
       "City Ethics Commission",
       "City Planning",
       "Controller",
+      "Council",
       "Convention and Tourism Development",
       "Cultural Affairs",
       "Disability",
@@ -132,6 +133,7 @@ export class Payroll extends React.Component<any, any> {
   lastReqF: string;
   lastReqL: string;
   lastReqJ: string;
+  lastReqD: any;
   lastReqRowCount: any;
 
 
@@ -140,12 +142,14 @@ export class Payroll extends React.Component<any, any> {
     this.currentlyLoadedF = "";
     this.currentlyLoadedL = "";
     this.currentlyLoadedJ = "";
-    this.currentlyLoadedD = arrayOfEnabledDepts;
     this.currentlyLoadedMetadata = {
       active: false
     }
 
     this.state = {
+      numberoftotalrows: 0,
+      entiresetcount: 1,
+      loadedfirsttime: false,
       filterpanel: false,
       sortpanel: true,
       socketconnected: false,
@@ -199,16 +203,22 @@ export class Payroll extends React.Component<any, any> {
 
   }
 
+  makePercent= (num,dem) => {
+    return parseFloat(((num/dem) * 100).toFixed(2))
+  }
+
   checkIfLoadMoreScrollRapid = () => {
     //have idempotency
 
     if (this.lastReqF === this.filterFirstName &&
       this.lastReqRowCount === this.state.loadedEmployeeRows.length &&
       this.lastReqL === this.filterLastName &&
-      this.lastReqJ === this.filterLastName
+      this.lastReqJ === this.filterLastName &&
+      this.lastReqD === this.getParsedDeptFilter()
     ) {
 
     } else {
+      console.log('passed 2nd check')
       this.checkIfLoadMore()
     }
 
@@ -258,13 +268,7 @@ export class Payroll extends React.Component<any, any> {
       var toloadrows = state.loadedEmployeeRows
 
       //if loaded states matches incoming state
-      if ((
-        this.state.currentlyLoadedF === message.meta.f
-        &&
-        this.state.currentlyLoadedL === message.meta.l
-        &&
-        this.state.currentlyLoadedJ === message.meta.j
-      )) {
+      if (message.meta.newseq === false) {
         //console.log('append')
         toloadrows = [...toloadrows, ...message.employeePortion]
       } else {
@@ -281,23 +285,29 @@ export class Payroll extends React.Component<any, any> {
 
     //  console.log('result ', this.currentlyLoadedF)
 
-      this.currentlyLoadedF = message.meta.l;
+      this.currentlyLoadedL = message.meta.l;
       this.currentlyLoadedJ = message.meta.j;
+      this.currentlyLoadedD = message.meta.d;
       // console.log(message)
       this.currentlyLoadedMetadata = {
         active: true,
         totalFiltered: message.meta.totalFiltered,
         f: message.meta.f,
         l: message.meta.l,
-        j: message.meta.j
+        j: message.meta.j,
+        d: message.meta.d
       }
 
 
         return {
+          entiresetcount: message.meta.entiresetcount,
+          numberoftotalrows: message.meta.totalFiltered,
+          loadedfirsttime: true,
           loadedEmployeeRows: toloadrows,
           currentlyLoadedF: message.meta.f,
           currentlyLoadedL: message.meta.l,
-          currentlyLoadedJ: message.meta.j
+          currentlyLoadedJ: message.meta.j,
+          currentlyLoadedD: message.meta.d
         }
       })
 
@@ -351,6 +361,8 @@ export class Payroll extends React.Component<any, any> {
       newSetDept[nameOfDept] = newStateToSetForOneDept;
 
       return { enabledDept: newSetDept };
+    }, () => {
+      this.getNewData();
     });
   }
 
@@ -361,6 +373,7 @@ export class Payroll extends React.Component<any, any> {
   }
 
   setAllDept = (state) => {
+    
     if (state === true) {
       this.setState({
         enabledDept: arrayOfEnabledDepts
@@ -371,10 +384,11 @@ export class Payroll extends React.Component<any, any> {
       }
       )
     }
+    this.getNewData();
   }
 
-  getNewData = () => {
-  //  console.log('get new data')
+  getParsedDeptFilter = () => {
+    //  console.log('get new data')
     var numberSelected = Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length;
 
     var valueToSubmit;
@@ -386,28 +400,74 @@ export class Payroll extends React.Component<any, any> {
       if (numberSelected === 0) {
         valueToSubmit = 'none'
       } else {
-        valueToSubmit = this.state.enabledDept;
+      //  valueToSubmit = this.state.enabledDept;
+
+      //submit an array instead
+      valueToSubmit = 
+      Object.keys(
+        Object.fromEntries(
+          Object.entries(this.state.enabledDept)
+          .filter(([key, value]) => value === true)
+          )
+      )
       }
     }
 
+    return valueToSubmit;
+  }
+
+ comparedeptcodes = (a,b) => {
+    var maska:any = a;
+    var maskb:any = b;
+
+    if (Array.isArray(a)) {
+      maska = a.join('|')
+    }
+
+    if (Array.isArray(b)) {
+      maskb = b.join('|')
+    }
+
+    return maska == maskb;
+  }
+
+  getNewData = () => {
+  
+
     var newSeq: boolean = true;
 
-  
+    var deptvaluetosubmit = this.getParsedDeptFilter()
 
     //console.log('getnewfunc says f is', this.state.currentlyLoadedF)
 
     if (this.state.filterFirstName == this.state.currentlyLoadedF
       && this.state.filterLastName == this.state.currentlyLoadedL
       && this.state.filterJobTitle == this.state.currentlyLoadedJ
+  //    && deptvaluetosubmit == this.state.currentlyLoadedD
+      && this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD)
     ) {
+      console.log('not new seq')
+
       newSeq = false;
+    } else {
+      
+      console.log('new seq')
+
+      console.log('is rest matching', (this.state.filterFirstName == this.state.currentlyLoadedF
+        && this.state.filterLastName == this.state.currentlyLoadedL
+        && this.state.filterJobTitle == this.state.currentlyLoadedJ))
+
+        console.log('does the dept filter match', this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD))
     }
+
+    console.log('deptvaluetosubmit ',  deptvaluetosubmit )
+    console.log('this.state.currentlyLoadedD ',  this.state.currentlyLoadedD )
 
     console.log({
       firstName: this.state.filterFirstName,
       lastName: this.state.filterLastName,
       j: this.state.filterJobTitle,
-      enabledDept: valueToSubmit,
+      enabledDept: deptvaluetosubmit,
 
       currentF: this.state.currentlyLoadedF,
       currentL: this.currentlyLoadedL,
@@ -418,6 +478,7 @@ export class Payroll extends React.Component<any, any> {
     this.lastReqF = this.state.filterFirstName;
     this.lastReqJ = this.state.filterLastName;
     this.lastReqJ = this.state.filterJobTitle;
+    this.lastReqD = this.getParsedDeptFilter();
     this.lastReqRowCount = this.state.loadedEmployeeRows;
 
     var preventNextLoadBecauseRowsAreAllDone = false;
@@ -434,14 +495,17 @@ export class Payroll extends React.Component<any, any> {
 
     //console.log('repeat load', preventNextLoadBecauseRowsAreAllDone)
 
-    if (preventNextLoadBecauseRowsAreAllDone === false) {
+    console.log('this.getParsedDeptFilter()', this.getParsedDeptFilter())
+
+    if (preventNextLoadBecauseRowsAreAllDone === false && this.getParsedDeptFilter() !== 'none') {
+
       this.socketmain.emit("employeereq", {
         loadedEmployeeRowsCount: this.state.loadedEmployeeRows.length,
         requestedFilters: {
           firstName: this.state.filterFirstName,
           lastName: this.state.filterLastName,
           j: this.state.filterJobTitle,
-          enabledDept: valueToSubmit
+          enabledDept: deptvaluetosubmit
         },
         newSeq: newSeq,
         currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
@@ -638,14 +702,23 @@ export class Payroll extends React.Component<any, any> {
 
                               <div
                                 onClick={() => {
-                                  this.setAllDept(true)
+                                  this.setAllDept(true);
                                 }}
                                 className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
                                   'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
-                                  } rounded-xl px-2 py-0.5 font-bold`}>Select All</div>
+                                  } rounded-xl px-2 py-0.5 font-bold`}
+                                  
+                                  style={{
+                                    cursor: 'pointer'
+                                  }}
+                                  >Select All</div>
                               <div className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
                                 'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
                                 } rounded-xl px-2 py-0.5 font-bold`}
+
+                                style={{
+                                  cursor: 'pointer'
+                                }}
 
                                 onClick={() => {
                                   this.setAllDept(false)
@@ -673,7 +746,8 @@ export class Payroll extends React.Component<any, any> {
                                           eachDepartmentGroup.array.map((eachDept) => (
                                             <div>
                                               <button
-                                                onClick={(event) => { this.toggleDepartments(eachDept) }}
+                                                onClick={(event) => { this.toggleDepartments(eachDept);
+                                                }}
                                                 className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 flex flex-row
  ${this.state.enabledDept[eachDept] === true ? "  bg-truegray-700 bg-opacity-95 text-truegray-50 hover:bg-truegray-500 border-mejito" : 'bg-truegray-900 text-truegray-300  hover:bg-truegray-800  border-truegray-100'}
 
@@ -741,10 +815,23 @@ export class Payroll extends React.Component<any, any> {
 
 
                     </div>
+                        <div className='flex flex-row'>
+                        <div className="text-base bg-opacity-30">
+                          {this.state.loadedfirsttime === true && (
+                            <>
+                            <span className='font-semibold'>{this.state.numberoftotalrows}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount}</span>
+                            </>
+                          )}
+                            </div>
+                            
+                  <div className='ml-auto'>
                   <a href='https://algolia.com' target="_blank">
                   <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
                  
                   </a>
+                    </div>
+                            </div>
+
                   </div>
                 )
               }
@@ -841,6 +928,7 @@ export class Payroll extends React.Component<any, any> {
                   </tr>
                 </thead>
                 <tbody>
+
                   {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
 
                     <tr
@@ -851,12 +939,14 @@ export class Payroll extends React.Component<any, any> {
 
                       }
 
-                      className='py-2 border-b border-truegray-700'
+                      className={`py-2 border-b border-truegray-700 ${this.getParsedDeptFilter() === 'none' ? 'hidden': ''}`}
                     >
                       <td>{eachEmployee.f}</td>
                       <td>{eachEmployee.l}</td>
                       <td>{eachEmployee.j}</td>
+                      {eachEmployee.d && (
                       <td>{eachEmployee.d.replace(/Department/gi, "")}</td>
+                      )}
                       <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
                       <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
                       <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
@@ -867,6 +957,35 @@ export class Payroll extends React.Component<any, any> {
                   ))}
                 </tbody>
               </table>
+
+              <>
+              {
+                this.state.loadedfirsttime === true && this.state.totalFiltered && (
+                  <div>
+                    <h2 className="text-md font-bold">Zero Rows Found</h2>
+                  <h2 className="text-base font-semibold">Try expanding your search.</h2>
+                 
+                  </div>
+                )
+              }
+               <>
+                  {
+                    this.getParsedDeptFilter() === 'none' && (
+                      <div className="text-base font-semibold bg-green-500 bg-opacity-30">You don't have any departments selected. Please select some!</div>
+                    )
+                  }
+                  </>
+                  <>
+                  {
+                    (this.getParsedDeptFilter() === 'none' && this.state.loadedEmployeeRows.length == this.state.numberoftotalrows) && (
+                      <>
+                      <div className="text-base font-semibold bg-opacity-30">You've reached the end of the table.</div>
+                      <div className="text-base bg-opacity-30">{this.state.numberoftotalrows}  ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) filtered employees of {this.state.entiresetcount} total</div>
+                      </>
+                    )
+                  }
+                  </>
+              </>
             </div>
           </React.StrictMode>
 
