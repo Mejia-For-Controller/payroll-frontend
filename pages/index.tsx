@@ -375,16 +375,17 @@ export class Payroll extends React.Component<any, any> {
   setAllDept = (state) => {
     
     if (state === true) {
-      this.setState({
-        enabledDept: arrayOfEnabledDepts
-      })
+      var stateToPush = arrayOfEnabledDepts
     } else {
-      this.setState({
-        enabledDept: arrayOfDisabledDepts
-      }
-      )
+      stateToPush =  arrayOfDisabledDepts
     }
-    this.getNewData();
+
+      this.setState({
+        enabledDept: stateToPush
+      }, () => {
+        this.getNewData();
+      })
+   
   }
 
   getParsedDeptFilter = () => {
