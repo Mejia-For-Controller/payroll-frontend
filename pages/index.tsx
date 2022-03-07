@@ -376,15 +376,17 @@ export class Payroll extends React.Component<any, any> {
     
     if (state === true) {
       var stateToPush = arrayOfEnabledDepts
-    } else {
-      stateToPush =  arrayOfDisabledDepts
+    }
+
+    if (state === false) {
+      stateToPush = arrayOfDisabledDepts
     }
 
       this.setState({
         enabledDept: stateToPush
       }, () => {
         this.getNewData();
-      })
+      });
    
   }
 
@@ -596,7 +598,7 @@ export class Payroll extends React.Component<any, any> {
               <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
 
                 <button
-                  onClick={() => this.toggleFilterButton()}
+                  onMouseDown={() => this.toggleFilterButton()}
                   className={` rounded-full  pl-3 pr-3 py-1  border border-2 border-gray-50 bg-truegray-200 ${this.state.filterpanel ? 'bg-truegray-100 text-coolgray-900' : 'bg-truegray-800'}`}>
                   <svg className={` h-6 w-6 align-bottom inline-block align-text-bottom  ${this.state.filterpanel ? 'text-coolgray-900' : 'bg-truegray-800'}`} viewBox="0 0 24 24">
                     <path fill="currentColor" d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z" />
@@ -674,7 +676,7 @@ export class Payroll extends React.Component<any, any> {
                     <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
                       <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
                       <button
-                        onClick={(event) => { this.toggleDeptPanel() }}
+                        onMouseDown={(event) => { this.toggleDeptPanel() }}
                         className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
                         {this.departmentsSelectedRender()}
                         <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
@@ -698,7 +700,7 @@ export class Payroll extends React.Component<any, any> {
                             <div className='flex flex-row'>
                               <p className='text-sm md:text-lg'>Select Departments</p>
                               <button className='ml-auto mr-2 md:hidden'
-                                onClick={(event) => { this.toggleDeptPanel() }}
+                                onMouseDown={(event) => { this.toggleDeptPanel() }}
                               >
                                 <svg className='h-10 w-10' viewBox="0 0 24 24">
                                   <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
@@ -709,8 +711,8 @@ export class Payroll extends React.Component<any, any> {
                               className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
                             >
 
-                              <div
-                                onClick={() => {
+                              <button
+                                onMouseDown={() => {
                                   this.setAllDept(true);
                                 }}
                                 className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
@@ -720,8 +722,8 @@ export class Payroll extends React.Component<any, any> {
                                   style={{
                                     cursor: 'pointer'
                                   }}
-                                  >Select All</div>
-                              <div className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
+                                  >Select All</button>
+                              <button className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
                                 'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
                                 } rounded-xl px-2 py-0.5 font-bold`}
 
@@ -729,11 +731,11 @@ export class Payroll extends React.Component<any, any> {
                                   cursor: 'pointer'
                                 }}
 
-                                onClick={() => {
+                                onMouseDown={() => {
                                   this.setAllDept(false)
                                 }}
 
-                              >Unselect All</div>
+                              >Unselect All</button>
 
                             </div>
                           </div>
@@ -755,7 +757,9 @@ export class Payroll extends React.Component<any, any> {
                                           eachDepartmentGroup.array.map((eachDept) => (
                                             <div>
                                               <button
-                                                onClick={(event) => { this.toggleDepartments(eachDept);
+                                               
+                                                onMouseDown={(event) => { this.toggleDepartments(eachDept);
+                                                  
                                                 }}
                                                 className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 flex flex-row
  ${this.state.enabledDept[eachDept] === true ? "  bg-truegray-700 bg-opacity-95 text-truegray-50 hover:bg-truegray-500 border-mejito" : 'bg-truegray-900 text-truegray-300  hover:bg-truegray-800  border-truegray-100'}
