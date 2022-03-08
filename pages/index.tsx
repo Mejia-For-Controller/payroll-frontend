@@ -377,12 +377,14 @@ export class Payroll extends React.Component<any, any> {
     if (state === true) {
       var stateToPush = arrayOfEnabledDepts
     } else {
-      stateToPush =  arrayOfDisabledDepts
+      stateToPush = arrayOfDisabledDepts
     }
 
+    console.log('plz set state')
       this.setState({
         enabledDept: stateToPush
       }, () => {
+        console.log('call back set all dept set state')
         this.getNewData();
       })
    
@@ -571,7 +573,7 @@ export class Payroll extends React.Component<any, any> {
 
   render() {
     return (
-      <div className=' w-screen h-full overflow-y-auto overflow-x-clip bg-truegray-900'>
+      <div className='w-screen h-full overflow-y-auto overflow-x-clip bg-truegray-900'>
         <Head>
           <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
           <meta property="og:type" content="website" />
@@ -686,7 +688,7 @@ export class Payroll extends React.Component<any, any> {
                     {
                       this.state.deptpanelopen === true && (
 
-                        <div className='bg-truegray-800 h-full flex flex-col fixed bottom-0 md:relative md:h-full overflow-y-clip left-0'
+                        <div className='bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0'
 
                           style={
                             {
@@ -694,7 +696,7 @@ export class Payroll extends React.Component<any, any> {
                             }
                           }
                         >
-                          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky top-0 h-content bg-truegray-800  md:flex-row flex flex-col'>
+                          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800  md:flex-row flex flex-col'>
                             <div className='flex flex-row'>
                               <p className='text-sm md:text-lg'>Select Departments</p>
                               <button className='ml-auto mr-2 md:hidden'
@@ -741,8 +743,11 @@ export class Payroll extends React.Component<any, any> {
                             <>
                               {
 
-                                departments.map((eachDepartmentGroup) => (
-                                  <div className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
+                                departments.map((eachDepartmentGroup,eachDepartmentGroupNum) => (
+                           
+                                  <div
+                                  key={eachDepartmentGroupNum}
+                                  className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
                                     <div className='flex flex-col h-full '>
                                       {
                                         eachDepartmentGroup.nameOfGroup && (
@@ -753,7 +758,9 @@ export class Payroll extends React.Component<any, any> {
                                       <div className='flex flex-row flex-wrap w-full'>
                                         {
                                           eachDepartmentGroup.array.map((eachDept) => (
-                                            <div>
+                                            <div
+                                            key={eachDept}
+                                            >
                                               <button
                                                 onClick={(event) => { this.toggleDepartments(eachDept);
                                                 }}
@@ -945,8 +952,10 @@ export class Payroll extends React.Component<any, any> {
 
                         this.setLastObjRef(ref, employeeIndex, this.state.loadedEmployeeRows.length)
 
-
+                      
                       }
+
+                      key={employeeIndex}
 
                       className={`py-2 border-b border-truegray-700 ${this.getParsedDeptFilter() === 'none' ? 'hidden': ''}`}
                     >
