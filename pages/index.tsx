@@ -636,7 +636,13 @@ export class Payroll extends React.Component<any, any> {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Listbox.Options
+            style={
+              {
+                zIndex: 30
+              }
+            }
+            className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {yearsofpayroll.map((eachyear, yearIdx) => (
                 <Listbox.Option
                   key={yearIdx}
@@ -766,7 +772,7 @@ export class Payroll extends React.Component<any, any> {
 
                           style={
                             {
-                              zIndex: 50
+                              zIndex: 20
                             }
                           }
                         >
