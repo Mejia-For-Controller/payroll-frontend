@@ -1,5 +1,3 @@
-//import TableauEmbed from '../components/tableau'
-import TableauEmbedFunc from '../components/tableaufun'
 //import BasicEmbed from '../components/basicembed'
 import Disclaimer from '../components/disclaimer'
 
@@ -17,6 +15,15 @@ import { io } from "socket.io-client";
 import { AutocompleteBox } from '../components/AutocompleteBox'
 import { Autocomplete } from '../components/Autocomplete'
 import _ from 'lodash';
+
+import { Fragment, useState } from 'react'
+import { Listbox, Transition } from '@headlessui/react'
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+
+const yearsofpayroll = [
+  "2018", "2019", "2020", "2021"
+]
+
 
 export function isInViewport(element: any, buffer: any) {
   const rect = element.getBoundingClientRect();
@@ -129,6 +136,7 @@ export class Payroll extends React.Component<any, any> {
   currentlyLoadedL: string;
   currentlyLoadedJ: string;
   currentlyLoadedD: any;
+  currentlyLoadedYear: any; 
   currentlyLoadedMetadata: any;
   lastReqF: string;
   lastReqL: string;
@@ -147,6 +155,7 @@ export class Payroll extends React.Component<any, any> {
     }
 
     this.state = {
+      selectedyear: "2021",
       numberoftotalrows: 0,
       entiresetcount: 1,
       loadedfirsttime: false,
@@ -288,6 +297,7 @@ export class Payroll extends React.Component<any, any> {
       this.currentlyLoadedL = message.meta.l;
       this.currentlyLoadedJ = message.meta.j;
       this.currentlyLoadedD = message.meta.d;
+      this.currentlyLoadedYear = message.meta.year
       // console.log(message)
       this.currentlyLoadedMetadata = {
         active: true,
@@ -295,7 +305,8 @@ export class Payroll extends React.Component<any, any> {
         f: message.meta.f,
         l: message.meta.l,
         j: message.meta.j,
-        d: message.meta.d
+        d: message.meta.d,
+        year: message.meta.year
       }
 
 
@@ -307,7 +318,8 @@ export class Payroll extends React.Component<any, any> {
           currentlyLoadedF: message.meta.f,
           currentlyLoadedL: message.meta.l,
           currentlyLoadedJ: message.meta.j,
-          currentlyLoadedD: message.meta.d
+          currentlyLoadedD: message.meta.d,
+          currentlyLoadedYear: message.meta.year
         }
       })
 
@@ -447,6 +459,7 @@ export class Payroll extends React.Component<any, any> {
       && this.state.filterJobTitle == this.state.currentlyLoadedJ
   //    && deptvaluetosubmit == this.state.currentlyLoadedD
       && this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD)
+      && this.state.currentlyLoadedYear === this.state.selectedyear
     ) {
       console.log('not new seq')
 
@@ -489,7 +502,8 @@ export class Payroll extends React.Component<any, any> {
       if (this.currentlyLoadedMetadata.totalFiltered <= this.state.loadedEmployeeRows.length &&
         this.currentlyLoadedMetadata.f === this.state.filterFirstName &&
         this.currentlyLoadedMetadata.l === this.state.filterLastName &&
-        this.currentlyLoadedMetadata.j === this.state.filterJobTitle
+        this.currentlyLoadedMetadata.j === this.state.filterJobTitle &&
+        this.currentlyLoadedMetadata.year === this.state.selectedyear
       ) {
         preventNextLoadBecauseRowsAreAllDone = true
       }
@@ -509,6 +523,7 @@ export class Payroll extends React.Component<any, any> {
           j: this.state.filterJobTitle,
           enabledDept: deptvaluetosubmit
         },
+        requestedYear: this.state.selectedyear,
         newSeq: newSeq,
         currentlyLoadedRowFilters: this.state.currentlyLoadedRowFilters
       })
@@ -596,6 +611,65 @@ export class Payroll extends React.Component<any, any> {
               }}
             >
               <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
+
+              <div className="">
+      <Listbox value={this.state.selectedyear} onChange={(value) => {
+        this.setState({
+          selectedyear: value
+        }, () => {
+          this.getNewData();
+        });
+      }}>
+        <div className="">
+          <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-truegray-800 rounded-lg border-white border shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-green-300 focus-visible:ring-offset-2 focus-visible:border-green-500 sm:text-sm">
+            <span className="block truncate">{this.state.selectedyear}</span>
+            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <SelectorIcon
+                className="w-5 h-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+              {yearsofpayroll.map((eachyear, yearIdx) => (
+                <Listbox.Option
+                  key={yearIdx}
+                  className={({ active }) =>
+                    `cursor-default select-none relative py-2 pl-10 pr-4 bg-truegray-900 hover:bg-truegray-800 hover:shadow-sm ${
+                      active ? 'text-amber-100 bg-amber-900' : 'text-white'
+                    }`
+                  }
+                  value={eachyear}
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? 'font-medium' : 'font-normal'
+                        }`}
+                      >
+                        {eachyear}
+                      </span>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      </Listbox>
+    </div>
 
                 <button
                   onClick={() => this.toggleFilterButton()}
@@ -852,6 +926,15 @@ export class Payroll extends React.Component<any, any> {
                 )
               }
 
+{
+               this.state.currentlyLoadedYear == '2021' && (
+                  <div>
+                    <p className="text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable - The City Controller is still calculating this data.</p>
+                 
+                  </div>
+                )
+              }
+
               <div className='block md:hidden  mx-2 bg-gray-50'>
                 {_.uniq(this.state.loadedEmployeeRows).map((eachEmployee, index) => (
                   <div
@@ -889,6 +972,8 @@ export class Payroll extends React.Component<any, any> {
                         */
                       }
 
+
+
                       <table className="table-auto text-sm">
                         <tbody>
                           <tr>
@@ -903,7 +988,10 @@ export class Payroll extends React.Component<any, any> {
                             <td className='pr-1'>Other</td>
                             <td>{excelnum(eachEmployee.ot)}</td>
                           </tr>
-                          <tr>
+                          {
+                      this.state.currentlyLoadedYear != '2021' && (
+                       <>
+                         <tr>
                             <td className='pr-1'>Healthcare</td>
                             <td>{excelnum(eachEmployee.h)}</td>
                           </tr>
@@ -911,10 +999,21 @@ export class Payroll extends React.Component<any, any> {
                             <td className='pr-1'>Retirement</td>
                             <td>{excelnum(eachEmployee.r)}</td>
                           </tr>
-                          <tr>
-                            <td className='pr-1'>Total Pay</td>
-                            <td>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
-                          </tr>
+                    </>
+                      )
+                    }
+                         
+{
+                      this.state.currentlyLoadedYear != '2021' && (
+                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                      )
+                      }
+                      
+{
+                      this.state.currentlyLoadedYear === '2021' && (
+                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot )}</td>
+                      )
+                      }
                         </tbody>
                       </table>
 
@@ -938,8 +1037,14 @@ export class Payroll extends React.Component<any, any> {
                     <th>Base Pay</th>
                     <th>Overtime</th>
                     <th>Other</th>
-                    <th>Healthcare</th>
+                    {
+                      this.state.currentlyLoadedYear != '2021' && (
+                       <>
+                        <th>Healthcare</th>
                     <th>Retirement</th>
+                    </>
+                      )
+                    }
                     <th>Total Pay</th>
                   </tr>
                 </thead>
@@ -959,16 +1064,33 @@ export class Payroll extends React.Component<any, any> {
 
                       className={`py-2 border-b border-truegray-700 ${this.getParsedDeptFilter() === 'none' ? 'hidden': ''}`}
                     >
-                      <td>{eachEmployee.f}</td>
-                      <td>{eachEmployee.l}</td>
-                      <td>{eachEmployee.j}</td>
-                      <td>{eachEmployee.d.replace(/Department/gi, "")}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.b)}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.ov)}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.ot)}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.h)}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.r)}</td>
-                      <td className='text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                      <td className='border-x border-truegray-700'>{eachEmployee.f}</td>
+                      <td  className='border-r border-truegray-700'>{eachEmployee.l}</td>
+                      <td   className='border-r border-truegray-700'>{eachEmployee.j}</td>
+                      <td   className='border-r border-truegray-700'>{eachEmployee.d.replace(/Department/gi, "")}</td>
+                      <td className=' border-r text-right mono'>{excelnum(eachEmployee.b)}</td>
+                      <td className='border-r text-right mono'>{excelnum(eachEmployee.ov)}</td>
+                      <td className='border-r text-right mono'>{excelnum(eachEmployee.ot)}</td>
+                      {
+                      this.state.currentlyLoadedYear != '2021' && (
+                     <>
+                      <td className='border-r text-right mono'>{excelnum(eachEmployee.h)}</td>
+                      <td className='border-r text-right mono'>{excelnum(eachEmployee.r)}</td>
+                      </>
+                      )
+                      }
+
+{
+                      this.state.currentlyLoadedYear != '2021' && (
+                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                      )
+                      }
+                      
+{
+                      this.state.currentlyLoadedYear === '2021' && (
+                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot )}</td>
+                      )
+                      }
                     </tr>
                   ))}
                 </tbody>

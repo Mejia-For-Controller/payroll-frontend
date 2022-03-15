@@ -5,6 +5,9 @@ module.exports = {
   darkMode: 'media', // or 'media' or 'class'
   theme: {
     extend: {
+      boxShadow: {
+        'whitesel': '0 35px 60px -15px rgba(255,255,255,0.3)',
+      },
       colors: {
         coolgray: colors.coolGray,
         gray: colors.trueGray,
@@ -12,7 +15,8 @@ module.exports = {
         mejito: '#41ffca',
         lightmejito: '#c3f2ef',
         green: colors.green,
-        mejitodark: "#00C853"
+        mejitodark: "#00C853",
+        orange: colors.orange
       }
     },
   },
