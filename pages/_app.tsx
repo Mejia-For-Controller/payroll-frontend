@@ -9,6 +9,8 @@ import React, { useEffect } from 'react'
 
 import TagManager from 'react-gtm-module'
 //import TableauEmbed from './tableau'
+import { MantineProvider } from '@mantine/core';
+
 
 //import Navbar from '../components/navbar'
 //import {Budget} from './budget'
@@ -55,7 +57,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='twitter:site' content='@kennethmejiala' />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
       </Head>
+      <MantineProvider theme={{ colorScheme: 'dark' }}>
       <Component {...pageProps} class='h-full'/>
+      </MantineProvider>
     </div>
   );  
            

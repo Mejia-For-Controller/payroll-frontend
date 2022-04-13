@@ -1,13 +1,14 @@
 //import BasicEmbed from '../components/basicembed'
 import Disclaimer from '../components/disclaimer'
-
 import PayrollNav from '../components/payrollnav'
 
 import { Tab } from '@headlessui/react'
 
 import Head from 'next/head'
 
-import React from 'react'
+import React, {useEffect,  Fragment, useState } from 'react'
+
+import { mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending, mdiSortAscending  } from '@mdi/js';
 import dynamic from 'next/dynamic'
 
 import { io } from "socket.io-client";
@@ -15,15 +16,40 @@ import { io } from "socket.io-client";
 import { AutocompleteBox } from '../components/AutocompleteBox'
 import { Autocomplete } from '../components/Autocomplete'
 import _ from 'lodash';
-
-import { Fragment, useState } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
+
+import { ArrowUpIcon } from '@modulz/radix-icons';
+import { useWindowScroll } from '@mantine/hooks';
+import { Affix, Button, Text, Transition as MantineTransition, SegmentedControl, Center, RadioGroup, Radio, Box  } from '@mantine/core';
 
 const yearsofpayroll = [
   "2018", "2019", "2020", "2021"
 ]
 
+
+function ScrollToTop() {
+  const [scroll, scrollTo] = useWindowScroll();
+
+  return (
+    <>
+      <Affix position={{ bottom: 20, right: 20 }}>
+        <MantineTransition transition="slide-up" mounted={scroll.y > 0}>
+          {(transitionStyles) => (
+            <Button
+              leftIcon={<ArrowUpIcon />}
+              style={transitionStyles}
+              className='bg-mejito text-black hover:bg-mejito bg-opacity-90 hover:bg-opacity-100'
+              onClick={() => scrollTo({ y: 0 })}
+            >
+              Scroll to top
+            </Button>
+          )}
+        </MantineTransition>
+      </Affix>
+    </>
+  );
+}
 
 export function isInViewport(element: any, buffer: any) {
   const rect = element.getBoundingClientRect();
@@ -175,6 +201,8 @@ export class Payroll extends React.Component<any, any> {
     };
   }
 
+    
+
   attemptConnectSocket() {
     //   console.log('socket status main page', this.socketmain.connected)
     if (this.state.socketconnected) {
@@ -182,6 +210,9 @@ export class Payroll extends React.Component<any, any> {
       this.socketmain.connect();
     }
   }
+
+  
+handleClick(e) { if (e) {e.preventDefault()}; }
 
   checkIfLoadMore = () => {
     var loadMore = false;
@@ -374,6 +405,7 @@ export class Payroll extends React.Component<any, any> {
 
       return { enabledDept: newSetDept };
     }, () => {
+      console.log('call back dept')
       this.getNewData();
     });
   }
@@ -385,12 +417,16 @@ export class Payroll extends React.Component<any, any> {
   }
 
   setAllDept = (state) => {
+
     
     if (state === true) {
-      var stateToPush = arrayOfEnabledDepts
+      var stateToPush = arrayOfEnabledDepts;
     } else {
       stateToPush = arrayOfDisabledDepts
+    
     }
+
+    document.querySelectorAll('input[data-inputdept]').forEach((eachItem:any) => eachItem.checked = state);
 
     console.log('plz set state')
       this.setState({
@@ -398,7 +434,9 @@ export class Payroll extends React.Component<any, any> {
       }, () => {
         console.log('call back set all dept set state')
         this.getNewData();
-      })
+      });
+
+      
    
   }
 
@@ -473,6 +511,8 @@ export class Payroll extends React.Component<any, any> {
         && this.state.filterJobTitle == this.state.currentlyLoadedJ))
 
         console.log('does the dept filter match', this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD))
+        
+        console.log('years match', this.state.currentlyLoadedYear, this.state.selectedyear)
     }
 
     console.log('deptvaluetosubmit ',  deptvaluetosubmit )
@@ -588,7 +628,11 @@ export class Payroll extends React.Component<any, any> {
 
   render() {
     return (
-      <div className='w-screen h-full overflow-y-auto overflow-x-clip bg-truegray-900'>
+    <>
+      
+      <div className='w-full h-full overflow-x-clip bg-truegray-900'>
+   
+ 
         <Head>
           <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
           <meta property="og:type" content="website" />
@@ -602,10 +646,11 @@ export class Payroll extends React.Component<any, any> {
 
           <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
         </Head>
-        <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-full overflow-y-clip'>
+        <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-content'>
+        < ScrollToTop/>
           <PayrollNav />
           <React.StrictMode>
-            <div className='flex flex-col overflow-y-auto'
+            <div className='flex flex-col '
               onScroll={e => {
                 console.log('scroll')
               }}
@@ -702,240 +747,331 @@ export class Payroll extends React.Component<any, any> {
                 </div>
               </div>
 
+        <div className='flex flex-col md:flex-row gap-x-2'>
+        {
+
+true &&
+(//absolute bottom-0 
+
+  <div id='filterpanel' className={`mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1 ${this.state.filterpanel === false ? 'hidden': ''}`}>
+  <div className='flex flex-row'>
+
+  <p className='text-base md:text-lg'>Filter Employees</p>
+  
+
+  </div>
+    <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
+      <div className='flex flex-col md:flex-row sm:w-full'>
+        <p className='text-sm md:text-base grow md:w-28'>First Name</p>
+        <AutocompleteBox
+          index='PayrollFirstNames'
+          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+          inputClasses='bg-truegray-700 '
+          placeholder='Search First Name'
+          col='First Name'
+          onChange={(value) => {
+            this.filterFirstName = value
+            this.setState({
+              filterFirstName: value
+            }, () => {
+              this.getNewData();
+            });
+          }}
+        ></AutocompleteBox>
+      </div>
+      <div className='flex flex-col md:flex-row sm:w-full'>
+        <p className='text-sm md:text-base md:w-28'>Last Name</p>
+        <AutocompleteBox
+          index='PayrollLastName'
+          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+          inputClasses='bg-truegray-700 '
+          placeholder='Search Last Name'
+          col='Last Name'
+          onChange={(value) => {
+            this.filterLastName = value
+            this.setState({
+              filterLastName: value
+            }, () => {
+              this.getNewData();
+            })
+          }}
+        ></AutocompleteBox>
+      </div>
+    </div>
+
+    <div className={`flex flex-row md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
+
+>
+  <p className='text-sm md:text-base'>Job Title</p>
+  <AutocompleteBox
+    index='PayrollEmployeeList'
+    parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+    placeholder='Search Job Title'
+    col='Job Title'
+    onChange={(value) => {
+      
+      this.filterJobTitle = value
+      this.setState({
+        filterJobTitle: value
+      }, () => {
+        this.getNewData();
+      });
+
+    }}
+  ></AutocompleteBox>
+
+
+</div>
+
+    <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
+      <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
+      <button
+        onClick={(event) => { this.toggleDeptPanel() }}
+        className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
+        {this.departmentsSelectedRender()}
+        <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
+          <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
+        </svg>
+      </button>
+    </div>
+
+    {
+      true && (
+
+        <div className={`bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0 w-full md:w-auto
+        ${this.state.deptpanelopen === false ? 'hidden': ""}
+        `}
+
+          style={
+            {
+              zIndex: 20
+            }
+          }
+        >
+          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800  md:flex-row flex flex-col'>
+            <div className='flex flex-row'>
+              <p className='text-sm md:text-lg'>Select Departments</p>
+              <button className='ml-auto mr-2 md:hidden'
+                onClick={(event) => { this.toggleDeptPanel() }}
+              >
+                <svg className='h-10 w-10' viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                </svg>
+              </button>
+            </div>
+            <div
+              className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
+            >
+
+              <button
+              onMouseDown={this.handleClick}
+
+              onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
+                onClick={() => {
+                  this.setAllDept(true);
+                }}
+                className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
+                  'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                  } rounded-xl px-2 py-0.5 font-bold`}
+                  
+                  style={{
+                    cursor: 'pointer'
+                  }}
+                  >Select All</button>
+              <button className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
+                'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                } rounded-xl px-2 py-0.5 font-bold`}
+
+                onMouseDown={this.handleClick}
+
+                onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
+
+                style={{
+                  cursor: 'pointer'
+                }}
+
+                onClick={() => {
+                  this.setAllDept(false)
+                }}
+
+              >Unselect All</button>
+
+            </div>
+          </div>
+          <div className=' overflow-y-auto grow h-full md:h-64'>
+            <>
               {
 
-                this.state.filterpanel === true &&
-                (//absolute bottom-0 
+                departments.map((eachDepartmentGroup,eachDepartmentGroupNum) => (
+           
+                  <div
+                  key={eachDepartmentGroupNum}
+                  className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
+                    <div className='flex flex-col h-full '>
+                      {
+                        eachDepartmentGroup.nameOfGroup && (
 
-                  <div id='filterpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
-                  <div className='flex flex-row'>
-
-                  <p className='text-base md:text-lg'>Filter Employees</p>
-                  
-
-                  </div>
-                    <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
-                      <div className='flex flex-col md:flex-row sm:w-full'>
-                        <p className='text-sm md:text-base grow md:w-28'>First Name</p>
-                        <AutocompleteBox
-                          index='PayrollFirstNames'
-                          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                          inputClasses='bg-truegray-700 '
-                          placeholder='Search First Name'
-                          col='First Name'
-                          onChange={(value) => {
-                            this.filterFirstName = value
-                            this.setState({
-                              filterFirstName: value
-                            }, () => {
-                              this.getNewData();
-                            });
-                          }}
-                        ></AutocompleteBox>
-                      </div>
-                      <div className='flex flex-col md:flex-row sm:w-full'>
-                        <p className='text-sm md:text-base md:w-28'>Last Name</p>
-                        <AutocompleteBox
-                          index='PayrollLastName'
-                          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                          inputClasses='bg-truegray-700 '
-                          placeholder='Search Last Name'
-                          col='Last Name'
-                          onChange={(value) => {
-                            this.filterLastName = value
-                            this.setState({
-                              filterLastName: value
-                            }, () => {
-                              this.getNewData();
-                            })
-                          }}
-                        ></AutocompleteBox>
-                      </div>
-                    </div>
-
-                    <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
-                      <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
-                      <button
-                        onClick={(event) => { this.toggleDeptPanel() }}
-                        className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
-                        {this.departmentsSelectedRender()}
-                        <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
-                          <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    {
-                      this.state.deptpanelopen === true && (
-
-                        <div className='bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0'
-
-                          style={
-                            {
-                              zIndex: 20
-                            }
-                          }
-                        >
-                          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800  md:flex-row flex flex-col'>
-                            <div className='flex flex-row'>
-                              <p className='text-sm md:text-lg'>Select Departments</p>
-                              <button className='ml-auto mr-2 md:hidden'
-                                onClick={(event) => { this.toggleDeptPanel() }}
-                              >
-                                <svg className='h-10 w-10' viewBox="0 0 24 24">
-                                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                                </svg>
-                              </button>
-                            </div>
-                            <div
-                              className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
-                            >
-
-                              <div
-                                onClick={() => {
-                                  this.setAllDept(true);
-                                }}
-                                className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
-                                  'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
-                                  } rounded-xl px-2 py-0.5 font-bold`}
-                                  
-                                  style={{
-                                    cursor: 'pointer'
-                                  }}
-                                  >Select All</div>
-                              <div className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
-                                'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
-                                } rounded-xl px-2 py-0.5 font-bold`}
-
-                                style={{
-                                  cursor: 'pointer'
-                                }}
-
-                                onClick={() => {
-                                  this.setAllDept(false)
-                                }}
-
-                              >Unselect All</div>
-
-                            </div>
-                          </div>
-                          <div className=' overflow-y-auto grow h-full'>
+                          <p className='text-md px-2 pt-2'>{eachDepartmentGroup.nameOfGroup}</p>
+                        )
+                      }
+                      <div className='flex flex-col  w-full'>
+                        {
+                          eachDepartmentGroup.array.map((eachDept) => (
                             <>
-                              {
 
-                                departments.map((eachDepartmentGroup,eachDepartmentGroupNum) => (
-                           
-                                  <div
-                                  key={eachDepartmentGroupNum}
-                                  className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
-                                    <div className='flex flex-col h-full '>
-                                      {
-                                        eachDepartmentGroup.nameOfGroup && (
+                  <div>
+                      <div className="form-check"
+                      onClick={(event) => {
+                        this.toggleDepartments(eachDept)
+                      }}
 
-                                          <p className='text-md px-2 pt-2'>{eachDepartmentGroup.nameOfGroup}</p>
-                                        )
-                                      }
-                                      <div className='flex flex-row flex-wrap w-full'>
-                                        {
-                                          eachDepartmentGroup.array.map((eachDept) => (
-                                            <div
-                                            key={eachDept}
-                                            >
-                                              <button
-                                                onClick={(event) => { this.toggleDepartments(eachDept);
-                                                }}
-                                                className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 flex flex-row
- ${this.state.enabledDept[eachDept] === true ? "  bg-truegray-700 bg-opacity-95 text-truegray-50 hover:bg-truegray-500 border-mejito" : 'bg-truegray-900 text-truegray-300  hover:bg-truegray-800  border-truegray-100'}
+                      onMouseDown={this.handleClick} onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
+                      >
+                        
+                        <label
+                         className="form-check-label inline-block text-gray-50"
+                         
+                         data-labeldept={eachDept}
+                         >
+                           <input
+                         className={`form-check-input appearance-none h-4 w-4 border-2 border-gray-300 rounded-sm bg-truegray-800 
+                         checked:bg-green-600 checked:border-truegray-50 focus:outline-none transition duration-200 
+                          mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer`}
+                          data-inputdept={eachDept}
+                          type="checkbox" value={eachDept}
+                        /*  checked={this.state.enabledDept[eachDept]}*/
+                          id={`switch-${eachDept}`}/>
+                        {eachDept}
+                        </label>
+                      </div>
 
- `}>
+                            {/*<div
+                            key={eachDept}
+                            >
+                              <div
+                                onClick={(event) => { this.toggleDepartments(eachDept);
+                                }}
+                                className={`parentcheckmark rounded-full border-2 pl-3 pr-2 py-0.5 mx-1 my-1 flex flex-row
+${this.state.enabledDept[eachDept] === true ? "  bg-truegray-700 bg-opacity-95 text-truegray-50 hover:bg-truegray-500 border-mejito" : 'bg-truegray-900 text-truegray-300  hover:bg-truegray-800  border-truegray-100'}
 
-                                                {eachDept}
+`}>
 
-                                                {
-                                                  this.state.enabledDept[eachDept] === true && (
-                                                    <svg className={`h-5 w-5 ml-1 my-auto text-mejito`} viewBox="0 0 24 24">
-                                                      <path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
-                                                    </svg>
-                                                  )
-                                                }
-                                                {
-                                                  this.state.enabledDept[eachDept] === false && (
-                                                    <svg className={`h-5 w-5 ml-1 my-auto text-white`} viewBox="0 0 24 24">
-                                                      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                                                    </svg>
-                                                  )
-                                                }
+                                
 
-                                              </button>
+                                {
+                                  this.state.enabledDept[eachDept] === true && (
+                                    <svg className={`h-5 w-5 ml-1 my-auto text-mejito`} viewBox="0 0 24 24">
+                                      <path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+                                    </svg>
+                                  )
+                                }
+                                {
+                                  this.state.enabledDept[eachDept] === false && (
+                                    <svg className={`h-5 w-5 ml-1 my-auto text-white`} viewBox="0 0 24 24">
+                                      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                                    </svg>
+                                  )
+                                }
 
-                                            </div>
-                                          )
+                              </div>
 
-                                          )
-
-                                        }</div></div>
-                                  </div>
-                                ))
-
-
-                              }
-                              <div className='py-1 md:hidden'></div>
+                            </div>*/}
+                            </div>
                             </>
-                          </div>
-                        </div>
-                      )
-                    }
+                          )
 
+                          )
 
-
-                    <div className={`flex flex-row md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
-
-                    >
-                      <p className='text-sm md:text-base'>Job Title</p>
-                      <AutocompleteBox
-                        index='PayrollEmployeeList'
-                        parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                        placeholder='Search Job Title'
-                        col='Job Title'
-                        onChange={(value) => {
-                          
-                          this.filterJobTitle = value
-                          this.setState({
-                            filterJobTitle: value
-                          }, () => {
-                            this.getNewData();
-                          });
-
-                        }}
-                      ></AutocompleteBox>
-
-
-                    </div>
-                        <div className='flex flex-row'>
-                        <div className="text-base bg-opacity-30">
-                          {this.state.loadedfirsttime === true && (
-                            <span className='md:hidden'>
-                            <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
-                            </span>
-                          )}
-                            </div>
-                            
-                  <div className='ml-auto'>
-                  <a href='https://algolia.com' target="_blank">
-                  <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
-                 
-                  </a>
-                    </div>
-                            </div>
-
+                        }</div></div>
                   </div>
-                )
+                ))
+
+
               }
+              <div className='py-1 md:hidden'></div>
+            </>
+          </div>
+        </div>
+      )
+    }
+
+
+
+ 
+        <div className='flex flex-row'>
+        <div className="text-base bg-opacity-30">
+          {this.state.loadedfirsttime === true && (
+            <span className='md:hidden'>
+            <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
+            </span>
+          )}
+            </div>
+            
+  <div className='ml-auto'>
+  <a href='https://algolia.com' target="_blank">
+  <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
+ 
+  </a>
+    </div>
+            </div>
+
+  </div>
+)
+}
+
+{
+
+this.state.sortpanel === true &&
+(//absolute bottom-0 
+
+<div id='sortpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
+<div className='flex flex-col'>
+
+<p className='text-base md:text-lg'>Sort Employees</p>
+<div>
+  {
+    true && (
+     <>
+      <RadioGroup
+      label="Sorted Column"
+      color="green" 
+    >
+      <Radio value="first" label="First" />
+      <Radio value="last" label="Last" />
+      <Radio value="job" label="Job" />
+      <Radio value="dept" label="Dept" />
+      <Radio value="base" label="Base Pay" />
+      <Radio value="overtime" label="Overtime" />
+      <Radio value="other" label="Other" />
+      <Radio value="health" label="Health" />
+      <Radio value="retirement" label="Retirement" />
+      <Radio value="total" label="Total" />
+    </RadioGroup><br></br>
+     </>
+    )
+  }
+
+
+<SegmentedControl data={[{
+          value: "forward",
+          label: "A->Z",
+        },
+        {
+          value: "reverse",
+          label:  "Z->A",
+        }]} color="dark" />
+</div>
+
+</div>
+</div>
+)
+}
+        </div>
 
 {
                this.state.currentlyLoadedYear == '2021' && (
                   <div>
-                    <p className="text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable - The City Controller is still calculating this data.</p>
+                    <p className="text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable yet - The City Controller is still calculating this data.</p>
                  
                   </div>
                 )
@@ -998,17 +1134,20 @@ export class Payroll extends React.Component<any, any> {
                       this.state.currentlyLoadedYear != '2021' && (
                        <>
                          <tr>
-                            <td className='pr-1'>Healthcare</td>
+                            <td className='pr-1'>Health</td>
                             <td>{excelnum(eachEmployee.h)}</td>
                           </tr>
                           <tr>
                             <td className='pr-1'>Retirement</td>
                             <td>{excelnum(eachEmployee.r)}</td>
                           </tr>
+
                     </>
                       )
                     }
-                         
+                         <tr>
+                         <td className='pr-1'>Total</td>
+<>
 {
                       this.state.currentlyLoadedYear != '2021' && (
                         <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
@@ -1019,7 +1158,8 @@ export class Payroll extends React.Component<any, any> {
                       this.state.currentlyLoadedYear === '2021' && (
                         <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot )}</td>
                       )
-                      }
+                      }</>
+                      </tr>
                         </tbody>
                       </table>
 
@@ -1033,20 +1173,20 @@ export class Payroll extends React.Component<any, any> {
                 ))}
               </div>
 
-              <table className="table-auto hidden md:block px-2 text-truegray-200">
-                <thead className='sticky'>
+              <table className="relative table-auto hidden md:block px-2 text-truegray-200">
+                <thead className='sticky top-0'>
                   <tr className='bg-truegray-800 border-b-1 border-white py-2'>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Job</th>
-                    <th>Dept</th>
-                    <th>Base Pay</th>
-                    <th>Overtime</th>
-                    <th>Other</th>
+                    <th className='sticky top-0'>First</th>
+                    <th className='sticky top-0'>Last</th>
+                    <th className='sticky top-0'>Job</th>
+                    <th className='sticky top-0'>Dept</th>
+                    <th className='sticky top-0'>Base Pay</th>
+                    <th className='sticky top-0'>Overtime</th>
+                    <th className='sticky top-0'>Other</th>
                     {
                       this.state.currentlyLoadedYear != '2021' && (
                        <>
-                        <th>Healthcare</th>
+                        <th>Health</th>
                     <th>Retirement</th>
                     </>
                       )
@@ -1074,14 +1214,14 @@ export class Payroll extends React.Component<any, any> {
                       <td  className='border-r border-truegray-700'>{eachEmployee.l}</td>
                       <td   className='border-r border-truegray-700'>{eachEmployee.j}</td>
                       <td   className='border-r border-truegray-700'>{eachEmployee.d.replace(/Department/gi, "")}</td>
-                      <td className=' border-r text-right mono'>{excelnum(eachEmployee.b)}</td>
-                      <td className='border-r text-right mono'>{excelnum(eachEmployee.ov)}</td>
-                      <td className='border-r text-right mono'>{excelnum(eachEmployee.ot)}</td>
+                      <td className=' border-r text-right mono lg:px-3'>{excelnum(eachEmployee.b)}</td>
+                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ov)}</td>
+                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ot)}</td>
                       {
                       this.state.currentlyLoadedYear != '2021' && (
                      <>
-                      <td className='border-r text-right mono'>{excelnum(eachEmployee.h)}</td>
-                      <td className='border-r text-right mono'>{excelnum(eachEmployee.r)}</td>
+                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.h)}</td>
+                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.r)}</td>
                       </>
                       )
                       }
@@ -1134,6 +1274,7 @@ export class Payroll extends React.Component<any, any> {
           </React.StrictMode>
 
         </div></div>
+    </>
     )
   }
 }

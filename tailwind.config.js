@@ -3,6 +3,7 @@ const colors = require('tailwindcss/colors')
 module.exports = {
    purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'media', // or 'media' or 'class'
+  content: ['./src/**/*.{html,js}', './node_modules/tw-elements/dist/js/**/*.js',"./pages/**/*.{html,js}","./public/**/*.{html,js}"],
   theme: {
     extend: {
       boxShadow: {
@@ -23,5 +24,7 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('tw-elements/dist/plugin')
+  ],
 }
