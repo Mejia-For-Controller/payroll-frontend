@@ -266,6 +266,7 @@ document.addEventListener("click",(e) => {
                             this.state.employeesJobTitleAutocompleteResults
                                 .map((eachItem, itemIndex) => (
                                     <div
+                                    key={itemIndex}
                                     onClick={
                                         e => {
                                             this.switchValue(eachItem[this.props.col])

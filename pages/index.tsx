@@ -6,9 +6,9 @@ import { Tab } from '@headlessui/react'
 
 import Head from 'next/head'
 
-import React, {useEffect,  Fragment, useState } from 'react'
+import React, { useEffect, Fragment, useState } from 'react'
 
-import { mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending, mdiSortAscending  } from '@mdi/js';
+import { mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending, mdiSortAscending } from '@mdi/js';
 import dynamic from 'next/dynamic'
 
 import { io } from "socket.io-client";
@@ -21,7 +21,7 @@ import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 
 import { ArrowUpIcon } from '@modulz/radix-icons';
 import { useWindowScroll } from '@mantine/hooks';
-import { Affix, Button, Text, Transition as MantineTransition, SegmentedControl, Center, RadioGroup, Radio, Box  } from '@mantine/core';
+import { Affix, Button, Text, Transition as MantineTransition, SegmentedControl, Center, RadioGroup, Radio, Box } from '@mantine/core';
 
 const yearsofpayroll = [
   "2018", "2019", "2020", "2021"
@@ -162,7 +162,7 @@ export class Payroll extends React.Component<any, any> {
   currentlyLoadedL: string;
   currentlyLoadedJ: string;
   currentlyLoadedD: any;
-  currentlyLoadedYear: any; 
+  currentlyLoadedYear: any;
   currentlyLoadedMetadata: any;
   lastReqF: string;
   lastReqL: string;
@@ -201,8 +201,6 @@ export class Payroll extends React.Component<any, any> {
     };
   }
 
-    
-
   attemptConnectSocket() {
     //   console.log('socket status main page', this.socketmain.connected)
     if (this.state.socketconnected) {
@@ -211,8 +209,8 @@ export class Payroll extends React.Component<any, any> {
     }
   }
 
-  
-handleClick(e) { if (e) {e.preventDefault()}; }
+
+  handleClick(e) { if (e) { e.preventDefault() }; }
 
   checkIfLoadMore = () => {
     var loadMore = false;
@@ -243,8 +241,8 @@ handleClick(e) { if (e) {e.preventDefault()}; }
 
   }
 
-  makePercent= (num,dem) => {
-    return parseFloat(((num/dem) * 100).toFixed(2))
+  makePercent = (num, dem) => {
+    return parseFloat(((num / dem) * 100).toFixed(2))
   }
 
   checkIfLoadMoreScrollRapid = () => {
@@ -299,46 +297,46 @@ handleClick(e) { if (e) {e.preventDefault()}; }
       }
     }, true);
 
-    this.socketmain.on("result", (message:any) => {
+    this.socketmain.on("result", (message: any) => {
 
-      
+
       this.setState((state, props) => {
 
-        
-      var toloadrows = state.loadedEmployeeRows
 
-      //if loaded states matches incoming state
-      if (message.meta.newseq === false) {
-        //console.log('append')
-        toloadrows = [...toloadrows, ...message.employeePortion]
-      } else {
-      //  console.log('new')
-        toloadrows = message.employeePortion
-      }
+        var toloadrows = state.loadedEmployeeRows
 
-    //  console.log('change employee state to', toloadrows)
+        //if loaded states matches incoming state
+        if (message.meta.newseq === false) {
+          //console.log('append')
+          toloadrows = [...toloadrows, ...message.employeePortion]
+        } else {
+          //  console.log('new')
+          toloadrows = message.employeePortion
+        }
 
-   
-      this.currentlyLoadedF = message.meta.f;
+        //  console.log('change employee state to', toloadrows)
 
-    //  console.log('setting to ', message.meta.f);
 
-    //  console.log('result ', this.currentlyLoadedF)
+        this.currentlyLoadedF = message.meta.f;
 
-      this.currentlyLoadedL = message.meta.l;
-      this.currentlyLoadedJ = message.meta.j;
-      this.currentlyLoadedD = message.meta.d;
-      this.currentlyLoadedYear = message.meta.year
-      // console.log(message)
-      this.currentlyLoadedMetadata = {
-        active: true,
-        totalFiltered: message.meta.totalFiltered,
-        f: message.meta.f,
-        l: message.meta.l,
-        j: message.meta.j,
-        d: message.meta.d,
-        year: message.meta.year
-      }
+        //  console.log('setting to ', message.meta.f);
+
+        //  console.log('result ', this.currentlyLoadedF)
+
+        this.currentlyLoadedL = message.meta.l;
+        this.currentlyLoadedJ = message.meta.j;
+        this.currentlyLoadedD = message.meta.d;
+        this.currentlyLoadedYear = message.meta.year
+        // console.log(message)
+        this.currentlyLoadedMetadata = {
+          active: true,
+          totalFiltered: message.meta.totalFiltered,
+          f: message.meta.f,
+          l: message.meta.l,
+          j: message.meta.j,
+          d: message.meta.d,
+          year: message.meta.year
+        }
 
 
         return {
@@ -418,26 +416,26 @@ handleClick(e) { if (e) {e.preventDefault()}; }
 
   setAllDept = (state) => {
 
-    
+
     if (state === true) {
       var stateToPush = arrayOfEnabledDepts;
     } else {
       stateToPush = arrayOfDisabledDepts
-    
+
     }
 
-    document.querySelectorAll('input[data-inputdept]').forEach((eachItem:any) => eachItem.checked = state);
+    document.querySelectorAll('input[data-inputdept]').forEach((eachItem: any) => eachItem.checked = state);
 
     console.log('plz set state')
-      this.setState({
-        enabledDept: stateToPush
-      }, () => {
-        console.log('call back set all dept set state')
-        this.getNewData();
-      });
+    this.setState({
+      enabledDept: stateToPush
+    }, () => {
+      console.log('call back set all dept set state')
+      this.getNewData();
+    });
 
-      
-   
+
+
   }
 
   getParsedDeptFilter = () => {
@@ -453,25 +451,25 @@ handleClick(e) { if (e) {e.preventDefault()}; }
       if (numberSelected === 0) {
         valueToSubmit = 'none'
       } else {
-      //  valueToSubmit = this.state.enabledDept;
+        //  valueToSubmit = this.state.enabledDept;
 
-      //submit an array instead
-      valueToSubmit = 
-      Object.keys(
-        Object.fromEntries(
-          Object.entries(this.state.enabledDept)
-          .filter(([key, value]) => value === true)
+        //submit an array instead
+        valueToSubmit =
+          Object.keys(
+            Object.fromEntries(
+              Object.entries(this.state.enabledDept)
+                .filter(([key, value]) => value === true)
+            )
           )
-      )
       }
     }
 
     return valueToSubmit;
   }
 
- comparedeptcodes = (a,b) => {
-    var maska:any = a;
-    var maskb:any = b;
+  comparedeptcodes = (a, b) => {
+    var maska: any = a;
+    var maskb: any = b;
 
     if (Array.isArray(a)) {
       maska = a.join('|')
@@ -495,7 +493,7 @@ handleClick(e) { if (e) {e.preventDefault()}; }
     if (this.state.filterFirstName == this.state.currentlyLoadedF
       && this.state.filterLastName == this.state.currentlyLoadedL
       && this.state.filterJobTitle == this.state.currentlyLoadedJ
-  //    && deptvaluetosubmit == this.state.currentlyLoadedD
+      //    && deptvaluetosubmit == this.state.currentlyLoadedD
       && this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD)
       && this.state.currentlyLoadedYear === this.state.selectedyear
     ) {
@@ -503,20 +501,20 @@ handleClick(e) { if (e) {e.preventDefault()}; }
 
       newSeq = false;
     } else {
-      
+
       console.log('new seq')
 
       console.log('is rest matching', (this.state.filterFirstName == this.state.currentlyLoadedF
         && this.state.filterLastName == this.state.currentlyLoadedL
         && this.state.filterJobTitle == this.state.currentlyLoadedJ))
 
-        console.log('does the dept filter match', this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD))
-        
-        console.log('years match', this.state.currentlyLoadedYear, this.state.selectedyear)
+      console.log('does the dept filter match', this.comparedeptcodes(deptvaluetosubmit, this.state.currentlyLoadedD))
+
+      console.log('years match', this.state.currentlyLoadedYear, this.state.selectedyear)
     }
 
-    console.log('deptvaluetosubmit ',  deptvaluetosubmit )
-    console.log('this.state.currentlyLoadedD ',  this.state.currentlyLoadedD )
+    console.log('deptvaluetosubmit ', deptvaluetosubmit)
+    console.log('this.state.currentlyLoadedD ', this.state.currentlyLoadedD)
 
     console.log({
       firstName: this.state.filterFirstName,
@@ -628,324 +626,322 @@ handleClick(e) { if (e) {e.preventDefault()}; }
 
   render() {
     return (
-    <>
-      
-      <div className='w-full h-full overflow-x-clip bg-truegray-900'>
-   
- 
-        <Head>
-          <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
-          <meta property="og:type" content="website" />
-          <meta name="twitter:site" content="@kennethmejiala" />
-          <meta name="twitter:creator" content="@kennethmejiala" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" key='twittertitle' content="City of LA Employee Names and Payroll"></meta>
-          <meta name="twitter:description" key='twitterdesc' content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!"></meta>
-          <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous" />
+      <>
 
-          <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
-        </Head>
-        <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-content'>
-        < ScrollToTop/>
-          <PayrollNav />
-          <React.StrictMode>
-            <div className='flex flex-col '
-              onScroll={e => {
-                console.log('scroll')
-              }}
-            >
-              <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
+        <div className='w-full h-full overflow-x-clip bg-truegray-900'>
 
-              <div className="">
-      <Listbox value={this.state.selectedyear} onChange={(value) => {
-        this.setState({
-          selectedyear: value
-        }, () => {
-          this.getNewData();
-        });
-      }}>
-        <div className="">
-          <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-truegray-800 rounded-lg border-white border shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-green-300 focus-visible:ring-offset-2 focus-visible:border-green-500 sm:text-sm">
-            <span className="block truncate">{this.state.selectedyear}</span>
-            <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-              <SelectorIcon
-                className="w-5 h-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </span>
-          </Listbox.Button>
-          <Transition
-            as={Fragment}
-            leave="transition ease-in duration-100"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <Listbox.Options
-            style={
-              {
-                zIndex: 30
-              }
-            }
-            className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {yearsofpayroll.map((eachyear, yearIdx) => (
-                <Listbox.Option
-                  key={yearIdx}
-                  className={({ active }) =>
-                    `cursor-default select-none relative py-2 pl-10 pr-4 bg-truegray-900 hover:bg-truegray-800 hover:shadow-sm ${
-                      active ? 'text-amber-100 bg-amber-900' : 'text-white'
-                    }`
-                  }
-                  value={eachyear}
-                >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? 'font-medium' : 'font-normal'
-                        }`}
-                      >
-                        {eachyear}
-                      </span>
-                      {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
-            </Listbox.Options>
-          </Transition>
-        </div>
-      </Listbox>
-    </div>
 
-                <button
-                  onClick={() => this.toggleFilterButton()}
-                  className={` rounded-full  pl-3 pr-3 py-1  border border-2 border-gray-50 bg-truegray-200 ${this.state.filterpanel ? 'bg-truegray-100 text-coolgray-900' : 'bg-truegray-800'}`}>
-                  <svg className={` h-6 w-6 align-bottom inline-block align-text-bottom  ${this.state.filterpanel ? 'text-coolgray-900' : 'bg-truegray-800'}`} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z" />
-                  </svg>
-                  Filter
-                </button>
-                <div className='rounded-full bg-truegray-800  pl-3 pr-4 py-1 border border-2 border-gray-50 flex flex-row align-middle space-x-1'>
-                  <svg className='text-white h-5 w-5 align-bottom inline-block align-text-bottom relative top-1' viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19 17H22L18 21L14 17H17V3H19V17M7 3C4.79 3 3 4.79 3 7S4.79 11 7 11 11 9.21 11 7 9.21 3 7 3M7 9C5.9 9 5 8.1 5 7S5.9 5 7 5 9 5.9 9 7 8.1 9 7 9M7 13C4.79 13 3 14.79 3 17S4.79 21 7 21 11 19.21 11 17 9.21 13 7 13Z" />
-                  </svg>
-                  <span className='align-middle'>Sort</span>
+          <Head>
+            <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
+            <meta property="og:type" content="website" />
+            <meta name="twitter:site" content="@kennethmejiala" />
+            <meta name="twitter:creator" content="@kennethmejiala" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" key='twittertitle' content="City of LA Employee Names and Payroll"></meta>
+            <meta name="twitter:description" key='twitterdesc' content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!"></meta>
+            <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous" />
+
+            <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
+          </Head>
+          <div suppressHydrationWarning={true} className='bg-truegray-900 text-white h-content'>
+            < ScrollToTop />
+            <PayrollNav />
+            <React.StrictMode>
+              <div className='flex flex-col '
+                onScroll={e => {
+                  console.log('scroll')
+                }}
+              >
+                <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
+
+                  <div className="">
+                    <Listbox value={this.state.selectedyear} onChange={(value) => {
+                      this.setState({
+                        selectedyear: value
+                      }, () => {
+                        this.getNewData();
+                      });
+                    }}>
+                      <div className="">
+                        <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-truegray-800 rounded-lg border-white border shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-green-300 focus-visible:ring-offset-2 focus-visible:border-green-500 sm:text-sm">
+                          <span className="block truncate">{this.state.selectedyear}</span>
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                            <SelectorIcon
+                              className="w-5 h-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Listbox.Button>
+                        <Transition
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Listbox.Options
+                            style={
+                              {
+                                zIndex: 30
+                              }
+                            }
+                            className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {yearsofpayroll.map((eachyear, yearIdx) => (
+                              <Listbox.Option
+                                key={yearIdx}
+                                className={({ active }) =>
+                                  `cursor-default select-none relative py-2 pl-10 pr-4 bg-truegray-900 hover:bg-truegray-800 hover:shadow-sm ${active ? 'text-amber-100 bg-amber-900' : 'text-white'
+                                  }`
+                                }
+                                value={eachyear}
+                              >
+                                {({ selected }) => (
+                                  <>
+                                    <span
+                                      className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                        }`}
+                                    >
+                                      {eachyear}
+                                    </span>
+                                    {selected ? (
+                                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )}
+                              </Listbox.Option>
+                            ))}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </Listbox>
+                  </div>
+
+                  <button
+                    onClick={() => this.toggleFilterButton()}
+                    className={` rounded-full  pl-3 pr-3 py-1  border border-2 border-gray-50 bg-truegray-200 ${this.state.filterpanel ? 'bg-truegray-100 text-coolgray-900' : 'bg-truegray-800'}`}>
+                    <svg className={` h-6 w-6 align-bottom inline-block align-text-bottom  ${this.state.filterpanel ? 'text-coolgray-900' : 'bg-truegray-800'}`} viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z" />
+                    </svg>
+                    Filter
+                  </button>
+                  <div className='rounded-full bg-truegray-800  pl-3 pr-4 py-1 border border-2 border-gray-50 flex flex-row align-middle space-x-1'>
+                    <svg className='text-white h-5 w-5 align-bottom inline-block align-text-bottom relative top-1' viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M19 17H22L18 21L14 17H17V3H19V17M7 3C4.79 3 3 4.79 3 7S4.79 11 7 11 11 9.21 11 7 9.21 3 7 3M7 9C5.9 9 5 8.1 5 7S5.9 5 7 5 9 5.9 9 7 8.1 9 7 9M7 13C4.79 13 3 14.79 3 17S4.79 21 7 21 11 19.21 11 17 9.21 13 7 13Z" />
+                    </svg>
+                    <span className='align-middle'>Sort</span>
+                  </div>
+                  <div className='hidden md:block my-auto ml-auto pl-2'>
+                    {
+                      this.state.loadedfirsttime === true && (
+                        <>
+                          <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> <span className='font-normal'>({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) Filtered of </span> <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
+                        </>
+                      )
+                    }
+                  </div>
                 </div>
-                <div className='hidden md:block my-auto ml-auto pl-2'>
-                {
-                  this.state.loadedfirsttime === true && (
-                    <>
-                    <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> <span className='font-normal'>({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) Filtered of </span> <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
-                    </>
-                  )
-                }
-                </div>
-              </div>
 
-        <div className='flex flex-col md:flex-row gap-x-2'>
-        {
+                <div className='flex flex-col md:flex-row gap-x-2'>
+                  {
 
-true &&
-(//absolute bottom-0 
+                    true &&
+                    (//absolute bottom-0 
 
-  <div id='filterpanel' className={`mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1 ${this.state.filterpanel === false ? 'hidden': ''}`}>
-  <div className='flex flex-row'>
+                      <div id='filterpanel' className={`mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1 ${this.state.filterpanel === false ? 'hidden' : ''}`}>
+                        <div className='flex flex-row'>
 
-  <p className='text-base md:text-lg'>Filter Employees</p>
-  
-
-  </div>
-    <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
-      <div className='flex flex-col md:flex-row sm:w-full'>
-        <p className='text-sm md:text-base grow md:w-28'>First Name</p>
-        <AutocompleteBox
-          index='PayrollFirstNames'
-          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-          inputClasses='bg-truegray-700 '
-          placeholder='Search First Name'
-          col='First Name'
-          onChange={(value) => {
-            this.filterFirstName = value
-            this.setState({
-              filterFirstName: value
-            }, () => {
-              this.getNewData();
-            });
-          }}
-        ></AutocompleteBox>
-      </div>
-      <div className='flex flex-col md:flex-row sm:w-full'>
-        <p className='text-sm md:text-base md:w-28'>Last Name</p>
-        <AutocompleteBox
-          index='PayrollLastName'
-          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-          inputClasses='bg-truegray-700 '
-          placeholder='Search Last Name'
-          col='Last Name'
-          onChange={(value) => {
-            this.filterLastName = value
-            this.setState({
-              filterLastName: value
-            }, () => {
-              this.getNewData();
-            })
-          }}
-        ></AutocompleteBox>
-      </div>
-    </div>
-
-    <div className={`flex flex-row md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
-
->
-  <p className='text-sm md:text-base'>Job Title</p>
-  <AutocompleteBox
-    index='PayrollEmployeeList'
-    parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-    placeholder='Search Job Title'
-    col='Job Title'
-    onChange={(value) => {
-      
-      this.filterJobTitle = value
-      this.setState({
-        filterJobTitle: value
-      }, () => {
-        this.getNewData();
-      });
-
-    }}
-  ></AutocompleteBox>
+                          <p className='text-base md:text-lg'>Filter Employees</p>
 
 
-</div>
+                        </div>
+                        <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
+                          <div className='flex flex-col md:flex-row sm:w-full'>
+                            <p className='text-sm md:text-base grow md:w-28'>First Name</p>
+                            <AutocompleteBox
+                              index='PayrollFirstNames'
+                              parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                              inputClasses='bg-truegray-700 '
+                              placeholder='Search First Name'
+                              col='First Name'
+                              onChange={(value) => {
+                                this.filterFirstName = value
+                                this.setState({
+                                  filterFirstName: value
+                                }, () => {
+                                  this.getNewData();
+                                });
+                              }}
+                            ></AutocompleteBox>
+                          </div>
+                          <div className='flex flex-col md:flex-row sm:w-full'>
+                            <p className='text-sm md:text-base md:w-28'>Last Name</p>
+                            <AutocompleteBox
+                              index='PayrollLastName'
+                              parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                              inputClasses='bg-truegray-700 '
+                              placeholder='Search Last Name'
+                              col='Last Name'
+                              onChange={(value) => {
+                                this.filterLastName = value
+                                this.setState({
+                                  filterLastName: value
+                                }, () => {
+                                  this.getNewData();
+                                })
+                              }}
+                            ></AutocompleteBox>
+                          </div>
+                        </div>
 
-    <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
-      <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
-      <button
-        onClick={(event) => { this.toggleDeptPanel() }}
-        className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
-        {this.departmentsSelectedRender()}
-        <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
-          <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
-        </svg>
-      </button>
-    </div>
+                        <div className={`flex flex-row md:flex-row md:w-full ${this.state.deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
 
-    {
-      true && (
+                        >
+                          <p className='text-sm md:text-base'>Job Title</p>
+                          <AutocompleteBox
+                            index='PayrollEmployeeList'
+                            parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
+                            placeholder='Search Job Title'
+                            col='Job Title'
+                            onChange={(value) => {
 
-        <div className={`bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0 w-full md:w-auto
-        ${this.state.deptpanelopen === false ? 'hidden': ""}
+                              this.filterJobTitle = value
+                              this.setState({
+                                filterJobTitle: value
+                              }, () => {
+                                this.getNewData();
+                              });
+
+                            }}
+                          ></AutocompleteBox>
+
+
+                        </div>
+
+                        <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
+                          <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
+                          <button
+                            onClick={(event) => { this.toggleDeptPanel() }}
+                            className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
+                            {this.departmentsSelectedRender()}
+                            <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
+                              <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        {
+                          true && (
+
+                            <div className={`bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0 w-full md:w-auto
+        ${this.state.deptpanelopen === false ? 'hidden' : ""}
         `}
 
-          style={
-            {
-              zIndex: 20
-            }
-          }
-        >
-          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800  md:flex-row flex flex-col'>
-            <div className='flex flex-row'>
-              <p className='text-sm md:text-lg'>Select Departments</p>
-              <button className='ml-auto mr-2 md:hidden'
-                onClick={(event) => { this.toggleDeptPanel() }}
-              >
-                <svg className='h-10 w-10' viewBox="0 0 24 24">
-                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                </svg>
-              </button>
-            </div>
-            <div
-              className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
-            >
+                              style={
+                                {
+                                  zIndex: 20
+                                }
+                              }
+                            >
+                              <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800  md:flex-row flex flex-col'>
+                                <div className='flex flex-row'>
+                                  <p className='text-sm md:text-lg'>Select Departments</p>
+                                  <button className='ml-auto mr-2 md:hidden'
+                                    onClick={(event) => { this.toggleDeptPanel() }}
+                                  >
+                                    <svg className='h-10 w-10' viewBox="0 0 24 24">
+                                      <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                                    </svg>
+                                  </button>
+                                </div>
+                                <div
+                                  className='flex flex-row  space-x-4 my-auto  grow-0 md:ml-8'
+                                >
 
-              <button
-              onMouseDown={this.handleClick}
+                                  <button
+                                    onMouseDown={this.handleClick}
 
-              onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
-                onClick={() => {
-                  this.setAllDept(true);
-                }}
-                className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
-                  'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
-                  } rounded-xl px-2 py-0.5 font-bold`}
-                  
-                  style={{
-                    cursor: 'pointer'
-                  }}
-                  >Select All</button>
-              <button className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
-                'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
-                } rounded-xl px-2 py-0.5 font-bold`}
+                                    onKeyUp={(e) => { if (e.keyCode === 13 || e.keyCode === 32) { this.handleClick(e) } }}
+                                    onClick={() => {
+                                      this.setAllDept(true);
+                                    }}
+                                    className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === Object.values(this.state.enabledDept).length ?
+                                      'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                                      } rounded-xl px-2 py-0.5 font-bold`}
 
-                onMouseDown={this.handleClick}
+                                    style={{
+                                      cursor: 'pointer'
+                                    }}
+                                  >Select All</button>
+                                  <button className={`${Object.values(this.state.enabledDept).filter((eachDept) => eachDept === true).length === 0 ?
+                                    'text-truegray-400 bg-truegray-700  ' : "text-truegray-100 bg-truegray-600 border-1 underline border-truegray-100"
+                                    } rounded-xl px-2 py-0.5 font-bold`}
 
-                onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
+                                    onMouseDown={this.handleClick}
 
-                style={{
-                  cursor: 'pointer'
-                }}
+                                    onKeyUp={(e) => { if (e.keyCode === 13 || e.keyCode === 32) { this.handleClick(e) } }}
 
-                onClick={() => {
-                  this.setAllDept(false)
-                }}
+                                    style={{
+                                      cursor: 'pointer'
+                                    }}
 
-              >Unselect All</button>
+                                    onClick={() => {
+                                      this.setAllDept(false)
+                                    }}
 
-            </div>
-          </div>
-          <div className=' overflow-y-auto grow h-full md:h-64'>
-            <>
-              {
+                                  >Unselect All</button>
 
-                departments.map((eachDepartmentGroup,eachDepartmentGroupNum) => (
-           
-                  <div
-                  key={eachDepartmentGroupNum}
-                  className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
-                    <div className='flex flex-col h-full '>
-                      {
-                        eachDepartmentGroup.nameOfGroup && (
+                                </div>
+                              </div>
+                              <div className=' overflow-y-auto grow h-full md:h-64'>
+                                <>
+                                  {
 
-                          <p className='text-md px-2 pt-2'>{eachDepartmentGroup.nameOfGroup}</p>
-                        )
-                      }
-                      <div className='flex flex-col  w-full'>
-                        {
-                          eachDepartmentGroup.array.map((eachDept) => (
-                            <>
+                                    departments.map((eachDepartmentGroup, eachDepartmentGroupNum) => (
 
-                  <div>
-                      <div className="form-check"
-                      onClick={(event) => {
-                        this.toggleDepartments(eachDept)
-                      }}
+                                      <div
+                                        key={eachDepartmentGroupNum}
+                                        className={`${eachDepartmentGroup.grouped === true ? 'bg-truegray-700' : "bg-truegray-800"}  px-1 `}>
+                                        <div className='flex flex-col h-full '>
+                                          {
+                                            eachDepartmentGroup.nameOfGroup && (
 
-                      onMouseDown={this.handleClick} onKeyUp={(e) => {if (e.keyCode === 13 || e.keyCode === 32) {this.handleClick(e)}}}
-                      >
-                        
-                        <label
-                         className="form-check-label inline-block text-gray-50"
-                         
-                         data-labeldept={eachDept}
-                         >
-                           <input
-                         className={`form-check-input appearance-none h-4 w-4 border-2 border-gray-300 rounded-sm bg-truegray-800 
+                                              <p className='text-md px-2 pt-2'>{eachDepartmentGroup.nameOfGroup}</p>
+                                            )
+                                          }
+                                          <div className='flex flex-col  w-full'>
+                                            {
+                                              eachDepartmentGroup.array.map((eachDept) => (
+                                                <>
+
+                                                  <div>
+                                                    <div className="form-check"
+                                                      onClick={(event) => {
+                                                        this.toggleDepartments(eachDept)
+                                                      }}
+
+                                                      onMouseDown={this.handleClick} onKeyUp={(e) => { if (e.keyCode === 13 || e.keyCode === 32) { this.handleClick(e) } }}
+                                                    >
+
+                                                      <label
+                                                        className="form-check-label inline-block text-gray-50"
+
+                                                        data-labeldept={eachDept}
+                                                      >
+                                                        <input
+                                                          className={`form-check-input appearance-none h-4 w-4 border-2 border-gray-300 rounded-sm bg-truegray-800 
                          checked:bg-green-600 checked:border-truegray-50 focus:outline-none transition duration-200 
                           mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer`}
-                          data-inputdept={eachDept}
-                          type="checkbox" value={eachDept}
-                        /*  checked={this.state.enabledDept[eachDept]}*/
-                          id={`switch-${eachDept}`}/>
-                        {eachDept}
-                        </label>
-                      </div>
+                                                          data-inputdept={eachDept}
+                                                          type="checkbox" value={eachDept}
+                                                          /*  checked={this.state.enabledDept[eachDept]}*/
+                                                          id={`switch-${eachDept}`} />
+                                                        {eachDept}
+                                                      </label>
+                                                    </div>
 
-                            {/*<div
+                                                    {/*<div
                             key={eachDept}
                             >
                               <div
@@ -976,305 +972,305 @@ ${this.state.enabledDept[eachDept] === true ? "  bg-truegray-700 bg-opacity-95 t
                               </div>
 
                             </div>*/}
+                                                  </div>
+                                                </>
+                                              )
+
+                                              )
+
+                                            }</div></div>
+                                      </div>
+                                    ))
+
+
+                                  }
+                                  <div className='py-1 md:hidden'></div>
+                                </>
+                              </div>
                             </div>
-                            </>
                           )
-
-                          )
-
-                        }</div></div>
-                  </div>
-                ))
-
-
-              }
-              <div className='py-1 md:hidden'></div>
-            </>
-          </div>
-        </div>
-      )
-    }
+                        }
 
 
 
- 
-        <div className='flex flex-row'>
-        <div className="text-base bg-opacity-30">
-          {this.state.loadedfirsttime === true && (
-            <span className='md:hidden'>
-            <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
-            </span>
-          )}
-            </div>
-            
-  <div className='ml-auto'>
-  <a href='https://algolia.com' target="_blank">
-  <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
- 
-  </a>
-    </div>
-            </div>
 
-  </div>
-)
-}
+                        <div className='flex flex-row'>
+                          <div className="text-base bg-opacity-30">
+                            {this.state.loadedfirsttime === true && (
+                              <span className='md:hidden'>
+                                <span className='font-semibold'>{this.state.numberoftotalrows.toLocaleString("en-US")}</span> ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) of <span className='font-semibold'>{this.state.entiresetcount.toLocaleString("en-US")}</span>
+                              </span>
+                            )}
+                          </div>
 
-{
+                          <div className='ml-auto'>
+                            <a href='https://algolia.com' target="_blank">
+                              <img className='ml-auto w-32' src='https://res.cloudinary.com/hilnmyskv/image/upload/q_auto/v1638794025/Algolia_com_Website_assets/images/shared/algolia_logo/search-by-algolia-dark-background.svg'></img>
 
-this.state.sortpanel === true &&
-(//absolute bottom-0 
+                            </a>
+                          </div>
+                        </div>
 
-<div id='sortpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
-<div className='flex flex-col'>
+                      </div>
+                    )
+                  }
 
-<p className='text-base md:text-lg'>Sort Employees</p>
-<div>
-  {
-    true && (
-     <>
-      <RadioGroup
-      label="Sorted Column"
-      color="green" 
-    >
-      <Radio value="first" label="First" />
-      <Radio value="last" label="Last" />
-      <Radio value="job" label="Job" />
-      <Radio value="dept" label="Dept" />
-      <Radio value="base" label="Base Pay" />
-      <Radio value="overtime" label="Overtime" />
-      <Radio value="other" label="Other" />
-      <Radio value="health" label="Health" />
-      <Radio value="retirement" label="Retirement" />
-      <Radio value="total" label="Total" />
-    </RadioGroup><br></br>
-     </>
-    )
-  }
+                  {
 
+                    this.state.sortpanel === true &&
+                    (//absolute bottom-0 
 
-<SegmentedControl data={[{
-          value: "forward",
-          label: "A->Z",
-        },
-        {
-          value: "reverse",
-          label:  "Z->A",
-        }]} color="dark" />
-</div>
+                      <div id='sortpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
+                        <div className='flex flex-col'>
 
-</div>
-</div>
-)
-}
-        </div>
-
-{
-               this.state.currentlyLoadedYear == '2021' && (
-                  <div>
-                    <p className="text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable yet - The City Controller is still calculating this data.</p>
-                 
-                  </div>
-                )
-              }
-
-              <div className='block md:hidden  mx-2 bg-gray-50'>
-                {_.uniq(this.state.loadedEmployeeRows).map((eachEmployee, index) => (
-                  <div
-                  key={index}
-
-                    ref={
-                      ref => {
-                        this.setLastObjRefMobile(ref, index, this.state.loadedEmployeeRows.length)
-                      }
-                    }
-                    className='bg-truegray-900 border-slate-700  border-b py-2'>
-                    <div className=' flex flex-row'><div className='grow flex-grow'><span
-                      className='bold font-bold'
-                    >{eachEmployee.f}</span> {eachEmployee.l}</div>
-                      <div className='grow flex-grow text-right'>
-                        <span className='font-semibold'>{eachEmployee.j}</span>
-                        <span className='ml-2'>{eachEmployee.d}</span></div></div>
-
-                    <div className='pl-3'>
-
-                      {
-                        /*
-                         Base Pay <span className='mono'>{excelnum(eachEmployee.b)}</span>
-                    <br></br>
-                    Overtime <span className='mono'>{excelnum(eachEmployee.ov)}</span>
-                    <br></br>
-                    Other <span className='mono'>{excelnum(eachEmployee.ot)}</span>
-                    <br></br>
-                    Healthcare <span className='mono'>{excelnum(eachEmployee.h)}</span>
-                    <br></br>
-                    Retirement <span className='mono'>{excelnum(eachEmployee.r)}</span>
-                    <br></br>
-                    <span className='font-semibold'> 
-                    Total Pay <span className='mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</span></span>
-                        */
-                      }
+                          <p className='text-base md:text-lg'>Sort Employees</p>
+                          <div>
+                            {
+                              true && (
+                                <>
+                                  <RadioGroup
+                                    label="Sorted Column"
+                                    color="green"
+                                  >
+                                    <Radio value="first" label="First" />
+                                    <Radio value="last" label="Last" />
+                                    <Radio value="job" label="Job" />
+                                    <Radio value="dept" label="Dept" />
+                                    <Radio value="base" label="Base Pay" />
+                                    <Radio value="overtime" label="Overtime" />
+                                    <Radio value="other" label="Other" />
+                                    <Radio value="health" label="Health" />
+                                    <Radio value="retirement" label="Retirement" />
+                                    <Radio value="total" label="Total" />
+                                  </RadioGroup><br></br>
+                                </>
+                              )
+                            }
 
 
+                            <SegmentedControl data={[{
+                              value: "forward",
+                              label: "A->Z",
+                            },
+                            {
+                              value: "reverse",
+                              label: "Z->A",
+                            }]} color="dark" />
+                          </div>
 
-                      <table className="table-auto text-sm">
-                        <tbody>
-                          <tr>
-                            <td className='pr-2'>Base Pay</td>
-                            <td>{excelnum(eachEmployee.b)}</td>
-                          </tr>
-                          <tr>
-                            <td className='pr-1'>Overtime</td>
-                            <td>{excelnum(eachEmployee.ov)}</td>
-                          </tr>
-                          <tr>
-                            <td className='pr-1'>Other</td>
-                            <td>{excelnum(eachEmployee.ot)}</td>
-                          </tr>
-                          {
-                      this.state.currentlyLoadedYear != '2021' && (
-                       <>
-                         <tr>
-                            <td className='pr-1'>Health</td>
-                            <td>{excelnum(eachEmployee.h)}</td>
-                          </tr>
-                          <tr>
-                            <td className='pr-1'>Retirement</td>
-                            <td>{excelnum(eachEmployee.r)}</td>
-                          </tr>
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
 
-                    </>
-                      )
-                    }
-                         <tr>
-                         <td className='pr-1'>Total</td>
-<>
-{
-                      this.state.currentlyLoadedYear != '2021' && (
-                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
-                      )
-                      }
-                      
-{
-                      this.state.currentlyLoadedYear === '2021' && (
-                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot )}</td>
-                      )
-                      }</>
-                      </tr>
-                        </tbody>
-                      </table>
-
+                {
+                  this.state.currentlyLoadedYear == '2021' && (
+                    <div>
+                      <p className="text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable yet - The City Controller is still calculating this data.</p>
 
                     </div>
-                  </div>
+                  )
+                }
+
+                <div className='block md:hidden  mx-2 bg-gray-50'>
+                  {_.uniq(this.state.loadedEmployeeRows).map((eachEmployee, index) => (
+                    <div
+                      key={index}
+
+                      ref={
+                        ref => {
+                          this.setLastObjRefMobile(ref, index, this.state.loadedEmployeeRows.length)
+                        }
+                      }
+                      className='bg-truegray-900 border-slate-700  border-b py-2'>
+                      <div className=' flex flex-row'><div className='grow flex-grow'><span
+                        className='bold font-bold'
+                      >{eachEmployee.f}</span> {eachEmployee.l}</div>
+                        <div className='grow flex-grow text-right'>
+                          <span className='font-semibold'>{eachEmployee.j}</span>
+                          <span className='ml-2'>{eachEmployee.d}</span></div></div>
+
+                      <div className='pl-3'>
+
+                        {
+                          /*
+                           Base Pay <span className='mono'>{excelnum(eachEmployee.b)}</span>
+                      <br></br>
+                      Overtime <span className='mono'>{excelnum(eachEmployee.ov)}</span>
+                      <br></br>
+                      Other <span className='mono'>{excelnum(eachEmployee.ot)}</span>
+                      <br></br>
+                      Healthcare <span className='mono'>{excelnum(eachEmployee.h)}</span>
+                      <br></br>
+                      Retirement <span className='mono'>{excelnum(eachEmployee.r)}</span>
+                      <br></br>
+                      <span className='font-semibold'> 
+                      Total Pay <span className='mono'>{excelnum( eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</span></span>
+                          */
+                        }
+
+
+
+                        <table className="table-auto text-sm">
+                          <tbody>
+                            <tr>
+                              <td className='pr-2'>Base Pay</td>
+                              <td>{excelnum(eachEmployee.b)}</td>
+                            </tr>
+                            <tr>
+                              <td className='pr-1'>Overtime</td>
+                              <td>{excelnum(eachEmployee.ov)}</td>
+                            </tr>
+                            <tr>
+                              <td className='pr-1'>Other</td>
+                              <td>{excelnum(eachEmployee.ot)}</td>
+                            </tr>
+                            {
+                              this.state.currentlyLoadedYear != '2021' && (
+                                <>
+                                  <tr>
+                                    <td className='pr-1'>Health</td>
+                                    <td>{excelnum(eachEmployee.h)}</td>
+                                  </tr>
+                                  <tr>
+                                    <td className='pr-1'>Retirement</td>
+                                    <td>{excelnum(eachEmployee.r)}</td>
+                                  </tr>
+
+                                </>
+                              )
+                            }
+                            <tr>
+                              <td className='pr-1'>Total</td>
+                              <>
+                                {
+                                  this.state.currentlyLoadedYear != '2021' && (
+                                    <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                                  )
+                                }
+
+                                {
+                                  this.state.currentlyLoadedYear === '2021' && (
+                                    <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot)}</td>
+                                  )
+                                }</>
+                            </tr>
+                          </tbody>
+                        </table>
+
+
+                      </div>
+                    </div>
 
 
 
 
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <table className="relative table-auto hidden md:block px-2 text-truegray-200">
-                <thead className='sticky top-0'>
-                  <tr className='bg-truegray-800 border-b-1 border-white py-2'>
-                    <th className='sticky top-0'>First</th>
-                    <th className='sticky top-0'>Last</th>
-                    <th className='sticky top-0'>Job</th>
-                    <th className='sticky top-0'>Dept</th>
-                    <th className='sticky top-0'>Base Pay</th>
-                    <th className='sticky top-0'>Overtime</th>
-                    <th className='sticky top-0'>Other</th>
+                <table className="relative table-auto hidden md:block px-2 text-truegray-200">
+                  <thead className='sticky top-0'>
+                    <tr className='bg-truegray-800 border-b-1 border-white py-2'>
+                      <th className='sticky top-0'>First</th>
+                      <th className='sticky top-0'>Last</th>
+                      <th className='sticky top-0'>Job</th>
+                      <th className='sticky top-0'>Dept</th>
+                      <th className='sticky top-0'>Base Pay</th>
+                      <th className='sticky top-0'>Overtime</th>
+                      <th className='sticky top-0'>Other</th>
+                      {
+                        this.state.currentlyLoadedYear != '2021' && (
+                          <>
+                            <th>Health</th>
+                            <th>Retirement</th>
+                          </>
+                        )
+                      }
+                      <th>Total Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
+
+                      <tr
+                        ref={ref =>
+
+                          this.setLastObjRef(ref, employeeIndex, this.state.loadedEmployeeRows.length)
+
+
+                        }
+
+                        key={employeeIndex}
+
+                        className={`py-2 border-b border-truegray-700 ${this.getParsedDeptFilter() === 'none' ? 'hidden' : ''}`}
+                      >
+                        <td className='border-x border-truegray-700'>{eachEmployee.f}</td>
+                        <td className='border-r border-truegray-700'>{eachEmployee.l}</td>
+                        <td className='border-r border-truegray-700'>{eachEmployee.j}</td>
+                        <td className='border-r border-truegray-700'>{eachEmployee.d.replace(/Department/gi, "")}</td>
+                        <td className=' border-r text-right mono lg:px-3'>{excelnum(eachEmployee.b)}</td>
+                        <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ov)}</td>
+                        <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ot)}</td>
+                        {
+                          this.state.currentlyLoadedYear != '2021' && (
+                            <>
+                              <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.h)}</td>
+                              <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.r)}</td>
+                            </>
+                          )
+                        }
+
+                        {
+                          this.state.currentlyLoadedYear != '2021' && (
+                            <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
+                          )
+                        }
+
+                        {
+                          this.state.currentlyLoadedYear === '2021' && (
+                            <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot)}</td>
+                          )
+                        }
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <>
+                  {
+                    this.state.loadedfirsttime === true && this.state.totalFiltered && (
+                      <div>
+                        <h2 className="text-md font-bold">Zero Rows Found</h2>
+                        <h2 className="text-base font-semibold">Try expanding your search.</h2>
+
+                      </div>
+                    )
+                  }
+                  <>
                     {
-                      this.state.currentlyLoadedYear != '2021' && (
-                       <>
-                        <th>Health</th>
-                    <th>Retirement</th>
-                    </>
+                      this.getParsedDeptFilter() === 'none' && (
+                        <div className="text-base font-semibold bg-green-500 bg-opacity-30">You don't have any departments selected. Please select some!</div>
                       )
                     }
-                    <th>Total Pay</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  {this.state.loadedEmployeeRows.map((eachEmployee, employeeIndex) => (
-
-                    <tr
-                      ref={ref =>
-
-                        this.setLastObjRef(ref, employeeIndex, this.state.loadedEmployeeRows.length)
-
-                      
-                      }
-
-                      key={employeeIndex}
-
-                      className={`py-2 border-b border-truegray-700 ${this.getParsedDeptFilter() === 'none' ? 'hidden': ''}`}
-                    >
-                      <td className='border-x border-truegray-700'>{eachEmployee.f}</td>
-                      <td  className='border-r border-truegray-700'>{eachEmployee.l}</td>
-                      <td   className='border-r border-truegray-700'>{eachEmployee.j}</td>
-                      <td   className='border-r border-truegray-700'>{eachEmployee.d.replace(/Department/gi, "")}</td>
-                      <td className=' border-r text-right mono lg:px-3'>{excelnum(eachEmployee.b)}</td>
-                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ov)}</td>
-                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ot)}</td>
-                      {
-                      this.state.currentlyLoadedYear != '2021' && (
-                     <>
-                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.h)}</td>
-                      <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.r)}</td>
-                      </>
-                      )
-                      }
-
-{
-                      this.state.currentlyLoadedYear != '2021' && (
-                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
-                      )
-                      }
-                      
-{
-                      this.state.currentlyLoadedYear === '2021' && (
-                        <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot )}</td>
-                      )
-                      }
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              <>
-              {
-                this.state.loadedfirsttime === true && this.state.totalFiltered && (
-                  <div>
-                    <h2 className="text-md font-bold">Zero Rows Found</h2>
-                  <h2 className="text-base font-semibold">Try expanding your search.</h2>
-                 
-                  </div>
-                )
-              }
-               <>
-                  {
-                    this.getParsedDeptFilter() === 'none' && (
-                      <div className="text-base font-semibold bg-green-500 bg-opacity-30">You don't have any departments selected. Please select some!</div>
-                    )
-                  }
                   </>
                   <>
-                  {
-                    (this.getParsedDeptFilter() === 'none' && this.state.loadedEmployeeRows.length == this.state.numberoftotalrows) && (
-                      <>
-                      <div className="text-base font-semibold bg-opacity-30">You've reached the end of the table.</div>
-                      <div className="text-base bg-opacity-30">{this.state.numberoftotalrows.toLocaleString("en-US")}  ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) filtered employees of {this.state.entiresetcount.toLocaleString("en-US")} total</div>
-                      </>
-                    )
-                  }
+                    {
+                      (this.getParsedDeptFilter() === 'none' && this.state.loadedEmployeeRows.length == this.state.numberoftotalrows) && (
+                        <>
+                          <div className="text-base font-semibold bg-opacity-30">You've reached the end of the table.</div>
+                          <div className="text-base bg-opacity-30">{this.state.numberoftotalrows.toLocaleString("en-US")}  ({this.makePercent(this.state.numberoftotalrows, this.state.entiresetcount)}%) filtered employees of {this.state.entiresetcount.toLocaleString("en-US")} total</div>
+                        </>
+                      )
+                    }
                   </>
-              </>
-            </div>
-          </React.StrictMode>
+                </>
+              </div>
+            </React.StrictMode>
 
-        </div></div>
-    </>
+          </div></div>
+      </>
     )
   }
 }
