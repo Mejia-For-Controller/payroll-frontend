@@ -9,6 +9,7 @@
     "@heroicons/react": "^1.0.2",
     "@mantine/core": "^4.0.7",
     "@mantine/hooks": "^4.0.7",
+    "@material/textfield": "^14.0.0",
     "@mdi/js": "^6.6.95",
     "@modulz/radix-icons": "^4.0.0",
     "@sentry/react": "^6.10.0",

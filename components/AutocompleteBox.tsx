@@ -203,9 +203,18 @@ document.addEventListener("click",(e) => {
         return (
 
             <div className={`${this.props.parentClasses} autocomplete w-full`}>
-                <input className={`bg-truegray-700 ${this.props.inputClasses}`}
+                <label className="mdc-text-field mdc-text-field--outlined">
+                 <span className="mdc-notched-outline">
+    <span className="mdc-notched-outline__leading"></span>
+    <span className="mdc-notched-outline__notch">
+      <span className="mdc-floating-label" id="my-label-id">{this.props.placeholder}</span>
+    </span>
+    <span className="mdc-notched-outline__trailing"></span>
+  </span>
 
-                    placeholder={this.props.placeholder}
+                <input type="text" className={`mdc-text-field__input bg-truegray-700 ${this.props.inputClasses}`}
+
+                    
 
                     onChange={e => {
                         this.sendBackToParent()
@@ -281,6 +290,7 @@ document.addEventListener("click",(e) => {
 
 
 
+                </label>
             </div>
 
 
