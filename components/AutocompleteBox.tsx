@@ -4,7 +4,15 @@ import { ProductItem } from '../components/ProductItem';
 import { createAutocomplete } from '@algolia/autocomplete-core';
 import { getAlgoliaResults } from '@algolia/autocomplete-preset-algolia';
 import { Autocomplete } from '../components/Autocomplete';
+import InputBase from '@mui/material/InputBase';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import { OutlinedInputProps } from '@mui/material/OutlinedInput';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
+import { alpha, styled } from '@mui/material/styles';
 
 import Head from 'next/head'
 
@@ -23,6 +31,10 @@ interface requirementsForAutocompleteProps {
     index: string,
     onChange?: any;
 }
+
+
+
+  
 
 export class AutocompleteBox extends React.Component<any, any> {
 
@@ -202,71 +214,83 @@ document.addEventListener("click",(e) => {
     render() {
         return (
 
+
+
             <div className={`${this.props.parentClasses} autocomplete w-full`}>
-                <label className="mdc-text-field mdc-text-field--outlined">
-                 <span className="mdc-notched-outline">
-    <span className="mdc-notched-outline__leading"></span>
-    <span className="mdc-notched-outline__notch">
-      <span className="mdc-floating-label" id="my-label-id">{this.props.placeholder}</span>
-    </span>
-    <span className="mdc-notched-outline__trailing"></span>
-  </span>
 
-                <input type="text" className={`mdc-text-field__input bg-truegray-700 ${this.props.inputClasses}`}
+                
+<Box
+      component="form"
+      sx={{
+        '& > :not(style)': { m: 1 },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <FormControl>
+        <InputLabel htmlFor="component-outlined">{this.props.placeholder}</InputLabel>
+        <OutlinedInput
+       color='primary'
+       id={`inputboi-${this.props.index}`}
+          label={this.props.placeholder}
 
-                    
+          
+          onChange={e => {
+            this.sendBackToParent()
+       this.searchEmployeeJobTitle()
+            
+        }}
 
-                    onChange={e => {
-                        this.sendBackToParent()
-                   this.searchEmployeeJobTitle()
-                        
-                    }}
+       onKeyDown={e => {
+        //this.sendBackToParent()
+       }}
 
-                   onKeyDown={e => {
-                    //this.sendBackToParent()
-                   }}
+       onKeyUp={e => {
+       //this.sendBackToParent()
+       }}
 
-                   onKeyUp={e => {
-                   //this.sendBackToParent()
-                   }}
+        onClick={(e) => {
+            this.setState({
+                openUpBox: true
+            })
+           // this.sendBackToParent()
+        }}
 
-                    onClick={(e) => {
-                        this.setState({
-                            openUpBox: true
-                        })
-                       // this.sendBackToParent()
-                    }}
+        onPaste={(e) => {
+            console.log(e)
 
-                    onPaste={(e) => {
-                        console.log(e)
+            this.sendBackToParent()
 
-                        this.sendBackToParent()
+            this.searchEmployeeJobTitle();
+            this.setState({
+                openUpBox: true
+            })
+           // 
+        }}
 
-                        this.searchEmployeeJobTitle();
-                        this.setState({
-                            openUpBox: true
-                        })
-                       // 
-                    }}
+        onKeyPress={e => {
+         //   this.sendBackToParent()
 
-                    onKeyPress={e => {
-                     //   this.sendBackToParent()
+            if (e.key === "Enter") {
+                this.setState({
+                    openUpBox: false
+                })
+            } else {
+                this.setState({
+                    openUpBox: true
+                })
+                
+            }
 
-                        if (e.key === "Enter") {
-                            this.setState({
-                                openUpBox: false
-                            })
-                        } else {
-                            this.setState({
-                                openUpBox: true
-                            })
-                            
-                        }
+          //
+            console.log(e)
+        }}
+        />
+      </FormControl>
+     
+    </Box>
 
-                      //
-                        console.log(e)
-                    }}
-                    id={`inputboi-${this.props.index}`}></input>
+              
 
                 <div id={this.props.index + "autocomplete-list"} className="autocomplete-items max-h-64 overflow-y-scroll">
 
@@ -290,7 +314,7 @@ document.addEventListener("click",(e) => {
 
 
 
-                </label>
+                
             </div>
 
 

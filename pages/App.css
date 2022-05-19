@@ -9,7 +9,6 @@
 @use "@material/notched-outline/mdc-notched-outline";
 @use "@material/textfield";
 
-@include textfield.core-styles;
 
 .App {
   text-align: center;

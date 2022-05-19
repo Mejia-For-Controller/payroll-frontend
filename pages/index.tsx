@@ -648,7 +648,7 @@ export default function PayrollFunc(props: payrollprops) {
                             index='PayrollFirstNames'
                             parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
                             inputClasses='bg-truegray-700 '
-                            placeholder='Search First Name'
+                            placeholder='First Name'
                             col='First Name'
                             onChange={setfilterfirstname}
                           ></AutocompleteBox>
@@ -659,7 +659,7 @@ export default function PayrollFunc(props: payrollprops) {
                             index='PayrollLastName'
                             parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
                             inputClasses='bg-truegray-700 '
-                            placeholder='Search Last Name'
+                            placeholder='Last Name'
                             col='Last Name'
                             onChange={setfilterlastname}
                           ></AutocompleteBox>
@@ -673,7 +673,7 @@ export default function PayrollFunc(props: payrollprops) {
                         <AutocompleteBox
                           index='PayrollEmployeeList'
                           parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                          placeholder='Search Job Title'
+                          placeholder='Job Title'
                           col='Job Title'
                           onChange={(value) => {
                             setfilterjobtitle(value)

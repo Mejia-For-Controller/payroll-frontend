@@ -10,6 +10,7 @@ import React, { useEffect } from 'react'
 import TagManager from 'react-gtm-module'
 //import TableauEmbed from './tableau'
 import { MantineProvider } from '@mantine/core';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 
 //import Navbar from '../components/navbar'
@@ -38,6 +39,12 @@ const tagManagerArgs = {
   gtmId: 'GTM-MQG62S5'
 }
 
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -57,9 +64,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta property='twitter:site' content='@kennethmejiala' />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
       </Head>
+      
+    <ThemeProvider theme={darkTheme}>
       <MantineProvider theme={{ colorScheme: 'dark' }}>
       <Component {...pageProps} class='h-full'/>
       </MantineProvider>
+      </ThemeProvider>
     </div>
   );  
            
