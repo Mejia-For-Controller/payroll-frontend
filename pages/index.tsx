@@ -367,7 +367,7 @@ export default function PayrollFunc(props: payrollprops) {
   
     });
     
-    alreadylisteningtoresultsref.current === true
+    alreadylisteningtoresultsref.current = true
   }
  
 
