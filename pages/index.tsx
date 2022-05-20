@@ -640,8 +640,8 @@ export default function PayrollFunc(props: payrollprops) {
                     index='PayrollEmployeeList'
                     placeholder='Job Title'
                     col='Job Title'
-                    onChange={(value) => {
-                      (v) => { refJobTitle.current = v; setfilterjobtitle(v); }
+                    onChange={
+                      (v) => { refJobTitle.current = v; setfilterjobtitle(v); 
                     }}
                   ></AutocompleteBox>
 
