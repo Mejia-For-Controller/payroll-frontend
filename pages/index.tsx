@@ -662,7 +662,7 @@ export default function PayrollFunc(props: payrollprops) {
                     {
                       true && (
 
-                        <div className={`fixed overflow-y-auto top-0 bottom-0  sm:top-auto sm:bottom-auto sm:top-10 bg-truegray-800 h-full flex flex-col sm:absolute top-0 bottom-0 md:h-full overflow-y-clip left-0 w-full md:w-auto
+                        <div className={`bg-gray-800 fixed overflow-y-none sm:h-auto top-0 bottom-0  sm:top-auto sm:bottom-auto sm:top-10 bg-truegray-800 h-full flex flex-col sm:absolute top-0 bottom-0 md:h-full overflow-y-clip left-0 w-full md:w-auto
 ${deptpanelopen === false ? 'hidden' : ""}
 `}
 
@@ -688,16 +688,16 @@ ${deptpanelopen === false ? 'hidden' : ""}
                             >
 
                               <div className='flex flex-row gap-x-1'>
-                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1  border border-gray-400 text-sm'
+                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1  border border-gray-400 sm:text-xs'
                                   onClick={setAllDeptFilter}
 
                                 >Select All</button>
-                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1 text-sm border border-gray-400'
+                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1  border border-gray-400  sm:text-xs'
                                   onClick={setNoneDeptFilter}
                                 >Unselect All</button>
                                 <button
                                   onClick={invertDeptFilter}
-                                  className='text-sm align-middle bg-gray-800 rounded-lg px-1 text-sm   border border-gray-400'>Invert</button>
+                                  className='text-sm align-middle bg-gray-800 rounded-lg px-1  border border-gray-400  sm:text-xs'>Invert</button>
                               </div>
                               <div className='
  scrollbar-thumb-gray-400 scrollbar-rounded scrollbar scrollbar-thin scrollbar-trackgray-900  mejiascrollbar
