@@ -543,15 +543,15 @@ export default function PayrollFunc(props: payrollprops) {
           <meta property="og:type" content="website" />
 <meta property="og:type" content="website"></meta>
 <meta property="og:url" content="https://payroll.mejiaforcontroller.com/"></meta>
-<meta property="og:title" content="LA Payroll City Employees Names Lookup - 2017 to 2021"></meta>
-<meta property="og:description" content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and More! Data 2017-2021"></meta>
+<meta property="og:title" content="LA City Payroll Database - 2017 to 2021"></meta>
+<meta property="og:description" content="Find out how much City of LA employees made. All data is public. Data 2017-2021"></meta>
 <meta property="og:image" content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
          
           <meta name="twitter:site" content="@kennethmejiala" />
           <meta name="twitter:creator" content="@kennethmejiala" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" key='twittertitle' content="City of LA Employee Names and Payroll"></meta>
-          <meta name="twitter:description" key='twitterdesc' content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!"></meta>
+          <meta name="twitter:title" key='twittertitle' content="LA City Payroll Database - 2017 to 2021"></meta>
+          <meta name="twitter:description" key='twitterdesc' content="Find out how much City of LA employees made. All data is public. Data 2017-2021"></meta>
           <meta name="twitter:image" key='twitterimg' content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
          
          
