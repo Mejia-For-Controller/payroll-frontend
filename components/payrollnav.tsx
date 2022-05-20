@@ -1,11 +1,7 @@
 import ActiveLink from './ActiveLink'
 const navigationPayroll = [
   {
-    'name': "Summary",
-    'url': "summary"
-  },
-  {
-    'name': "Employees",
+    'name': "LA City Payroll",
     'url': "/",
   },
   {
