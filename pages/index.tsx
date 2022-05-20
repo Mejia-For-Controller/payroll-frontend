@@ -662,7 +662,7 @@ export default function PayrollFunc(props: payrollprops) {
                     {
                       true && (
 
-                        <div className={`bg-gray-800 fixed overflow-y-none sm:h-auto top-0 bottom-0  sm:top-auto sm:bottom-auto sm:top-10 bg-truegray-800 h-full flex flex-col sm:absolute top-0 bottom-0 md:h-full overflow-y-clip left-0 w-full md:w-auto
+                        <div className={`bg-gray-800 fixed overflow-y-auto sm:overflow-y-none sm:h-auto top-0 bottom-0  sm:top-auto sm:bottom-auto sm:top-10 bg-truegray-800 h-full flex flex-col sm:absolute top-0 bottom-0 md:h-full overflow-y-clip left-0 w-full md:w-auto
 ${deptpanelopen === false ? 'hidden' : ""}
 `}
 
