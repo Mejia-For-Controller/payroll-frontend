@@ -541,12 +541,21 @@ export default function PayrollFunc(props: payrollprops) {
         <Head>
           <title>LA Payroll City Employees Names Lookup - 2017 to 2021</title>
           <meta property="og:type" content="website" />
+<meta property="og:type" content="website"></meta>
+<meta property="og:url" content="https://payroll.mejiaforcontroller.com/"></meta>
+<meta property="og:title" content="LA Payroll City Employees Names Lookup - 2017 to 2021"></meta>
+<meta property="og:description" content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and More! Data 2017-2021"></meta>
+<meta property="og:image" content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
+         
           <meta name="twitter:site" content="@kennethmejiala" />
           <meta name="twitter:creator" content="@kennethmejiala" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" key='twittertitle' content="City of LA Employee Names and Payroll"></meta>
           <meta name="twitter:description" key='twitterdesc' content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!"></meta>
           <meta name="twitter:image" key='twitterimg' content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
+         
+         
+
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous" />
 
           <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
