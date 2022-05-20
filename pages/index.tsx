@@ -546,7 +546,7 @@ export default function PayrollFunc(props: payrollprops) {
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" key='twittertitle' content="City of LA Employee Names and Payroll"></meta>
           <meta name="twitter:description" key='twitterdesc' content="Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!"></meta>
-          <meta name="twitter:image" key='twitterimg' content="https://data.mejiaforcontroller.com/cityworkercardv2.png"></meta>
+          <meta name="twitter:image" key='twitterimg' content="https://payroll.mejiaforcontroller.com/payrollthumbnail.png"></meta>
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css" integrity="sha256-TehzF/2QvNKhGQrrNpoOb2Ck4iGZ1J/DI4pkd2oUsBc=" crossOrigin="anonymous" />
 
           <script defer={true} src="https://helianthus.mejiaforcontroller.com/index.js"></script>
@@ -871,7 +871,7 @@ overflow-y-scroll sm:h-96'>
               }
 
               <div>
-                <p className="text-sm sm:text-base  bg-green-700 bg-opacity-20 text-white">It downloads more employees as you scroll (infinite scrolling), Ctrl + F won't work because we haven't coded it yet, sorry. Please use the built in filters instead.</p>
+                <p className="text-sm sm:text-base  bg-green-700 bg-opacity-20 text-white hidden">It downloads more employees as you scroll (infinite scrolling), Ctrl + F won't work because we haven't coded it yet, sorry. Please use the built in filters instead.</p>
               </div>
 
               <div className='block md:hidden  mx-2 bg-gray-50'>
