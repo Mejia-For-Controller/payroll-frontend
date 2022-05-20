@@ -896,9 +896,9 @@ overflow-y-scroll sm:h-96'>
                     className='bg-truegray-900 border-slate-700  border-b py-2'>
                     <div className=' flex flex-row'><div className='grow flex-grow'><span
                       className='bold font-bold'
-                    >{eachEmployee.f}</span> {eachEmployee.l}</div>
+                    >{eachEmployee.f} {eachEmployee.l}</span> </div>
                       <div className='grow flex-grow text-right'>
-                        <span className='font-semibold'>{eachEmployee.j}</span>
+                        <span className='font-semibold'>{eachEmployee.j}</span><br></br>
                         <span className='ml-2'>{eachEmployee.d}</span></div></div>
 
                     <div className='pl-3'>
