@@ -955,13 +955,13 @@ overflow-y-scroll sm:h-96'>
                             <td className='pr-1'>Total</td>
                             <>
                               {
-                                currentlyLoadedYear != '2021' && (
+                                currentlyLoadedMetadata.year  != '2021' && (
                                   <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
                                 )
                               }
 
                               {
-                                currentlyLoadedYear === '2021' && (
+                                currentlyLoadedMetadata.year  === '2021' && (
                                   <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot)}</td>
                                 )
                               }</>
