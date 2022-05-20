@@ -21,6 +21,7 @@ import _ from 'lodash';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid'
 import { CheckboxGroup, Checkbox } from '@mantine/core';
+import { Select } from '@mantine/core';
 import { ArrowUpIcon } from '@modulz/radix-icons';
 import { useWindowScroll } from '@mantine/hooks';
 import { Affix, Button, Text, Transition as MantineTransition, SegmentedControl, Center, RadioGroup, Radio, Box } from '@mantine/core';
@@ -87,7 +88,8 @@ export default function PayrollFunc(props: payrollprops) {
   var [currentlyLoadedYear, setCurrentlyLoadedyear] = useState(null);
   var [numberoftotalrows, setnumberoftotalrows] = useState(0);
   var [entiresetcount, setentiresetcount] = useState(1);
-  var [loadedfirsttime, setloadedfirsttime] = useState(false);
+  //var [loadedfirsttime, setloadedfirsttime] = useState(false);
+  var loadedfirsttimeref = useRef(false);
   var [filterpanel, setfilterpanel] = useState(true);
   var [sortpanel, setsortpanel] = useState(true);
   var [socketconnected, setsocketconnected] = useState(false);
@@ -96,8 +98,15 @@ export default function PayrollFunc(props: payrollprops) {
   var [filterfirstname, setfilterfirstname] = useState("");
   var [filterlastname, setfilterlastname] = useState("");
   var [filterjobtitle, setfilterjobtitle] = useState("");
+  var selectedyearref = useRef('2021');
   var [loadedEmployeeRows, setLoadedEmployeeRows] = useState([]);
+  var refFirstName = useRef('')
+  var refLastName = useRef('');
+  var enableddeptref = useRef(depts);
+  var refJobTitle = useRef('')
   var loadedEmployeeRowsRef = useRef([])
+  var sortcolref = useRef('b');
+  var sortreverseref = useRef('reverse')
   var [arrayOfResultsMetadata, setarrayOfResultsMetadata] = useState([]);
   var alreadylisteningtoresultsref = useRef(false)
   var [currentlyLoadedMetadata, setCurrentlyLoadedMetadata] = useState({
@@ -172,14 +181,14 @@ export default function PayrollFunc(props: payrollprops) {
   }
 
   const departmentsSelectedRender = () => {
-    var numberSelected = enableddept.length;
+    var numberSelected = enableddeptref.current.length;
     var totalOptions = depts.length;
 
     if (numberSelected === totalOptions) {
       return "All " + totalOptions;
     } else {
       if (numberSelected === 1) {
-        var singledept = enableddept[0]
+        var singledept = enableddeptref.current[0]
 
         return `${singledept}`
       } else {
@@ -196,15 +205,19 @@ export default function PayrollFunc(props: payrollprops) {
   //  const [filterArray, setFilterArray] = useState<string[]>(depts);
 
   const setAllDeptFilter = (event) => {
+    enableddeptref.current = depts;
     setenableddept(depts)
   }
 
   const setNoneDeptFilter = (event) => {
+    enableddeptref.current = [];
     setenableddept([])
   }
 
   const invertDeptFilter = (event) => {
-    setenableddept(depts.filter(n => !enableddept.includes(n)))
+    var invertedDept = depts.filter(n => !enableddept.includes(n));
+    enableddeptref.current = invertedDept;
+    setenableddept(invertedDept);
   }
 
   var urlParams = undefined;
@@ -225,11 +238,11 @@ export default function PayrollFunc(props: payrollprops) {
 
     console.log('currentlyLoadedMetadata in rapid', currentlyLoadedMetadataRef.current)
 
-    if (currentlyLoadedMetadataRef.current.f === filterfirstname &&
+    if (currentlyLoadedMetadataRef.current.f === refFirstName.current &&
       currentlyLoadedMetadataRef.current.totalFiltered === loadedEmployeeRows.length &&
-      currentlyLoadedMetadataRef.current.l === filterlastname &&
-      currentlyLoadedMetadataRef.current.j === filterjobtitle &&
-      currentlyLoadedMetadataRef.current.d === enableddept &&
+      currentlyLoadedMetadataRef.current.l === refLastName.current &&
+      currentlyLoadedMetadataRef.current.j === refJobTitle.current &&
+      currentlyLoadedMetadataRef.current.d === enableddeptref.current &&
       currentlyLoadedMetadataRef.current.sortreverse === sortreverse &&
       currentlyLoadedMetadataRef.current.sortcol === sortcol
     ) {
@@ -281,37 +294,39 @@ export default function PayrollFunc(props: payrollprops) {
     });
   }
 
-  if ( alreadylisteningtoresultsref.current === false ) {
+  if (alreadylisteningtoresultsref.current === false) {
     socket.current.on("result", (message: any) => {
       console.log('result came in')
-  
-  
-  
+
+
+
       var isDifferentResult = true;
-  
+
       if (currentlyLoadedMetadataRef.current.f === message.meta.f &&
         currentlyLoadedMetadataRef.current.totalFiltered === message.meta.totalFiltered &&
         currentlyLoadedMetadataRef.current.l === message.meta.l &&
         currentlyLoadedMetadataRef.current.j === message.meta.j &&
-        JSON.stringify(currentlyLoadedMetadataRef.current.d) === JSON.stringify(enableddept) &&
+        JSON.stringify(currentlyLoadedMetadataRef.current.d) === JSON.stringify(message.meta.d) &&
         currentlyLoadedMetadataRef.current.sortreverse === message.meta.sortreverse &&
         currentlyLoadedMetadataRef.current.sortcol === message.meta.sortcol &&
         currentlyLoadedMetadataRef.current.year === message.meta.year &&
         currentlyLoadedMetadataRef.current.startingpoint === message.meta.startingpoint) {
         isDifferentResult = false;
       }
-  
+
       console.log('isdifferentresult', isDifferentResult)
-  
+
+      var matchSameAsInput = false;
+
       if (isDifferentResult === true) {
-  
+
         //  console.log('change employee state to', toloadrows)
-  
-  
+
+
         // this.currentlyLoadedF = message.meta.f;
-  
+
         //  console.log('setting to ', message.meta.f);
-  
+
         //  console.log('result ', this.currentlyLoadedF)
         /*
             this.currentlyLoadedL = message.meta.l;
@@ -328,7 +343,7 @@ export default function PayrollFunc(props: payrollprops) {
               d: message.meta.d,
               year: message.meta.year
             }*/
-  
+
         /*
         return {
           entiresetcount: message.meta.entiresetcount,
@@ -342,7 +357,7 @@ export default function PayrollFunc(props: payrollprops) {
           currentlyLoadedYear: message.meta.year
         }*/
         var toloadrows = loadedEmployeeRowsRef.current;
-  
+
         //if loaded states matches incoming state
         if (message.meta.newseq === false) {
           console.log('append')
@@ -352,24 +367,25 @@ export default function PayrollFunc(props: payrollprops) {
           toloadrows = message.employeePortion
         }
         loadedEmployeeRowsRef.current = toloadrows;
+        loadedfirsttimeref.current = true;
         setLoadedEmployeeRows(toloadrows);
         setentiresetcount(message.meta.entiresetcount);
         setnumberoftotalrows(message.meta.totalFiltered);
-        setloadedfirsttime(true);
+        //setloadedfirsttime(true);
         setCurrentlyLoadedMetadata(message.meta);
         currentlyLoadedMetadataRef.current = message.meta;
-  
+
         //   console.log('currentlyLoadedMetadata', currentlyLoadedMetadataRef.current)
-  
+
       }
-  
-  
-  
+
+
+
     });
-    
+
     alreadylisteningtoresultsref.current = true
   }
- 
+
 
   const getNewData = () => {
 
@@ -379,14 +395,14 @@ export default function PayrollFunc(props: payrollprops) {
 
     //console.log('getnewfunc says f is', this.state.currentlyLoadedF)
 
-    if (filterfirstname == currentlyLoadedMetadataRef.current.f
-      && filterlastname == currentlyLoadedMetadataRef.current.l
-      && filterjobtitle == currentlyLoadedMetadataRef.current.j
+    if (refFirstName.current == currentlyLoadedMetadataRef.current.f
+      && refLastName.current == currentlyLoadedMetadataRef.current.l
+      && refJobTitle.current == currentlyLoadedMetadataRef.current.j
       //    && deptvaluetosubmit == this.state.currentlyLoadedD
-      && JSON.stringify(enableddept) == JSON.stringify(currentlyLoadedMetadataRef.current.d)
-      && selectedyear == currentlyLoadedMetadataRef.current.year
-      && sortcol == currentlyLoadedMetadataRef.current.sortcol
-      && sortreverse == currentlyLoadedMetadataRef.current.sortreverse
+      && JSON.stringify(enableddeptref.current) == JSON.stringify(currentlyLoadedMetadataRef.current.d)
+      && selectedyearref.current == currentlyLoadedMetadataRef.current.year
+      && sortcolref.current == currentlyLoadedMetadataRef.current.sortcol
+      && sortreverseref.current == currentlyLoadedMetadataRef.current.sortreverse
     ) {
       console.log('not new seq')
 
@@ -415,13 +431,13 @@ export default function PayrollFunc(props: payrollprops) {
 
     if (true) {
       if (currentlyLoadedMetadataRef.current.totalFiltered <= loadedEmployeeRows.length &&
-        currentlyLoadedMetadataRef.current.f === filterlastname &&
-        currentlyLoadedMetadataRef.current.l === filterlastname &&
-        currentlyLoadedMetadataRef.current.j === filterjobtitle &&
-        currentlyLoadedMetadataRef.current.year === selectedyear &&
-        currentlyLoadedMetadataRef.current.d === enableddept &&
-        currentlyLoadedMetadataRef.current.sortcol === sortcol &&
-        currentlyLoadedMetadataRef.current.sortreverse === sortreverse
+        currentlyLoadedMetadataRef.current.f === refFirstName.current &&
+        currentlyLoadedMetadataRef.current.l === refLastName.current &&
+        currentlyLoadedMetadataRef.current.j === refJobTitle.current &&
+        currentlyLoadedMetadataRef.current.year === selectedyearref.current &&
+        currentlyLoadedMetadataRef.current.d === enableddeptref.current &&
+        currentlyLoadedMetadataRef.current.sortcol === sortcolref.current &&
+        currentlyLoadedMetadataRef.current.sortreverse === sortreverseref.current
       ) {
         preventNextLoadBecauseRowsAreAllDone = true
       }
@@ -436,17 +452,17 @@ export default function PayrollFunc(props: payrollprops) {
       var emitobj = {
         loadedEmployeeRowsCount: loadedEmployeeRowsRef.current.length,
         requestedFilters: {
-          f: filterfirstname,
-          l: filterlastname,
-          j: filterjobtitle,
-          d: enableddept
+          f: refFirstName.current,
+          l: refLastName.current,
+          j: refJobTitle.current,
+          d: enableddeptref.current
         },
         requestedSort: {
-          sortCol: sortcol,
-          reverse: sortreverse,
+          sortCol: sortcolref.current,
+          reverse: sortreverseref.current,
           sortEnabled: true
         },
-        requestedYear: selectedyear,
+        requestedYear: selectedyearref.current,
         newSeq: newSeq
       }
 
@@ -523,7 +539,7 @@ export default function PayrollFunc(props: payrollprops) {
 
 
         <Head>
-          <title>Search City Employee Names, Job Titles, Salaries, Overtime, Benefits, Pensions, and more!</title>
+          <title>LA Payroll City Employees Names Lookup - 2017 to 2021</title>
           <meta property="og:type" content="website" />
           <meta name="twitter:site" content="@kennethmejiala" />
           <meta name="twitter:creator" content="@kennethmejiala" />
@@ -544,94 +560,242 @@ export default function PayrollFunc(props: payrollprops) {
                 console.log('scroll')
               }}
             >
-              <div className='font-semibold flex flex-row pl-1 mt-2 text-base md:text-lg space-x-2 flex flex-row align-middle space-x-1'>
+              <div className='font-semibold flex flex-col sm:flex-row pl-1 mt-2 text-base md:text-lg  flex flex-row align-middle gap-x-1 flex-wrap'>
+                <div className='flex flex-col sm:flex-row'>
+                  <div className="sm:pt-2">
+                    <Listbox value={selectedyear} onChange={v => { selectedyearref.current = v; setselectedyear(v); }}>
+                      <div className="">
+                        <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-truegray-800 rounded-lg border-white border shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-green-300 focus-visible:ring-offset-2 focus-visible:border-green-500 sm:text-sm">
+                          <span className="block truncate">{selectedyear}</span>
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                            <SelectorIcon
+                              className="w-5 h-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </Listbox.Button>
+                        <Transition
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Listbox.Options
+                            style={
+                              {
+                                zIndex: 30
+                              }
+                            }
+                            className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {yearsofpayroll.map((eachyear, yearIdx) => (
+                              <Listbox.Option
+                                key={yearIdx}
+                                className={({ active }) =>
+                                  `cursor-default select-none relative py-2 pl-10 pr-4 bg-truegray-900 hover:bg-truegray-800 hover:shadow-sm ${active ? 'text-amber-100 bg-amber-900' : 'text-white'
+                                  }`
+                                }
+                                value={eachyear}
+                              >
+                                {({ selected }) => (
+                                  <>
+                                    <span
+                                      className={`block truncate ${selected ? 'font-medium' : 'font-normal'
+                                        }`}
+                                    >
+                                      {eachyear}
+                                    </span>
+                                    {selected ? (
+                                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )}
+                              </Listbox.Option>
+                            ))}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </Listbox>
+                  </div>
+                  <AutocompleteBox
+                    index='PayrollFirstNames'
+                    inputClasses='bg-truegray-700 '
+                    placeholder='First Name'
+                    col='First Name'
+                    onChange={(v) => { refFirstName.current = v; setfilterfirstname(v); }}
+                  ></AutocompleteBox>
 
-                <div className="">
-                  <Listbox value={selectedyear} onChange={setselectedyear}>
-                    <div className="">
-                      <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-truegray-800 rounded-lg border-white border shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-green-300 focus-visible:ring-offset-2 focus-visible:border-green-500 sm:text-sm">
-                        <span className="block truncate">{selectedyear}</span>
-                        <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                          <SelectorIcon
-                            className="w-5 h-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Listbox.Button>
-                      <Transition
-                        as={Fragment}
-                        leave="transition ease-in duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                        <Listbox.Options
+
+                  <AutocompleteBox
+                    index='PayrollLastName'
+                    inputClasses='bg-truegray-700 '
+                    placeholder='Last Name'
+                    col='Last Name'
+                    onChange={(v) => { refLastName.current = v; setfilterlastname(v); }}
+                  ></AutocompleteBox>
+
+
+                  <AutocompleteBox
+                    index='PayrollEmployeeList'
+                    placeholder='Job Title'
+                    col='Job Title'
+                    onChange={(value) => {
+                      (v) => { refJobTitle.current = v; setfilterjobtitle(v); }
+                    }}
+                  ></AutocompleteBox>
+
+                  <div className='sm:relative'>
+
+                    <div className='flex flex-row text-xs md:w-full space-x-2 align-middle mt-2'>
+                      <p className='text-xs md:text-base align-middle my-auto'>Depts</p>
+                      <button
+                        onClick={(event) => { toggleDeptPanel() }}
+                        className='align-middle rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
+                        <span className='align-middle mt-1'> {departmentsSelectedRender()}</span>
+                        <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {
+                      true && (
+
+                        <div className={`fixed overflow-y-auto top-0 bottom-0  sm:top-auto sm:bottom-auto sm:top-10 bg-truegray-800 h-full flex flex-col sm:absolute top-0 bottom-0 md:h-full overflow-y-clip left-0 w-full md:w-auto
+${deptpanelopen === false ? 'hidden' : ""}
+`}
+
                           style={
                             {
-                              zIndex: 30
+                              zIndex: 20
                             }
                           }
-                          className="absolute py-1 mt-1 overflow-auto text-base bg-truegray-800 rounded-md border-truegray-200 border shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                          {yearsofpayroll.map((eachyear, yearIdx) => (
-                            <Listbox.Option
-                              key={yearIdx}
-                              className={({ active }) =>
-                                `cursor-default select-none relative py-2 pl-10 pr-4 bg-truegray-900 hover:bg-truegray-800 hover:shadow-sm ${active ? 'text-amber-100 bg-amber-900' : 'text-white'
-                                }`
-                              }
-                              value={eachyear}
+                        >
+                          <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800 flex flex-col'>
+                            <div className='flex'>
+                              <h2 className='font-bold text-base md:text-lg'>Filter Depts</h2>
+                              <button className='ml-auto mr-2 md:hidden'
+                                onClick={(event) => { toggleDeptPanel() }}
+                              >
+                                <svg className='h-10 w-10' viewBox="0 0 24 24">
+                                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                                </svg>
+                              </button>
+                            </div>
+                            <div
+                              className='my-auto sm:h-96'
                             >
-                              {({ selected }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${selected ? 'font-medium' : 'font-normal'
-                                      }`}
-                                  >
-                                    {eachyear}
-                                  </span>
-                                  {selected ? (
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                      <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                                    </span>
-                                  ) : null}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Transition>
-                    </div>
-                  </Listbox>
+
+                              <div className='flex flex-row gap-x-1'>
+                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1  border border-gray-400 text-sm'
+                                  onClick={setAllDeptFilter}
+
+                                >Select All</button>
+                                <button className='text-sm align-middle bg-gray-800 rounded-lg px-1 text-sm border border-gray-400'
+                                  onClick={setNoneDeptFilter}
+                                >Unselect All</button>
+                                <button
+                                  onClick={invertDeptFilter}
+                                  className='text-sm align-middle bg-gray-800 rounded-lg px-1 text-sm   border border-gray-400'>Invert</button>
+                              </div>
+                              <div className='
+ scrollbar-thumb-gray-400 scrollbar-rounded scrollbar scrollbar-thin scrollbar-trackgray-900  mejiascrollbar
+overflow-y-scroll sm:h-96'>
+                                <CheckboxGroup
+                                  orientation="vertical"
+                                  spacing="sm"
+                                  value={enableddept} onChange={(changes) => {
+                                    enableddeptref.current = changes;
+                                    setenableddept(changes);
+                                    console.log(changes)
+                                  }}>
+                                  {depts.sort().map((eachDept) => (
+                                    <Checkbox value={eachDept}
+                                      key={eachDept}
+                                      label={labelDeptProcess(eachDept)} />
+                                  ))
+                                  }
+                                </CheckboxGroup>
+                                <br />
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      )
+                    }
+                  </div>
                 </div>
 
-                <button
-                  onClick={() => toggleFilterButton()}
-                  className={` rounded-full  pl-3 pr-3 py-1  border border-2 border-gray-50 bg-truegray-200 ${filterpanel ? 'bg-truegray-100 text-coolgray-900' : 'bg-truegray-800'}`}>
-                  <svg className={` h-6 w-6 align-bottom inline-block align-text-bottom  ${filterpanel ? 'text-coolgray-900' : 'bg-truegray-800'}`} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z" />
-                  </svg>
-                  Filter
-                </button>
-                <div className='rounded-full bg-truegray-800  pl-3 pr-4 py-1 border border-2 border-gray-50 flex flex-row align-middle space-x-1'>
-                  <svg className='text-white h-5 w-5 align-bottom inline-block align-text-bottom relative top-1' viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19 17H22L18 21L14 17H17V3H19V17M7 3C4.79 3 3 4.79 3 7S4.79 11 7 11 11 9.21 11 7 9.21 3 7 3M7 9C5.9 9 5 8.1 5 7S5.9 5 7 5 9 5.9 9 7 8.1 9 7 9M7 13C4.79 13 3 14.79 3 17S4.79 21 7 21 11 19.21 11 17 9.21 13 7 13Z" />
-                  </svg>
-                  <span className='align-middle'>Sort</span>
-                </div>
-                <div className='hidden md:block my-auto ml-auto pl-2'>
-                  {
-                    loadedfirsttime === true && (
-                      <>
-                        <span className='font-semibold'>{numberoftotalrows.toLocaleString("en-US")}</span> <span className='font-normal'>({makePercent(numberoftotalrows, entiresetcount)}%) Filtered of </span> <span className='font-semibold'>{entiresetcount.toLocaleString("en-US")}</span>
-                      </>
-                    )
-                  }
-                </div>
+                <div className='flex flex-row'>
+                  <Select
+
+                    maxDropdownHeight={990}
+                    label="Sort By"
+                    color="green"
+                    value={sortcol}
+                    onChange={v => { sortcolref.current = v; setsortcol(v) }}
+                    data={[
+                      { value: 'f', label: "First" },
+                      { value: 'l', label: "Last" },
+                      { value: 'j', label: "Job Title" },
+                      { value: 'd', label: "Dept" },
+                      { value: 'b', label: "Base Pay" },
+                      { value: 'ov', label: "Overtime" },
+                      { value: 'ot', label: "Other" },
+                      { value: 'h', label: "Health" },
+                      { value: 'r', label: "Retirement" },
+
+                      { value: 't', label: "Total" }
+                    ]}
+                  />
+                  <SegmentedControl
+                    value={sortreverse}
+                    className={'mt-auto'}
+                    onChange={v => { sortreverseref.current = v; setsortreverse(v) }}
+                    data={[{
+                      value: "forward",
+                      label: "A->Z",
+                    },
+                    {
+                      value: "reverse",
+                      label: "Z->A",
+                    }]} color="dark" />   </div>
+                {
+                  false && (
+                    <>
+                      <button
+                        onClick={() => toggleFilterButton()}
+                        className={` rounded-full  pl-3 pr-3 py-1  border border-2 border-gray-50 bg-truegray-200 ${filterpanel ? 'bg-truegray-100 text-coolgray-900' : 'bg-truegray-800'}`}>
+                        <svg className={` h-6 w-6 align-bottom inline-block align-text-bottom  ${filterpanel ? 'text-coolgray-900' : 'bg-truegray-800'}`} viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z" />
+                        </svg>
+                        Filter
+                      </button>
+                      <div className='rounded-full bg-truegray-800  pl-3 pr-4 py-1 border border-2 border-gray-50 flex flex-row align-middle space-x-1'>
+                        <svg className='text-white h-5 w-5 align-bottom inline-block align-text-bottom relative top-1' viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M19 17H22L18 21L14 17H17V3H19V17M7 3C4.79 3 3 4.79 3 7S4.79 11 7 11 11 9.21 11 7 9.21 3 7 3M7 9C5.9 9 5 8.1 5 7S5.9 5 7 5 9 5.9 9 7 8.1 9 7 9M7 13C4.79 13 3 14.79 3 17S4.79 21 7 21 11 19.21 11 17 9.21 13 7 13Z" />
+                        </svg>
+                        <span className='align-middle'>Sort</span>
+                      </div></>
+                  )
+                }
+
+
+
+                {/* Okay put the inputs  in here */}
+
+
+
+
+                {/* Okay end inputs in here */}
               </div>
 
-              <div className='flex flex-col md:flex-row gap-x-2'>
+              <div className='flex flex-col md:flex-row space-x-2'>
                 {
 
-                  true &&
+                  false &&
                   (//absolute bottom-0 
 
                     <div id='filterpanel' className={`mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1 ${filterpanel === false ? 'hidden' : ''}`}>
@@ -642,136 +806,23 @@ export default function PayrollFunc(props: payrollprops) {
 
                       </div>
                       <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
-                        <div className='flex flex-col md:flex-row sm:w-full'>
-                    
-                          <AutocompleteBox
-                            index='PayrollFirstNames'
-                            parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                            inputClasses='bg-truegray-700 '
-                            placeholder='First Name'
-                            col='First Name'
-                            onChange={setfilterfirstname}
-                          ></AutocompleteBox>
-                        </div>
-                        <div className='flex flex-col md:flex-row sm:w-full'>
-                       
-                          <AutocompleteBox
-                            index='PayrollLastName'
-                            parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                            inputClasses='bg-truegray-700 '
-                            placeholder='Last Name'
-                            col='Last Name'
-                            onChange={setfilterlastname}
-                          ></AutocompleteBox>
-                        </div>
+
                       </div>
 
                       <div className={`flex flex-row md:flex-row md:w-full ${deptpanelopen === true ? "-z-10 block" : "block"} md:z-0`}
 
                       >
-                       
-                        <AutocompleteBox
-                          index='PayrollEmployeeList'
-                          parentClasses='w-full grow md:grow sm:w-full lg:w-9/12 md:ml-2'
-                          placeholder='Job Title'
-                          col='Job Title'
-                          onChange={(value) => {
-                            setfilterjobtitle(value)
-                          }}
-                        ></AutocompleteBox>
 
 
                       </div>
 
-                      <div className='flex flex-row md:w-full space-x-2 align-middle mt-2'>
-                        <p className='text-sm md:text-base align-middle my-auto'>Departments</p>
-                        <button
-                          onClick={(event) => { toggleDeptPanel() }}
-                          className='rounded-full border-2 pl-3 pr-2 py-0.5 border-truegray-400 hover:bg-truegray-600 bg-truegray-700 flex flex-row'>
-                          {departmentsSelectedRender()}
-                          <svg className='w-7 h-7 my-auto relative bottom-0.5' viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M7,10L12,15L17,10H7Z" />
-                          </svg>
-                        </button>
-                      </div>
-
-                      {
-                        true && (
-
-                          <div className={`bg-truegray-800 h-full flex flex-col fixed top-0 bottom-0 md:relative md:h-full overflow-y-clip left-0 w-full md:w-auto
-${deptpanelopen === false ? 'hidden' : ""}
-`}
-
-                            style={
-                              {
-                                zIndex: 20
-                              }
-                            }
-                          >
-                            <div className='border-b-1 border-truegray-600 px-2 mt-2 pb-4 md:pb-4 md:pt-2 md:pb-0 sticky h-content bg-truegray-800 flex flex-col'>
-                              <div className='flex'>
-                                <h2 className='font-bold text-base md:text-lg'>Filter Depts</h2>
-                                <button className='ml-auto mr-2 md:hidden'
-                                  onClick={(event) => { toggleDeptPanel() }}
-                                >
-                                  <svg className='h-10 w-10' viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                                  </svg>
-                                </button>
-                              </div>
-                              <div
-                                className='my-auto grow-0 '
-                              >
-
-                                <div className='flex flex-row gap-x-1'>
-                                  <button className='align-middle bg-gray-800 rounded-lg px-1  border border-gray-400 text-sm md:text-base'
-                                    onClick={setAllDeptFilter}
-
-                                  >Select All</button>
-                                  <button className='align-middle bg-gray-800 rounded-lg px-1 text-sm md:text-base border border-gray-400'
-                                    onClick={setNoneDeptFilter}
-                                  >Unselect All</button>
-                                  <button
-                                    onClick={invertDeptFilter}
-                                    className='align-middle bg-gray-800 rounded-lg px-1 text-sm md:text-base  border border-gray-400'>Invert</button>
-                                </div>
-                                <div className='
- scrollbar-thumb-gray-400 scrollbar-rounded scrollbar scrollbar-thin scrollbar-trackgray-900  mejiascrollbar
-overflow-y-scroll h-full'>
-                                  <CheckboxGroup
-                                    orientation="vertical"
-                                    spacing="sm"
-                                    value={enableddept} onChange={(changes) => {
-                                      setenableddept(changes);
-                                      console.log(changes)
-                                    }}>
-                                    {depts.sort().map((eachDept) => (
-                                      <Checkbox value={eachDept}
-                                        key={eachDept}
-                                        label={labelDeptProcess(eachDept)} />
-                                    ))
-                                    }
-                                  </CheckboxGroup>
-                                  <br />
-                                </div>
-                              </div>
-                            </div>
-                            <div className=' overflow-y-auto grow h-full md:h-64'>
-                              <>
-
-                                <div className='py-1 md:hidden'></div>
-                              </>
-                            </div>
-                          </div>
-                        )
-                      }
 
 
 
 
                       <div className='flex flex-row'>
                         <div className="text-base bg-opacity-30">
-                          {loadedfirsttime === true && (
+                          {loadedfirsttimeref.current === true && (
                             <span className='md:hidden'>
 
                               <span className='font-semibold'>{numberoftotalrows.toLocaleString("en-US")}</span> ({makePercent(numberoftotalrows, entiresetcount)}%) of <span className='font-semibold'>{entiresetcount.toLocaleString("en-US")}</span>
@@ -793,50 +844,15 @@ overflow-y-scroll h-full'>
 
                 {
 
-                  sortpanel === true &&
+                  false &&
                   (//absolute bottom-0 
 
                     <div id='sortpanel' className='mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1'>
                       <div className='flex flex-col'>
 
                         <p className='text-base md:text-lg'>Sort Employees</p>
-                        <div>
-                          {
-                            true && (
-                              <>
-                                <RadioGroup
-                                  label="Sorted Column"
-                                  color="green"
-                                  value={sortcol}
-                                  onChange={setsortcol}
-                                >
-                                  <Radio value="f" label="First" />
-                                  <Radio value="l" label="Last" />
-                                  <Radio value="j" label="Job" />
-                                  <Radio value="d" label="Dept" />
-                                  <Radio value="b" label="Base Pay" />
-                                  <Radio value="ov" label="Overtime" />
-                                  <Radio value="ot" label="Other" />
-                                  <Radio value="h" label="Health" />
-                                  <Radio value="r" label="Retirement" />
-                                  <Radio value="t" label="Total" />
-                                </RadioGroup><br></br>
-                              </>
-                            )
-                          }
+                        <div className='w-32'>
 
-
-                          <SegmentedControl
-                            value={sortreverse}
-                            onChange={setsortreverse}
-                            data={[{
-                              value: "forward",
-                              label: "A->Z",
-                            },
-                            {
-                              value: "reverse",
-                              label: "Z->A",
-                            }]} color="dark" />
                         </div>
 
                       </div>
@@ -855,7 +871,7 @@ overflow-y-scroll h-full'>
               }
 
               <div>
-              <p className="text-sm sm:text-base  bg-green-700 bg-opacity-20 text-white">It downloads more employees as you scroll (infinite scrolling), Ctrl + F won't work because we haven't coded it yet, sorry. Please use the built in filters instead.</p>
+                <p className="text-sm sm:text-base  bg-green-700 bg-opacity-20 text-white">It downloads more employees as you scroll (infinite scrolling), Ctrl + F won't work because we haven't coded it yet, sorry. Please use the built in filters instead.</p>
               </div>
 
               <div className='block md:hidden  mx-2 bg-gray-50'>
@@ -1025,7 +1041,7 @@ overflow-y-scroll h-full'>
 
               <>
                 {
-                  loadedfirsttime === true && numberoftotalrows === 0 && (
+                  loadedfirsttimeref.current === true && numberoftotalrows === 0 && (
                     <div>
                       <h2 className="text-md font-bold">Zero Rows Found</h2>
                       <h2 className="text-base font-semibold">Try expanding your search.</h2>
@@ -1051,6 +1067,22 @@ overflow-y-scroll h-full'>
                   }
                 </>
               </>
+
+
+              {
+                loadedfirsttimeref.current === true && (
+                  <div className='text-gray-200 fixed bottom-0 w-full text-sm my-auto ml-auto pl-2 py-2 border-t border-white'
+                    style={{
+                      background: '#27272a'
+                    }}
+                  >
+                    <>
+                      <span className='font-semibold '>{numberoftotalrows.toLocaleString("en-US")}</span> <span className='font-normal'>({makePercent(numberoftotalrows, entiresetcount)}%) Filtered of </span> <span className='font-semibold'>{entiresetcount.toLocaleString("en-US")}</span>
+                    </>
+                  </div>
+                )
+              }
+
             </div>
           </React.StrictMode>
 

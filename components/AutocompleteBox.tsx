@@ -216,7 +216,7 @@ document.addEventListener("click",(e) => {
 
 
 
-            <div className={`${this.props.parentClasses} autocomplete w-full`}>
+            <div className={`${this.props.parentClasses} autocomplete`}>
 
                 
 <Box
@@ -226,10 +226,19 @@ document.addEventListener("click",(e) => {
       }}
       noValidate
       autoComplete="off"
+      margin="none"
+      
     >
-      <FormControl>
-        <InputLabel htmlFor="component-outlined">{this.props.placeholder}</InputLabel>
+      <FormControl size="small"
+      className='w-content m-0'
+      classes={'m-0'}
+     
+      margin="none">
+        <InputLabel htmlFor="component-outlined" 
+        >{this.props.placeholder}</InputLabel>
         <OutlinedInput
+        margin="none"
+        size="small"
        color='primary'
        id={`inputboi-${this.props.index}`}
           label={this.props.placeholder}
