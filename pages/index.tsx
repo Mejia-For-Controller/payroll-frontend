@@ -873,7 +873,7 @@ overflow-y-scroll sm:h-96'>
               {
                 currentlyLoadedMetadata.year == '2021' && (
                   <div>
-                    <p className="text-sm sm:text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement not avaliable yet - The City Controller is still calculating this data.</p>
+                    <p className="text-sm sm:text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement & Entire LADWP not avaliable yet - The City Controller is still calculating this data (expected June 15).</p>
 
                   </div>
                 )
