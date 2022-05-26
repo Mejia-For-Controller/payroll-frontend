@@ -58,13 +58,13 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "test": "next test",
-    "build": "next build",
-    "start": "next start",
-    "dev": "next dev -p 8003",
-    "export": "next export",
-    "bruh": "next build && next export",
-    "duo": "next build && next start"
+    "test": "export SET NODE_OPTIONS=--openssl-legacy-provider && next test",
+    "build": "export SET NODE_OPTIONS=--openssl-legacy-provider && next build",
+    "start": "export SET NODE_OPTIONS=--openssl-legacy-provider && next start",
+    "dev": "export SET NODE_OPTIONS=--openssl-legacy-provider && next dev -p 8003",
+    "export": "export SET NODE_OPTIONS=--openssl-legacy-provider && next export",
+    "bruh": "export SET NODE_OPTIONS=--openssl-legacy-provider && next build && next export",
+    "duo": "export SET NODE_OPTIONS=--openssl-legacy-provider && next build && next start"
   },
   "eslintConfig": {
     "extends": [
