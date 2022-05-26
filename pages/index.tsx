@@ -7,7 +7,6 @@ import { Tab } from '@headlessui/react'
 import Head from 'next/head'
 
 import config from './depts.json'
-
 import React, { useEffect, Fragment, useState, useRef } from 'react'
 
 import { mdiSortAlphabeticalAscending, mdiSortAlphabeticalDescending, mdiSortAscending } from '@mdi/js';
