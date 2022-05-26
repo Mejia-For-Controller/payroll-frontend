@@ -16,7 +16,7 @@ import { alpha, styled } from '@mui/material/styles';
 
 import Head from 'next/head'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { timeStamp } from 'console';
 
@@ -33,8 +33,266 @@ interface requirementsForAutocompleteProps {
 }
 
 
+function AutocompleteBoxFunc(props: any) {
+    var [openUpBox, setOpenUpBox] = useState(false);
+    var [outputvalue, setoutputvalue] = useState("");
+    var [employeesJobTitleAutocompleteResults, setEmployeesJobTitleAutocompeteResult] = useState([]);
+    var [currentFocus, setCurrentFocus] = useState(-1);
+    var [employeesJobTitleLastUpdated, setEmployeesJobTitleLastUpdated] = useState(-1);
 
-  
+    const setInputValue = (valueToSet: any) => {
+        var inputjobtitle: any = document.getElementById(`inputboi-${this.props.index}`)
+
+        if (inputjobtitle) {
+
+            setoutputvalue(valueToSet)
+
+            if (valueToSet === '') {
+                setOpenUpBox(false)
+            }
+
+        }
+    }
+
+
+    const searchEmployeeJobTitle = () => {
+        var inputjobtitle: any = document.getElementById(`inputboi-${this.props.index}`)
+
+        if (inputjobtitle) {
+
+            this.setState({
+                outputvalue: inputjobtitle.value,
+                currentFocus: -1
+            })
+
+            if (inputjobtitle.value.length > 0) {
+                var searchterm = inputjobtitle.value;
+
+
+                if (searchterm.length < 90) {
+                    this.jobtitleindex
+                        .search(searchterm)
+                        .then(({ hits }) => {
+                            console.log(hits);
+
+                            this.setState({
+                                employeejobtitlelastupdated: searchterm,
+                                employeesJobTitleAutocompleteResults: hits
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        });
+                }
+
+            }
+        }
+
+
+    }
+
+    const sendBackToParent = () => {
+        var inputBoi: any = document.getElementById(`inputboi-${props.index}`)
+
+        if (inputBoi) {
+            if (inputBoi.value !== undefined && inputBoi.value !== null) {
+                if (props.onChange) {
+                    console.log('sending', inputBoi.value)
+                    props.onChange(inputBoi.value)
+                }
+            }
+
+        }
+    }
+
+    const nextFocus = () => {
+        setCurrentFocus(currentFocus + 1)
+    }
+
+    const prevFocus = () => {
+        setCurrentFocus(currentFocus - 1)
+    }
+
+    useEffect(() => {
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", (e) => {
+            closeAllLists(e.target);
+        });
+
+        var indexName = props.index;
+
+        var inputBoi: any = document.getElementById(`inputboi-${props.index}`)
+        /*execute a function presses a key on the keyboard:*/
+        inputBoi.addEventListener("keydown", (e) => {
+            var x: any = document.getElementById(indexName + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+
+            if (e.key === 'Tab') {
+                if (e.shiftKey) {
+                    prevFocus()
+                } else {
+                    nextFocus()
+                }
+                if ((openUpBox === true) && (inputBoi.value > 0)) {
+                    e.preventDefault();
+                }
+            }
+
+            if (e.keyCode == 40) {
+                /*If the arrow DOWN key is pressed,
+                increase the currentFocus variable:*/
+                nextFocus()
+                /*and and make the current item more visible:*/
+                //addActive(x);
+            } else if (e.keyCode == 38) { //up
+                /*If the arrow UP key is pressed,
+                decrease the currentFocus variable:*/
+                // currentFocus--;
+
+                prevFocus()
+
+                /*and and make the current item more visible:*/
+                //addActive(x);
+            } else if (e.keyCode == 13) {
+                /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                // e.preventDefault();
+                if (currentFocus > -1) {
+                    /*and simulate a click on the "active" item:*/
+                    if (x) x[currentFocus].click();
+                }
+            }
+        }, []);
+    });
+
+    const closeAllLists = (elmnt) => {
+        setOpenUpBox(false)
+    }
+
+
+
+    const switchValue = (valueToSet) => {
+        var inputBoi: any = document.getElementById(`inputboi-${props.index}`)
+
+        if (inputBoi) {
+            inputBoi.value = valueToSet;
+        }
+    }
+
+
+    return (
+        <div>
+            <div className={`${props.parentClasses} autocomplete`}>
+
+                <Box
+                    component="form"
+                    sx={{
+                        '& > :not(style)': { m: 1 },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    margin="none"
+
+                >
+                    <FormControl size="small"
+                        className='w-content m-0'
+                        classes={'m-0'}
+
+                        margin="none">
+                        <InputLabel htmlFor="component-outlined"
+                        >{props.placeholder}</InputLabel>
+                        <OutlinedInput
+                            margin="none"
+                            size="small"
+                            color='primary'
+                            id={`inputboi-${index}`}
+                            label={props.placeholder}
+
+
+                            onChange={e => {
+                                this.sendBackToParent()
+                                this.searchEmployeeJobTitle()
+
+                            }}
+
+                            onKeyDown={e => {
+                                //this.sendBackToParent()
+                            }}
+
+                            onKeyUp={e => {
+                                //this.sendBackToParent()
+                            }}
+
+                            onClick={(e) => {
+                                this.setState({
+                                    openUpBox: true
+                                })
+                                // this.sendBackToParent()
+                            }}
+
+                            onPaste={(e) => {
+                                console.log(e)
+
+                                this.sendBackToParent()
+
+                                this.searchEmployeeJobTitle();
+                                this.setState({
+                                    openUpBox: true
+                                })
+                                // 
+                            }}
+
+                            onKeyPress={e => {
+                                //   this.sendBackToParent()
+
+                                if (e.key === "Enter") {
+                                    this.setState({
+                                        openUpBox: false
+                                    })
+                                } else {
+                                    this.setState({
+                                        openUpBox: true
+                                    })
+
+                                }
+
+                                //
+                                console.log(e)
+                            }}
+                        />
+                    </FormControl>
+
+                </Box>
+
+
+
+                <div id={index + "autocomplete-list"} className="autocomplete-items max-h-64 overflow-y-scroll">
+
+                    {
+                        (outputvalue.trim().length > 0 && openUpBox) && (
+                            employeesJobTitleAutocompleteResults
+                                .map((eachItem, itemIndex) => (
+                                    <div
+                                        key={itemIndex}
+                                        onClick={
+                                            e => {
+                                                switchValue(eachItem[props.col])
+                                            }
+                                        }
+                                        className={`pl-1 md:pl-2 py-1 md:py-2 text-base eachautoitem bg-truegray-900 text-truegray-200 ${this.state.currentFocus === itemIndex ? 'autocomplete-active' : ""}`}>{eachItem[this.props.col]}</div>
+                                ))
+                        )
+                    }
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    )
+}
+
 
 export class AutocompleteBox extends React.Component<any, any> {
 
@@ -58,13 +316,13 @@ export class AutocompleteBox extends React.Component<any, any> {
 
 
         if (inputjobtitle) {
-        
+
             inputjobtitle.value = valueToSet;
 
             this.setState({
                 outputvalue: valueToSet
             })
-        
+
             if (valueToSet === '') {
                 this.setState({
                     openUpBox: false
@@ -121,7 +379,7 @@ export class AutocompleteBox extends React.Component<any, any> {
                     this.props.onChange(inputBoi.value)
                 }
             }
-            
+
         }
     }
 
@@ -144,9 +402,9 @@ export class AutocompleteBox extends React.Component<any, any> {
     componentDidMount = () => {
 
         /*execute a function when someone clicks in the document:*/
-document.addEventListener("click",(e) => {
-    this.closeAllLists(e.target);
-});
+        document.addEventListener("click", (e) => {
+            this.closeAllLists(e.target);
+        });
 
         var indexName = this.props.index;
 
@@ -178,7 +436,7 @@ document.addEventListener("click",(e) => {
                 decrease the currentFocus variable:*/
                 // currentFocus--;
 
-              this.prevFocus()
+                this.prevFocus()
 
                 /*and and make the current item more visible:*/
                 //addActive(x);
@@ -194,7 +452,7 @@ document.addEventListener("click",(e) => {
 
     }
 
-      closeAllLists = (elmnt) =>{
+    closeAllLists = (elmnt) => {
         this.setState({
             openUpBox: false
         })
@@ -218,88 +476,88 @@ document.addEventListener("click",(e) => {
 
             <div className={`${this.props.parentClasses} autocomplete`}>
 
-                
-<Box
-      component="form"
-      sx={{
-        '& > :not(style)': { m: 1 },
-      }}
-      noValidate
-      autoComplete="off"
-      margin="none"
-      
-    >
-      <FormControl size="small"
-      className='w-content m-0'
-      classes={'m-0'}
-     
-      margin="none">
-        <InputLabel htmlFor="component-outlined" 
-        >{this.props.placeholder}</InputLabel>
-        <OutlinedInput
-        margin="none"
-        size="small"
-       color='primary'
-       id={`inputboi-${this.props.index}`}
-          label={this.props.placeholder}
 
-          
-          onChange={e => {
-            this.sendBackToParent()
-       this.searchEmployeeJobTitle()
-            
-        }}
+                <Box
+                    component="form"
+                    sx={{
+                        '& > :not(style)': { m: 1 },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    margin="none"
 
-       onKeyDown={e => {
-        //this.sendBackToParent()
-       }}
+                >
+                    <FormControl size="small"
+                        className='w-content m-0'
+                        classes={'m-0'}
 
-       onKeyUp={e => {
-       //this.sendBackToParent()
-       }}
+                        margin="none">
+                        <InputLabel htmlFor="component-outlined"
+                        >{this.props.placeholder}</InputLabel>
+                        <OutlinedInput
+                            margin="none"
+                            size="small"
+                            color='primary'
+                            id={`inputboi-${this.props.index}`}
+                            label={this.props.placeholder}
 
-        onClick={(e) => {
-            this.setState({
-                openUpBox: true
-            })
-           // this.sendBackToParent()
-        }}
 
-        onPaste={(e) => {
-            console.log(e)
+                            onChange={e => {
+                                this.sendBackToParent()
+                                this.searchEmployeeJobTitle()
 
-            this.sendBackToParent()
+                            }}
 
-            this.searchEmployeeJobTitle();
-            this.setState({
-                openUpBox: true
-            })
-           // 
-        }}
+                            onKeyDown={e => {
+                                //this.sendBackToParent()
+                            }}
 
-        onKeyPress={e => {
-         //   this.sendBackToParent()
+                            onKeyUp={e => {
+                                //this.sendBackToParent()
+                            }}
 
-            if (e.key === "Enter") {
-                this.setState({
-                    openUpBox: false
-                })
-            } else {
-                this.setState({
-                    openUpBox: true
-                })
-                
-            }
+                            onClick={(e) => {
+                                this.setState({
+                                    openUpBox: true
+                                })
+                                // this.sendBackToParent()
+                            }}
 
-          //
-            console.log(e)
-        }}
-        />
-      </FormControl>
-     
-    </Box>
+                            onPaste={(e) => {
+                                console.log(e)
 
-              
+                                this.sendBackToParent()
+
+                                this.searchEmployeeJobTitle();
+                                this.setState({
+                                    openUpBox: true
+                                })
+                                // 
+                            }}
+
+                            onKeyPress={e => {
+                                //   this.sendBackToParent()
+
+                                if (e.key === "Enter") {
+                                    this.setState({
+                                        openUpBox: false
+                                    })
+                                } else {
+                                    this.setState({
+                                        openUpBox: true
+                                    })
+
+                                }
+
+                                //
+                                console.log(e)
+                            }}
+                        />
+                    </FormControl>
+
+                </Box>
+
+
 
                 <div id={this.props.index + "autocomplete-list"} className="autocomplete-items max-h-64 overflow-y-scroll">
 
@@ -308,13 +566,13 @@ document.addEventListener("click",(e) => {
                             this.state.employeesJobTitleAutocompleteResults
                                 .map((eachItem, itemIndex) => (
                                     <div
-                                    key={itemIndex}
-                                    onClick={
-                                        e => {
-                                            this.switchValue(eachItem[this.props.col])
+                                        key={itemIndex}
+                                        onClick={
+                                            e => {
+                                                this.switchValue(eachItem[this.props.col])
+                                            }
                                         }
-                                    }
-                                    className={`pl-1 md:pl-2 py-1 md:py-2 text-base eachautoitem bg-truegray-900 text-truegray-200 ${this.state.currentFocus === itemIndex ? 'autocomplete-active' : ""}`}>{eachItem[this.props.col]}</div>
+                                        className={`pl-1 md:pl-2 py-1 md:py-2 text-base eachautoitem bg-truegray-900 text-truegray-200 ${this.state.currentFocus === itemIndex ? 'autocomplete-active' : ""}`}>{eachItem[this.props.col]}</div>
                                 ))
                         )
                     }
@@ -323,7 +581,7 @@ document.addEventListener("click",(e) => {
 
 
 
-                
+
             </div>
 
 
