@@ -36,6 +36,21 @@ const makePercent = (num, dem) => {
   return parseFloat(((num / dem) * 100).toFixed(2))
 }
 
+const sizeofcheckbox = () => {
+  /*
+ if (typeof window !== "undefined") {
+  if (window.innerWidth >= 768) {
+    return "xs"
+  } else {
+    return "md"
+  }
+ } else {
+   return "md"
+ }*/
+
+ return "sm"
+}
+
 function ScrollToTop() {
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -276,7 +291,9 @@ export default function PayrollFunc(props: payrollprops) {
     }, true);
   }
 
-  var payrollserverendpoint: string = "https://api.payroll.mejiaforcontroller.com"
+  var arrayOfEndpoints = ["https://api.payroll.mejiaforcontroller.com","https://2.api.payroll.mejiaforcontroller.com"]
+
+  var payrollserverendpoint: string = arrayOfEndpoints[Math.floor(Math.random() * arrayOfEndpoints.length)]
 
   if (urlParams !== undefined) {
     if (urlParams.get('devport')) {
@@ -721,7 +738,8 @@ overflow-y-scroll sm:h-96'>
                                   {depts.sort().map((eachDept) => (
                                     <Checkbox value={eachDept}
                                       key={eachDept}
-                                      label={labelDeptProcess(eachDept)} />
+                                      label={labelDeptProcess(eachDept)}
+                                      size={sizeofcheckbox()} />
                                   ))
                                   }
                                 </CheckboxGroup>
