@@ -739,7 +739,7 @@ overflow-y-scroll sm:h-96'>
                                     <Checkbox value={eachDept}
                                       key={eachDept}
                                       label={labelDeptProcess(eachDept)}
-                                      size={sizeofcheckbox()} />
+                                       />
                                   ))
                                   }
                                 </CheckboxGroup>
