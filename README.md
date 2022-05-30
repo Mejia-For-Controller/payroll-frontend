@@ -2,7 +2,7 @@
 
 Paid for by Mejia for City Controller 2022, FPPC ID#: 1435234 1001 Wilshire Blvd. Suite 102, Los Angeles, CA, 90017. Additional information is available at ethics.lacity.org.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Official App Link [https://payroll.mejiaforcontroller.com](https://payroll.mejiaforcontroller.com)
 
 ### works with cloudflare! aug 1 
 
@@ -10,11 +10,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 If you've never run this project before, start by running
 
-### `yarn`
+### `npm`
 
 Then you'll need to build the project by running
 
-### `yarn build`
+### `npm build`
 
 This builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
