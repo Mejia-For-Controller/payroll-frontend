@@ -994,7 +994,14 @@ overflow-y-scroll sm:h-96'>
 
 
                 ))}
+
+                <div>
+                  {loadedEmployeeRows.length > 0 && (
+                    <div className='py-8'></div>
+                  )}
+                </div>
               </div>
+
 
               <table className="relative table-auto hidden md:block px-2 text-truegray-200">
                 <thead className='sticky top-0'>
