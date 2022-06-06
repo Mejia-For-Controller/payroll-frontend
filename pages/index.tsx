@@ -121,7 +121,7 @@ export default function PayrollFunc(props: payrollprops) {
   var enableddeptref = useRef(depts);
   var refJobTitle = useRef('')
   var loadedEmployeeRowsRef = useRef([])
-  var sortcolref = useRef('b');
+  var sortcolref = useRef('t');
   var sortreverseref = useRef('reverse')
   var [arrayOfResultsMetadata, setarrayOfResultsMetadata] = useState([]);
   var alreadylisteningtoresultsref = useRef(false)
