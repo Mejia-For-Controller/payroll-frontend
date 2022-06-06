@@ -31,6 +31,8 @@ const yearsofpayroll = [
   "2018", "2019", "2020", "2021"
 ]
 
+const brokenyear = "3021";
+
 
 const makePercent = (num, dem) => {
   return parseFloat(((num / dem) * 100).toFixed(2))
@@ -888,7 +890,7 @@ overflow-y-scroll sm:h-96'>
               </div>
 
               {
-                currentlyLoadedMetadata.year == '2021' && (
+                currentlyLoadedMetadata.year == brokenyear && (
                   <div>
                     <p className="text-sm sm:text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement & Entire LADWP not avaliable yet - The City Controller is still calculating this data (expected June 15).</p>
 
@@ -954,7 +956,7 @@ overflow-y-scroll sm:h-96'>
                             <td>{excelnum(eachEmployee.ot)}</td>
                           </tr>
                           {
-                            currentlyLoadedMetadata.year != '2021' && (
+                            currentlyLoadedMetadata.year != brokenyear && (
                               <>
                                 <tr>
                                   <td className='pr-1'>Health</td>
@@ -972,13 +974,13 @@ overflow-y-scroll sm:h-96'>
                             <td className='pr-1'>Total</td>
                             <>
                               {
-                                currentlyLoadedMetadata.year  != '2021' && (
+                                currentlyLoadedMetadata.year  != brokenyear && (
                                   <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
                                 )
                               }
 
                               {
-                                currentlyLoadedMetadata.year  === '2021' && (
+                                currentlyLoadedMetadata.year  === brokenyear && (
                                   <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot)}</td>
                                 )
                               }</>
@@ -1014,7 +1016,7 @@ overflow-y-scroll sm:h-96'>
                     <th className='sticky top-0'>Overtime</th>
                     <th className='sticky top-0'>Other</th>
                     {
-                      currentlyLoadedMetadata.year != '2021' && (
+                      currentlyLoadedMetadata.year != brokenyear && (
                         <>
                           <th>Health</th>
                           <th>Retirement</th>
@@ -1048,7 +1050,7 @@ overflow-y-scroll sm:h-96'>
                       <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ov)}</td>
                       <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.ot)}</td>
                       {
-                        currentlyLoadedMetadata.year != '2021' && (
+                        currentlyLoadedMetadata.year != brokenyear && (
                           <>
                             <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.h)}</td>
                             <td className='border-r text-right mono lg:px-3'>{excelnum(eachEmployee.r)}</td>
@@ -1057,13 +1059,13 @@ overflow-y-scroll sm:h-96'>
                       }
 
                       {
-                        currentlyLoadedMetadata.year != '2021' && (
+                        currentlyLoadedMetadata.year != brokenyear && (
                           <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot + eachEmployee.h + eachEmployee.r)}</td>
                         )
                       }
 
                       {
-                        currentlyLoadedMetadata.year === '2021' && (
+                        currentlyLoadedMetadata.year === brokenyear && (
                           <td className='border-x text-right mono'>{excelnum(eachEmployee.b + eachEmployee.ov + eachEmployee.ot)}</td>
                         )
                       }
