@@ -149,7 +149,7 @@ export default function PayrollFunc(props: payrollprops) {
   })
   var ticking = useRef(false)
   var lastKnownScrollPosition = useRef(0)
-  const [sortcol, setsortcol] = useState('b');
+  const [sortcol, setsortcol] = useState('t');
   const [sortreverse, setsortreverse] = useState('reverse');
   const lastRefBuffer70 = useRef(null);
   const lastRefMobileBuffer15 = useRef(null);
