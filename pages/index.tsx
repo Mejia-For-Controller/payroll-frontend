@@ -999,7 +999,7 @@ overflow-y-scroll sm:h-96'>
 
                 <div>
                   {loadedEmployeeRows.length > 0 && (
-                    <div className='py-8'></div>
+                    <div className='py-8 bg-truegray-900'></div>
                   )}
                 </div>
               </div>
