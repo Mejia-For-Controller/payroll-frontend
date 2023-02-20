@@ -293,7 +293,7 @@ export default function PayrollFunc(props: payrollprops) {
     }, true);
   }
 
-  var arrayOfEndpoints = ["https://api.payroll.mejiaforcontroller.com","https://2.api.payroll.mejiaforcontroller.com"]
+  var arrayOfEndpoints = ["https://api.payroll.mejiaforcontroller.com"]
 
   var payrollserverendpoint: string = arrayOfEndpoints[Math.floor(Math.random() * arrayOfEndpoints.length)]
 
