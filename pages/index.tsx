@@ -28,10 +28,10 @@ import { Affix, Button, Text, Transition as MantineTransition, SegmentedControl,
 const depts = config.depts;
 
 const yearsofpayroll = [
-  "2018", "2019", "2020", "2021"
+  "2018", "2019", "2020", "2021", "2022"
 ]
 
-const brokenyear = "3021";
+const brokenyear = "30000";
 
 
 const makePercent = (num, dem) => {
@@ -828,10 +828,7 @@ overflow-y-scroll sm:h-96'>
 
                     <div id='filterpanel' className={`mt-2 w-full md:w-6/12 md:static md:mt-2 md:ml-2 bg-truegray-800 px-3 py-1 ${filterpanel === false ? 'hidden' : ''}`}>
                       <div className='flex flex-row'>
-
                         <p className='text-base md:text-lg'>Filter Employees</p>
-
-
                       </div>
                       <div className='flex flex-col sm:flex-row md:flex-col sm:space-x-2 md:space-y-2 md:space-x-0'>
 
@@ -892,7 +889,7 @@ overflow-y-scroll sm:h-96'>
               {
                 currentlyLoadedMetadata.year == brokenyear && (
                   <div>
-                    <p className="text-sm sm:text-base font-bold bg-orange-700 bg-opacity-20 text-white">2021 Healthcare & Retirement & Entire LADWP not avaliable yet - The City Controller is still calculating this data (expected June 15).</p>
+                    <p className="text-sm sm:text-base font-bold bg-orange-700 bg-opacity-20 text-white">2022s Healthcare & Retirement & Entire LADWP not avaliable yet - The City Controller is still calculating this data (expected June 15).</p>
 
                   </div>
                 )
