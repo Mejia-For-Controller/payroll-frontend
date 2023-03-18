@@ -100,7 +100,7 @@ export default function PayrollFunc(props: payrollprops) {
   var lastreql;
   var lastreqd;
 
-  var [selectedyear, setselectedyear] = useState('2021');
+  var [selectedyear, setselectedyear] = useState('2022');
   var [currentlyLoadedYear, setCurrentlyLoadedyear] = useState(null);
   var [numberoftotalrows, setnumberoftotalrows] = useState(0);
   var [entiresetcount, setentiresetcount] = useState(1);
@@ -114,7 +114,7 @@ export default function PayrollFunc(props: payrollprops) {
   var [filterfirstname, setfilterfirstname] = useState("");
   var [filterlastname, setfilterlastname] = useState("");
   var [filterjobtitle, setfilterjobtitle] = useState("");
-  var selectedyearref = useRef('2021');
+  var selectedyearref = useRef('2022');
   var [loadedEmployeeRows, setLoadedEmployeeRows] = useState([]);
   var refFirstName = useRef('')
   var refLastName = useRef('');
@@ -557,19 +557,19 @@ export default function PayrollFunc(props: payrollprops) {
 
 
         <Head>
-          <title>LA Payroll City Employees Names Lookup - 2017 to 2021</title>
+          <title>LA Payroll City Employees Names Lookup - 2017 to 2022</title>
           <meta property="og:type" content="website" />
 <meta property="og:type" content="website"></meta>
 <meta property="og:url" content="https://payroll.mejiaforcontroller.com/"></meta>
-<meta property="og:title" content="LA City Payroll Database - 2017 to 2021"></meta>
-<meta property="og:description" content="Find out how much City of LA employees made. All data is public. Data 2017-2021"></meta>
+<meta property="og:title" content="LA City Payroll Database - 2017 to 2022"></meta>
+<meta property="og:description" content="Find out how much City of LA employees made. All data is public. Data 2017-2022"></meta>
 <meta property="og:image" content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
          
           <meta name="twitter:site" content="@kennethmejiala" />
           <meta name="twitter:creator" content="@kennethmejiala" />
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" key='twittertitle' content="LA City Payroll Database - 2017 to 2021"></meta>
-          <meta name="twitter:description" key='twitterdesc' content="Find out how much City of LA employees made. All data is public. Data 2017-2021"></meta>
+          <meta name="twitter:title" key='twittertitle' content="LA City Payroll Database - 2017 to 2022"></meta>
+          <meta name="twitter:description" key='twitterdesc' content="Find out how much City of LA employees made. All data is public. Data 2017-2022"></meta>
           <meta name="twitter:image" key='twitterimg' content="https://payroll.mejiaforcontroller.com/payrollthumbnail.jpg"></meta>
          
          
